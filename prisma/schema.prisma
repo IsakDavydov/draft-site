@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  favorites     Favorite[]
+  picks         Pick[]
+  pickRecords   PickRecord[]
+  viewLogs      ViewLog[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // 'team', 'player', 'prospect'
+  targetId  String
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type, targetId])
+  @@map("favorites")
+}
+
+model Pick {
+  id          String   @id @default(cuid())
+  userId      String
+  week        Int
+  season      Int
+  gameId      String
+  pick        String   // 'home', 'away', 'over', 'under'
+  confidence  Int      // 1-5 scale
+  units       Float
+  result      PickResult?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("picks")
+}
+
+model PickRecord {
+  id        String   @id @default(cuid())
+  userId    String
+  week      Int
+  season    Int
+  wins      Int
+  losses    Int
+  pushes    Int
+  units     Float
+  roi       Float
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, week, season])
+  @@map("pick_records")
+}
+
+model ViewLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  page      String
+  timestamp DateTime @default(now())
+  
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("view_logs")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+enum PickResult {
+  WIN
+  LOSS
+  PUSH
+  PENDING
+}

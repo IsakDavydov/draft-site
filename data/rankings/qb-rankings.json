@@ -1,0 +1,78 @@
+{
+  "title": "Quarterback Rankings",
+  "lastUpdated": "2024-12-12",
+  "category": "QB",
+  "rankings": [
+    {
+      "rank": 1,
+      "player": "Patrick Mahomes",
+      "team": "Kansas City Chiefs",
+      "tier": "Elite",
+      "notes": "Still the gold standard at the position"
+    },
+    {
+      "rank": 2,
+      "player": "Josh Allen",
+      "team": "Buffalo Bills",
+      "tier": "Elite",
+      "notes": "Dual-threat ability makes him nearly unstoppable"
+    },
+    {
+      "rank": 3,
+      "player": "Lamar Jackson",
+      "team": "Baltimore Ravens",
+      "tier": "Elite",
+      "notes": "MVP candidate with improved passing"
+    },
+    {
+      "rank": 4,
+      "player": "Jalen Hurts",
+      "team": "Philadelphia Eagles",
+      "tier": "Elite",
+      "notes": "Consistent performer in big moments"
+    },
+    {
+      "rank": 5,
+      "player": "Dak Prescott",
+      "team": "Dallas Cowboys",
+      "tier": "Elite",
+      "notes": "Having a career year"
+    },
+    {
+      "rank": 6,
+      "player": "Brock Purdy",
+      "team": "San Francisco 49ers",
+      "tier": "Tier 1",
+      "notes": "Efficient and effective in Shanahan's system"
+    },
+    {
+      "rank": 7,
+      "player": "Tua Tagovailoa",
+      "team": "Miami Dolphins",
+      "tier": "Tier 1",
+      "notes": "Thriving with elite weapons"
+    },
+    {
+      "rank": 8,
+      "player": "C.J. Stroud",
+      "team": "Houston Texans",
+      "tier": "Tier 1",
+      "notes": "Rookie sensation exceeding expectations"
+    },
+    {
+      "rank": 9,
+      "player": "Justin Herbert",
+      "team": "Los Angeles Chargers",
+      "tier": "Tier 1",
+      "notes": "Talented but needs better supporting cast"
+    },
+    {
+      "rank": 10,
+      "player": "Matthew Stafford",
+      "team": "Los Angeles Rams",
+      "tier": "Tier 1",
+      "notes": "Veteran still playing at a high level"
+    }
+  ]
+}
+

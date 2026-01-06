@@ -1,0 +1,319 @@
+{
+  "lastUpdated": "2024-12-12",
+  "season": "2024",
+  "conferences": {
+    "AFC": {
+      "divisions": {
+        "East": [
+          {
+            "team": "Buffalo Bills",
+            "wins": 9,
+            "losses": 5,
+            "ties": 0,
+            "winPercentage": 0.643,
+            "pointsFor": 342,
+            "pointsAgainst": 298
+          },
+          {
+            "team": "Miami Dolphins",
+            "wins": 8,
+            "losses": 6,
+            "ties": 0,
+            "winPercentage": 0.571,
+            "pointsFor": 328,
+            "pointsAgainst": 315
+          },
+          {
+            "team": "New York Jets",
+            "wins": 5,
+            "losses": 9,
+            "ties": 0,
+            "winPercentage": 0.357,
+            "pointsFor": 245,
+            "pointsAgainst": 312
+          },
+          {
+            "team": "New England Patriots",
+            "wins": 4,
+            "losses": 10,
+            "ties": 0,
+            "winPercentage": 0.286,
+            "pointsFor": 198,
+            "pointsAgainst": 335
+          }
+        ],
+        "North": [
+          {
+            "team": "Baltimore Ravens",
+            "wins": 11,
+            "losses": 3,
+            "ties": 0,
+            "winPercentage": 0.786,
+            "pointsFor": 385,
+            "pointsAgainst": 278
+          },
+          {
+            "team": "Cleveland Browns",
+            "wins": 9,
+            "losses": 5,
+            "ties": 0,
+            "winPercentage": 0.643,
+            "pointsFor": 312,
+            "pointsAgainst": 289
+          },
+          {
+            "team": "Pittsburgh Steelers",
+            "wins": 7,
+            "losses": 7,
+            "ties": 0,
+            "winPercentage": 0.500,
+            "pointsFor": 265,
+            "pointsAgainst": 298
+          },
+          {
+            "team": "Cincinnati Bengals",
+            "wins": 7,
+            "losses": 7,
+            "ties": 0,
+            "winPercentage": 0.500,
+            "pointsFor": 298,
+            "pointsAgainst": 312
+          }
+        ],
+        "South": [
+          {
+            "team": "Jacksonville Jaguars",
+            "wins": 8,
+            "losses": 6,
+            "ties": 0,
+            "winPercentage": 0.571,
+            "pointsFor": 315,
+            "pointsAgainst": 302
+          },
+          {
+            "team": "Indianapolis Colts",
+            "wins": 7,
+            "losses": 7,
+            "ties": 0,
+            "winPercentage": 0.500,
+            "pointsFor": 298,
+            "pointsAgainst": 315
+          },
+          {
+            "team": "Houston Texans",
+            "wins": 7,
+            "losses": 7,
+            "ties": 0,
+            "winPercentage": 0.500,
+            "pointsFor": 305,
+            "pointsAgainst": 298
+          },
+          {
+            "team": "Tennessee Titans",
+            "wins": 5,
+            "losses": 9,
+            "ties": 0,
+            "winPercentage": 0.357,
+            "pointsFor": 278,
+            "pointsAgainst": 335
+          }
+        ],
+        "West": [
+          {
+            "team": "Kansas City Chiefs",
+            "wins": 9,
+            "losses": 5,
+            "ties": 0,
+            "winPercentage": 0.643,
+            "pointsFor": 335,
+            "pointsAgainst": 298
+          },
+          {
+            "team": "Denver Broncos",
+            "wins": 7,
+            "losses": 7,
+            "ties": 0,
+            "winPercentage": 0.500,
+            "pointsFor": 285,
+            "pointsAgainst": 302
+          },
+          {
+            "team": "Las Vegas Raiders",
+            "wins": 6,
+            "losses": 8,
+            "ties": 0,
+            "winPercentage": 0.429,
+            "pointsFor": 265,
+            "pointsAgainst": 315
+          },
+          {
+            "team": "Los Angeles Chargers",
+            "wins": 5,
+            "losses": 9,
+            "ties": 0,
+            "winPercentage": 0.357,
+            "pointsFor": 298,
+            "pointsAgainst": 342
+          }
+        ]
+      }
+    },
+    "NFC": {
+      "divisions": {
+        "East": [
+          {
+            "team": "Dallas Cowboys",
+            "wins": 10,
+            "losses": 4,
+            "ties": 0,
+            "winPercentage": 0.714,
+            "pointsFor": 365,
+            "pointsAgainst": 285
+          },
+          {
+            "team": "Philadelphia Eagles",
+            "wins": 10,
+            "losses": 4,
+            "ties": 0,
+            "winPercentage": 0.714,
+            "pointsFor": 358,
+            "pointsAgainst": 298
+          },
+          {
+            "team": "New York Giants",
+            "wins": 5,
+            "losses": 9,
+            "ties": 0,
+            "winPercentage": 0.357,
+            "pointsFor": 245,
+            "pointsAgainst": 335
+          },
+          {
+            "team": "Washington Commanders",
+            "wins": 4,
+            "losses": 10,
+            "ties": 0,
+            "winPercentage": 0.286,
+            "pointsFor": 278,
+            "pointsAgainst": 365
+          }
+        ],
+        "North": [
+          {
+            "team": "Detroit Lions",
+            "wins": 10,
+            "losses": 4,
+            "ties": 0,
+            "winPercentage": 0.714,
+            "pointsFor": 352,
+            "pointsAgainst": 298
+          },
+          {
+            "team": "Green Bay Packers",
+            "wins": 7,
+            "losses": 7,
+            "ties": 0,
+            "winPercentage": 0.500,
+            "pointsFor": 312,
+            "pointsAgainst": 315
+          },
+          {
+            "team": "Minnesota Vikings",
+            "wins": 7,
+            "losses": 7,
+            "ties": 0,
+            "winPercentage": 0.500,
+            "pointsFor": 298,
+            "pointsAgainst": 302
+          },
+          {
+            "team": "Chicago Bears",
+            "wins": 6,
+            "losses": 8,
+            "ties": 0,
+            "winPercentage": 0.429,
+            "pointsFor": 285,
+            "pointsAgainst": 312
+          }
+        ],
+        "South": [
+          {
+            "team": "Tampa Bay Buccaneers",
+            "wins": 7,
+            "losses": 7,
+            "ties": 0,
+            "winPercentage": 0.500,
+            "pointsFor": 298,
+            "pointsAgainst": 305
+          },
+          {
+            "team": "Atlanta Falcons",
+            "wins": 6,
+            "losses": 8,
+            "ties": 0,
+            "winPercentage": 0.429,
+            "pointsFor": 278,
+            "pointsAgainst": 312
+          },
+          {
+            "team": "New Orleans Saints",
+            "wins": 6,
+            "losses": 8,
+            "ties": 0,
+            "winPercentage": 0.429,
+            "pointsFor": 285,
+            "pointsAgainst": 298
+          },
+          {
+            "team": "Carolina Panthers",
+            "wins": 2,
+            "losses": 12,
+            "ties": 0,
+            "winPercentage": 0.143,
+            "pointsFor": 198,
+            "pointsAgainst": 385
+          }
+        ],
+        "West": [
+          {
+            "team": "San Francisco 49ers",
+            "wins": 11,
+            "losses": 3,
+            "ties": 0,
+            "winPercentage": 0.786,
+            "pointsFor": 375,
+            "pointsAgainst": 265
+          },
+          {
+            "team": "Los Angeles Rams",
+            "wins": 8,
+            "losses": 6,
+            "ties": 0,
+            "winPercentage": 0.571,
+            "pointsFor": 328,
+            "pointsAgainst": 312
+          },
+          {
+            "team": "Seattle Seahawks",
+            "wins": 7,
+            "losses": 7,
+            "ties": 0,
+            "winPercentage": 0.500,
+            "pointsFor": 305,
+            "pointsAgainst": 315
+          },
+          {
+            "team": "Arizona Cardinals",
+            "wins": 4,
+            "losses": 10,
+            "ties": 0,
+            "winPercentage": 0.286,
+            "pointsFor": 265,
+            "pointsAgainst": 352
+          }
+        ]
+      }
+    }
+  }
+}
+
