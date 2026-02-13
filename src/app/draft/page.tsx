@@ -41,7 +41,7 @@ export default function DraftPage() {
           {/* Weekly Mock Draft */}
           <div className="bg-white rounded-lg shadow">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Weekly Mock Draft</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Mock Draft</h2>
             </div>
             <div className="p-6">
               <Suspense fallback={<div>Loading mock draft...</div>}>

@@ -62,7 +62,7 @@ export function FantasyRankings() {
         <select
           value={selectedPosition}
           onChange={(e) => setSelectedPosition(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-purple focus:border-transparent"
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-purple focus:border-transparent"
         >
           {positions.map(pos => (
             <option key={pos} value={pos}>{pos}</option>
@@ -72,7 +72,7 @@ export function FantasyRankings() {
         <select
           value={selectedWeek}
           onChange={(e) => setSelectedWeek(Number(e.target.value))}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-purple focus:border-transparent"
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-purple focus:border-transparent"
         >
           {weeks.map(week => (
             <option key={week} value={week}>Week {week}</option>
@@ -82,7 +82,7 @@ export function FantasyRankings() {
         <select
           value={selectedScoring}
           onChange={(e) => setSelectedScoring(e.target.value as 'standard' | 'half-ppr' | 'full-ppr')}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-purple focus:border-transparent"
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-purple focus:border-transparent"
         >
           {scoringOptions.map(option => (
             <option key={option.value} value={option.value}>{option.label}</option>

@@ -14,7 +14,7 @@ export default function HomePage() {
             <div className="mt-24 sm:mt-32 lg:mt-16">
               <a href="#" className="inline-flex space-x-6">
                 <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-semibold leading-6 text-white ring-1 ring-inset ring-white/20">
-                  NFL 2025 Season
+                  NFL 2026 Season
                 </span>
                 <span className="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-white">
                   <span>Live coverage</span>
@@ -102,7 +102,7 @@ export default function HomePage() {
               <h3 className="text-lg font-semibold leading-6 text-gray-900">Season</h3>
             </div>
             <p className="mt-4 text-sm leading-6 text-gray-600">
-              Standings, playoff odds, schedules, and team analysis. Track your favorite teams throughout the season.
+              Standings, playoff odds, and team analysis. Track your favorite teams throughout the season.
             </p>
             <div className="mt-6">
               <Link

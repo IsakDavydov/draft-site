@@ -1,5 +1,3 @@
-import { Suspense } from 'react';
-import { FantasyRankings } from '@/components/fantasy/FantasyRankings';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 
 export default function FantasyPage() {
@@ -12,13 +10,11 @@ export default function FantasyPage() {
         />
         
         <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Weekly Rankings</h2>
-          </div>
-          <div className="p-6">
-            <Suspense fallback={<div>Loading rankings...</div>}>
-              <FantasyRankings />
-            </Suspense>
+          <div className="p-12 text-center">
+            <p className="text-gray-600 max-w-lg mx-auto">
+              Fantasy rankings will be available as we get closer to the 2026 NFL season. 
+              Check back for position rankings, tier lists, and weekly updates once the season approaches.
+            </p>
           </div>
         </div>
       </div>

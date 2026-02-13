@@ -8,7 +8,7 @@ export function WeeklyPicks() {
   const [weeklyPicks, setWeeklyPicks] = useState<WeeklyPicksType | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedWeek, setSelectedWeek] = useState(1);
-  const [selectedSeason, setSelectedSeason] = useState(2025);
+  const [selectedSeason, setSelectedSeason] = useState(2026);
 
   useEffect(() => {
     loadPicks();
@@ -26,8 +26,8 @@ export function WeeklyPicks() {
     }
   }
 
-  // Only show 2025 season
-  const seasons = [2025];
+  // Only show 2026 season
+  const seasons = [2026];
   const weeks = Array.from({ length: 18 }, (_, i) => i + 1);
 
   if (loading) {
@@ -51,7 +51,7 @@ export function WeeklyPicks() {
           <select
             value={selectedSeason}
             onChange={(e) => setSelectedSeason(Number(e.target.value))}
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-green focus:border-transparent"
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-green focus:border-transparent"
           >
             {seasons.map(season => (
               <option key={season} value={season}>{season} Season</option>
@@ -64,7 +64,7 @@ export function WeeklyPicks() {
           <select
             value={selectedWeek}
             onChange={(e) => setSelectedWeek(Number(e.target.value))}
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-green focus:border-transparent"
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-green focus:border-transparent"
           >
             {weeks.map(week => (
               <option key={week} value={week}>Week {week}</option>
@@ -73,8 +73,8 @@ export function WeeklyPicks() {
         </div>
       </div>
 
-      {/* No Picks Message for 2025 Season */}
-      {selectedSeason === 2025 && (
+      {/* No Picks Message for 2026 Season */}
+      {selectedSeason === 2026 && (
         <div className="text-center py-12">
           <div className="max-w-md mx-auto">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -84,11 +84,11 @@ export function WeeklyPicks() {
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">No Picks Yet</h3>
             <p className="text-gray-600 mb-4">
-              The 2025 NFL season hasn't started yet. Your weekly picks will appear here once the season begins.
+              The 2026 NFL season hasn't started yet. Your weekly picks will appear here once the season begins.
             </p>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div className="text-sm text-blue-800">
-                <strong>Season Start:</strong> September 2025<br />
+                <strong>Season Start:</strong> September 2026<br />
                 <strong>First Picks:</strong> Week 1 games
               </div>
             </div>

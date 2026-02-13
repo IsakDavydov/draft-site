@@ -19,3 +19,14 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Ensure selects and dropdowns are always readable (override dark mode inheritance) */
+select {
+  background-color: #ffffff;
+  color: #171717;
+}
+
+select option {
+  background-color: #ffffff;
+  color: #171717;
+}

@@ -18,7 +18,7 @@ export default function AboutPage() {
               <div className="bg-gray-50 p-6 rounded-lg">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Season Analysis</h3>
                 <p className="text-gray-600">
-                  Comprehensive coverage of the NFL season including standings, playoff odds, schedules, and team analysis.
+                  Comprehensive coverage of the NFL season including standings, playoff odds, and team analysis.
                 </p>
               </div>
               

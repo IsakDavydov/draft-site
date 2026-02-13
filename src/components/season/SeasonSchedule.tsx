@@ -107,7 +107,7 @@ export function SeasonSchedule() {
             <select
               value={selectedTeam}
               onChange={(e) => setSelectedTeam(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-red focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-red focus:border-transparent"
             >
               <option value="all">All Teams</option>
               {teams.map(team => (
@@ -124,7 +124,7 @@ export function SeasonSchedule() {
             <select
               value={selectedWeek}
               onChange={(e) => setSelectedWeek(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-red focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-red focus:border-transparent"
             >
               <option value="all">All Weeks</option>
               {uniqueWeeks.map(week => (

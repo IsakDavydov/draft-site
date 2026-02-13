@@ -48,7 +48,6 @@ Each mock draft includes:
 ## Rankings
 
 Rankings are stored in `data/rankings/` as JSON files. You can create different ranking files:
-- `qb-rankings.json` - Quarterback rankings
 - `team-rankings.json` - Team power rankings
 - `rb-rankings.json` - Running back rankings
 - etc.

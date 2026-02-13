@@ -6,7 +6,7 @@ import { getSeasonRecord } from '@/lib/adapters';
 export function PickRecord() {
   const [seasonRecord, setSeasonRecord] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedSeason, setSelectedSeason] = useState(2025);
+  const [selectedSeason, setSelectedSeason] = useState(2026);
 
   useEffect(() => {
     loadSeasonRecord();
@@ -24,8 +24,8 @@ export function PickRecord() {
     }
   }
 
-  // Only show 2025 season since that's what we're tracking
-  const seasons = [2025];
+  // Only show 2026 season since that's what we're tracking
+  const seasons = [2026];
 
   if (loading) {
     return (
@@ -53,10 +53,10 @@ export function PickRecord() {
 
   return (
     <div>
-      {/* Season Selector - Only 2025 */}
+      {/* Season Selector - Only 2026 */}
       <div className="flex justify-center mb-6">
         <div className="text-center">
-          <div className="text-lg font-semibold text-gray-900 mb-2">2025 NFL Season</div>
+          <div className="text-lg font-semibold text-gray-900 mb-2">2026 NFL Season</div>
           <div className="text-sm text-gray-600">Fresh start - no picks yet!</div>
         </div>
       </div>
@@ -98,9 +98,9 @@ export function PickRecord() {
       {/* Season Start Message */}
       <div className="mt-8">
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-          <div className="text-lg font-medium text-blue-900 mb-2">2025 Season Starting Soon!</div>
+          <div className="text-lg font-medium text-blue-900 mb-2">2026 Season Starting Soon!</div>
           <div className="text-sm text-blue-700">
-            The 2025 NFL season begins in September. Your picks and performance tracking will appear here once the season starts.
+            The 2026 NFL season begins in September. Your picks and performance tracking will appear here once the season starts.
           </div>
         </div>
       </div>

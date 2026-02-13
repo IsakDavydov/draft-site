@@ -159,7 +159,7 @@ export function WeeklySchedule() {
             <select
               value={selectedWeek}
               onChange={(e) => setSelectedWeek(Number(e.target.value))}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-red focus:border-transparent"
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-red focus:border-transparent"
             >
               {[...Array(18)].map((_, i) => (
                 <option key={i + 1} value={i + 1}>

@@ -123,6 +123,26 @@ export interface MockDraftPick {
   };
 }
 
+// File-based mock draft format (from data/mock-drafts/*.json)
+export interface MockDraftPickFromFile {
+  pick: number;
+  team: string;
+  player: string;
+  position: string;
+  school: string;
+  height: string;
+  weight: string;
+  notes: string;
+}
+
+export interface MockDraftFromFile {
+  title: string;
+  date: string;
+  author: string;
+  rounds: number;
+  picks: MockDraftPickFromFile[];
+}
+
 export interface WeeklyPicks {
   id: string;
   week: number;

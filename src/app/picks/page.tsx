@@ -8,8 +8,8 @@ export default function PicksPage() {
     <div className="bg-gray-50 min-h-screen">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <SectionHeader
-          title="2025 Season Picks"
-          description="Expert picks with confidence ratings, unit tracking, and ROI analysis for the 2025 NFL season"
+          title="2026 Season Picks"
+          description="Expert picks with confidence ratings, unit tracking, and ROI analysis for the 2026 NFL season"
         />
         
         {/* Disclaimer Banner */}
@@ -38,7 +38,7 @@ export default function PicksPage() {
           {/* Pick Record */}
           <div className="bg-white rounded-lg shadow">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">2025 Season Record</h2>
+              <h2 className="text-lg font-semibold text-gray-900">2026 Season Record</h2>
             </div>
             <div className="p-6">
               <Suspense fallback={<div>Loading record...</div>}>

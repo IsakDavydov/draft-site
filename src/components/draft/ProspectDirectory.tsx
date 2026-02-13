@@ -11,7 +11,6 @@ export function ProspectDirectory() {
   const [filters, setFilters] = useState({
     position: '',
     school: '',
-    class: '',
   });
 
   useEffect(() => {
@@ -23,8 +22,7 @@ export function ProspectDirectory() {
       setLoading(true);
       const data = await getProspects(
         filters.position || undefined,
-        filters.school || undefined,
-        filters.class || undefined
+        filters.school || undefined
       );
       setProspects(data);
     } catch (error) {
@@ -35,7 +33,6 @@ export function ProspectDirectory() {
   }
 
   const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
-  const classes = ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate'];
   const schools = Array.from(new Set(prospects.map(p => p.school))).sort();
 
   if (loading) {
@@ -57,7 +54,7 @@ export function ProspectDirectory() {
         <select
           value={filters.position}
           onChange={(e) => setFilters(prev => ({ ...prev, position: e.target.value }))}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
         >
           <option value="">All Positions</option>
           {positions.map(pos => (
@@ -68,22 +65,11 @@ export function ProspectDirectory() {
         <select
           value={filters.school}
           onChange={(e) => setFilters(prev => ({ ...prev, school: e.target.value }))}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
         >
           <option value="">All Schools</option>
           {schools.map(school => (
             <option key={school} value={school}>{school}</option>
-          ))}
-        </select>
-
-        <select
-          value={filters.class}
-          onChange={(e) => setFilters(prev => ({ ...prev, class: e.target.value }))}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
-        >
-          <option value="">All Classes</option>
-          {classes.map(cls => (
-            <option key={cls} value={cls}>{cls}</option>
           ))}
         </select>
       </div>
