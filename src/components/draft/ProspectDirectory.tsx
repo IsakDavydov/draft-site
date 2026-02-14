@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import { getProspects } from '@/lib/adapters';
 import { Prospect } from '@/types';
-import { getPositionAbbreviation } from '@/lib/utils';
+
+const PROSPECTS_PER_PAGE = 12;
 
 export function ProspectDirectory() {
   const [prospects, setProspects] = useState<Prospect[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     position: '',
     school: '',
@@ -15,6 +17,10 @@ export function ProspectDirectory() {
 
   useEffect(() => {
     loadProspects();
+  }, [filters]);
+
+  useEffect(() => {
+    setCurrentPage(1);
   }, [filters]);
 
   async function loadProspects() {
@@ -34,6 +40,10 @@ export function ProspectDirectory() {
 
   const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
   const schools = Array.from(new Set(prospects.map(p => p.school))).sort();
+
+  const totalPages = Math.ceil(prospects.length / PROSPECTS_PER_PAGE) || 1;
+  const startIndex = (currentPage - 1) * PROSPECTS_PER_PAGE;
+  const paginatedProspects = prospects.slice(startIndex, startIndex + PROSPECTS_PER_PAGE);
 
   if (loading) {
     return (
@@ -74,9 +84,14 @@ export function ProspectDirectory() {
         </select>
       </div>
 
+      {/* Results count */}
+      <div className="text-sm text-gray-600 mb-4">
+        Showing {startIndex + 1}–{Math.min(startIndex + PROSPECTS_PER_PAGE, prospects.length)} of {prospects.length} prospects
+      </div>
+
       {/* Prospects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {prospects.map((prospect) => (
+        {paginatedProspects.map((prospect) => (
           <div key={prospect.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between mb-3">
               <div>
@@ -161,6 +176,41 @@ export function ProspectDirectory() {
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && prospects.length > 0 && (
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+          <button
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-nfl-blue"
+          >
+            Previous
+          </button>
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`w-10 h-10 text-sm font-medium rounded-md border focus:outline-none focus:ring-2 focus:ring-nfl-blue ${
+                  currentPage === page
+                    ? 'bg-nfl-blue border-nfl-blue text-white'
+                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-nfl-blue"
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       {prospects.length === 0 && (
         <div className="text-center py-12 text-gray-500">
