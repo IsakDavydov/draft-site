@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { getBigBoard } from '@/lib/adapters';
 import { Prospect } from '@/types';
 
@@ -79,8 +80,10 @@ export function BigBoard() {
                   {startIndex + index + 1}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{prospect.name}</div>
+                  <Link href={`/draft/prospects/${prospect.id}`} className="block hover:text-nfl-red transition-colors">
+                    <div className="text-sm font-medium text-gray-900">{prospect.name}</div>
                   <div className="text-sm text-gray-500">{prospect.height}, {prospect.weight} lbs</div>
+                  </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {prospect.position}

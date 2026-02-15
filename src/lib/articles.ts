@@ -9,6 +9,7 @@ export interface Article {
   excerpt: string;
   author: string;
   category: string;
+  format?: string;
   content: string;
 }
 
@@ -35,6 +36,7 @@ export function getAllArticles(): Article[] {
         excerpt: data.excerpt || '',
         author: data.author || 'SAKFootball',
         category: data.category || 'General',
+        format: data.format || undefined,
         content,
       };
     });
@@ -60,6 +62,7 @@ export function getArticleBySlug(slug: string): Article | null {
       excerpt: data.excerpt || '',
       author: data.author || 'SAKFootball',
       category: data.category || 'General',
+      format: data.format || undefined,
       content,
     };
   } catch (error) {

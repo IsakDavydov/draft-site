@@ -7,10 +7,10 @@ import postSuperBowlMock2026 from '../../../data/mock-drafts/post-super-bowl-moc
 const mockProspects: Prospect[] = [
   { id: '1', name: 'Fernando Mendoza', position: 'QB', school: 'Indiana', class: 'Junior', height: '6\'5"', weight: 225, ras: 9.2, bigBoardRank: 1, mockDraftRound: 1, mockDraftPick: 1, team: 'Las Vegas Raiders' },
   { id: '2', name: 'Jeremiyah Love', position: 'RB', school: 'Notre Dame', class: 'Junior', height: '6\'0"', weight: 214, ras: 9.4, bigBoardRank: 2, mockDraftRound: 1, mockDraftPick: 9, team: 'Kansas City Chiefs' },
-  { id: '3', name: 'Rueben Bain Jr.', position: 'DL', school: 'Miami', class: 'Junior', height: '6\'3"', weight: 275, ras: 9.0, bigBoardRank: 3, mockDraftRound: 1, mockDraftPick: 4, team: 'Tennessee Titans' },
-  { id: '4', name: 'Caleb Downs', position: 'S', school: 'Ohio State', class: 'Junior', height: '6\'0"', weight: 205, ras: 9.3, bigBoardRank: 4, mockDraftRound: 1, mockDraftPick: 5, team: 'New York Giants' },
-  { id: '5', name: 'Sonny Styles', position: 'LB', school: 'Ohio State', class: 'Senior', height: '6\'4"', weight: 243, ras: 9.1, bigBoardRank: 5, mockDraftRound: 1, mockDraftPick: 10, team: 'Cincinnati Bengals' },
-  { id: '6', name: 'Jordyn Tyson', position: 'WR', school: 'Arizona State', class: 'Junior', height: '6\'2"', weight: 200, ras: 9.2, bigBoardRank: 6, mockDraftRound: 1, mockDraftPick: 8, team: 'New Orleans Saints' },
+  { id: '3', name: 'Rueben Bain Jr.', position: 'DL', school: 'Miami', class: 'Junior', height: '6\'3"', weight: 275, ras: 9.0, bigBoardRank: 6, mockDraftRound: 1, mockDraftPick: 4, team: 'Tennessee Titans' },
+  { id: '4', name: 'Caleb Downs', position: 'S', school: 'Ohio State', class: 'Junior', height: '6\'0"', weight: 205, ras: 9.3, bigBoardRank: 3, mockDraftRound: 1, mockDraftPick: 5, team: 'New York Giants' },
+  { id: '5', name: 'Sonny Styles', position: 'LB', school: 'Ohio State', class: 'Senior', height: '6\'4"', weight: 243, ras: 9.1, bigBoardRank: 4, mockDraftRound: 1, mockDraftPick: 10, team: 'Cincinnati Bengals' },
+  { id: '6', name: 'Jordyn Tyson', position: 'WR', school: 'Arizona State', class: 'Junior', height: '6\'2"', weight: 200, ras: 9.2, bigBoardRank: 5, mockDraftRound: 1, mockDraftPick: 8, team: 'New Orleans Saints' },
   { id: '7', name: 'David Bailey', position: 'DL', school: 'Texas Tech', class: 'Senior', height: '6\'3"', weight: 250, ras: 8.9, bigBoardRank: 7, mockDraftRound: 1, mockDraftPick: 7, team: 'Washington Commanders' },
   { id: '8', name: 'Arvell Reese Jr.', position: 'LB', school: 'Ohio State', class: 'Junior', height: '6\'4"', weight: 243, ras: 9.5, bigBoardRank: 8, mockDraftRound: 1, mockDraftPick: 2, team: 'New York Jets' },
   { id: '9', name: 'Makai Lemon', position: 'WR', school: 'USC', class: 'Junior', height: '5\'11"', weight: 195, ras: 8.8, bigBoardRank: 9, mockDraftRound: 1, mockDraftPick: 13, team: 'Los Angeles Rams' },
@@ -113,6 +113,17 @@ export async function getProspects(
 export async function getBigBoard(): Promise<Prospect[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return mockProspects.sort((a, b) => (a.bigBoardRank || 999) - (b.bigBoardRank || 999));
+}
+
+export async function getProspectById(id: string): Promise<Prospect | null> {
+  await new Promise(resolve => setTimeout(resolve, 50));
+  return mockProspects.find((p) => p.id === id) || null;
+}
+
+export function getMockDraftNotesForProspect(playerName: string): string | null {
+  const picks = (postSuperBowlMock2026 as { picks: { player: string; notes: string }[] }).picks;
+  const match = picks.find((p) => p.player === playerName);
+  return match?.notes ?? null;
 }
 
 export async function getMockDraft(week: number, season: number = 2024): Promise<MockDraft | null> {

@@ -663,6 +663,11 @@ const mockPlayers: Player[] = [
   },
 ];
 
+// Map of team full name -> primary hex color (for use in UI accents)
+export const TEAM_COLORS_BY_NAME: Record<string, string> = Object.fromEntries(
+  mockTeams.map((t) => [t.name, t.colors.primary])
+);
+
 export async function getTeams(): Promise<Team[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return mockTeams;

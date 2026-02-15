@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { getProspects } from '@/lib/adapters';
 import { Prospect } from '@/types';
 
@@ -92,7 +93,11 @@ export function ProspectDirectory() {
       {/* Prospects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {paginatedProspects.map((prospect) => (
-          <div key={prospect.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow">
+          <Link
+            key={prospect.id}
+            href={`/draft/prospects/${prospect.id}`}
+            className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md hover:border-nfl-blue/30 transition-all block"
+          >
             <div className="flex items-start justify-between mb-3">
               <div>
                 <h3 className="font-semibold text-gray-900 text-lg">{prospect.name}</h3>
@@ -173,7 +178,7 @@ export function ProspectDirectory() {
                 </div>
               </div>
             )}
-          </div>
+          </Link>
         ))}
       </div>
 
