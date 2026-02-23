@@ -17,18 +17,33 @@ function SignInForm() {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
-    const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      const supabase = createClient();
 
-    if (error) {
-      setMessage({ type: 'error', text: error.message });
+      const timeoutMs = 15000;
+      const timeoutPromise = new Promise<{ error: { message: string } }>((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out. Check your connection and try again.')), timeoutMs)
+      );
+
+      const authPromise = supabase.auth.signInWithPassword({ email, password });
+      const { error } = await Promise.race([authPromise, timeoutPromise]);
+
+      if (error) {
+        setMessage({ type: 'error', text: error.message });
+        setLoading(false);
+        return;
+      }
+
+      // Full page navigation so the server receives cookies on the next request
+      window.location.href = next;
+    } catch (err) {
+      setMessage({
+        type: 'error',
+        text: err instanceof Error ? err.message : 'Sign-in failed. Please try again.',
+      });
       setLoading(false);
-      return;
     }
-
-    // Full page navigation so the server receives cookies on the next request
-    window.location.href = next;
   }
 
   return (
