@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, TrendingUp, Users, Target, Trophy, BookOpen } from 'lucide-react';
+import { ArrowRight, TrendingUp, Users, Target, Trophy, BookOpen, GraduationCap } from 'lucide-react';
 import { getLatestArticles } from '@/lib/articles';
 import { formatDate } from '@/lib/utils';
 
@@ -8,7 +8,7 @@ export default function HomePage() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <div className="relative isolate overflow-hidden bg-gradient-to-br from-nfl-red via-nfl-blue to-nfl-purple">
+      <div className="relative isolate overflow-visible bg-gradient-to-br from-nfl-red via-nfl-blue to-nfl-purple">
         <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
           <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
             <div className="mt-24 sm:mt-32 lg:mt-16">
@@ -45,9 +45,9 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
+          <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-16">
             <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                   <div className="text-center">
                     <div className="mx-auto h-12 w-12 bg-nfl-gold rounded-full flex items-center justify-center mb-4">
@@ -73,6 +73,15 @@ export default function HomePage() {
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">Fantasy Rankings</h3>
                     <p className="text-gray-300 text-sm">Position-by-position rankings and tiers</p>
+                  </div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                  <div className="text-center">
+                    <div className="mx-auto h-12 w-12 bg-nfl-gold rounded-full flex items-center justify-center mb-4">
+                      <GraduationCap className="h-6 w-6 text-nfl-red" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Draft</h3>
+                    <p className="text-gray-300 text-sm">Prospects, big board, and mock drafts</p>
                   </div>
                 </div>
               </div>

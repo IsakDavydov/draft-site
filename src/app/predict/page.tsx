@@ -9,14 +9,35 @@ export const metadata = {
   description: 'Predict the first round of the 2026 NFL Draft. Create an account to submit your picks.',
 };
 
-export default async function PredictPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+export const dynamic = 'force-dynamic';
 
-  const [prospects, draftOrder] = await Promise.all([
-    getBigBoard(),
-    Promise.resolve(getDraftOrder2026()),
-  ]);
+export default async function PredictPage() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error(
+      'Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your environment.'
+    );
+  }
+
+  let user: { id: string } | null = null;
+  let prospects: Awaited<ReturnType<typeof getBigBoard>>;
+  let draftOrder: ReturnType<typeof getDraftOrder2026>;
+
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+
+    [prospects, draftOrder] = await Promise.all([
+      getBigBoard(),
+      Promise.resolve(getDraftOrder2026()),
+    ]);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    throw new Error(`Predict page: ${msg}`);
+  }
 
   if (!user) {
     redirect('/auth/signin?next=/predict');
