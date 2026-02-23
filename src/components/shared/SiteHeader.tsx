@@ -3,13 +3,15 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { Menu, X, Search, User } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
+import { AuthButton } from '@/components/auth/AuthButton';
 import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Articles', href: '/articles' },
   { name: 'Season', href: '/season' },
   { name: 'Draft', href: '/draft' },
+  { name: 'Predict', href: '/predict' },
   { name: 'Picks', href: '/picks' },
   { name: 'Fantasy', href: '/fantasy' },
 ];
@@ -59,19 +61,14 @@ export function SiteHeader() {
           ))}
         </div>
         
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4 lg:items-center">
           <Link
             href="/search"
             className="text-sm font-semibold leading-6 text-gray-900 hover:text-nfl-red transition-colors"
           >
             <Search className="h-5 w-5" />
           </Link>
-          <Link
-            href="/auth/signin"
-            className="text-sm font-semibold leading-6 text-gray-900 hover:text-nfl-red transition-colors"
-          >
-            <User className="h-5 w-5" />
-          </Link>
+          <AuthButton />
         </div>
       </nav>
       
@@ -116,7 +113,7 @@ export function SiteHeader() {
                     </Link>
                   ))}
                 </div>
-                <div className="py-6">
+                <div className="py-6 space-y-2">
                   <Link
                     href="/search"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
@@ -124,13 +121,9 @@ export function SiteHeader() {
                   >
                     Search
                   </Link>
-                  <Link
-                    href="/auth/signin"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Sign In
-                  </Link>
+                  <div onClick={() => setMobileMenuOpen(false)}>
+                    <AuthButton />
+                  </div>
                 </div>
               </div>
             </div>

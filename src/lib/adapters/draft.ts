@@ -138,6 +138,12 @@ export async function getMockDrafts(season: number = 2024): Promise<MockDraft[]>
   return mockMockDrafts.filter(draft => draft.season === season);
 }
 
+// Draft order: pick number -> team (for 2026 first round)
+export function getDraftOrder2026(): { pick: number; team: string }[] {
+  const picks = (postSuperBowlMock2026 as { picks: { pick: number; team: string }[] }).picks;
+  return picks.map((p) => ({ pick: p.pick, team: p.team }));
+}
+
 // Load mock draft from JSON file (data/mock-drafts/)
 export async function getMockDraftFromFile(filename: string): Promise<MockDraftFromFile | null> {
   await new Promise(resolve => setTimeout(resolve, 100));

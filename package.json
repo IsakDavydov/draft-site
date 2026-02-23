@@ -32,6 +32,8 @@
     "@sanity/client": "^6.0.0",
     "@sanity/image-url": "^1.0.0",
     "@sanity/vision": "^3.0.0",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.97.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "gray-matter": "^4.0.3",

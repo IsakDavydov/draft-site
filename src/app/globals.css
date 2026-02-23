@@ -5,6 +5,24 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 211 100% 21%;
+  --primary: 211 100% 21%;
+  --primary-foreground: 255 255 255;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 255 255 255;
+  --card: 255 255 255;
+  --card-foreground: 0 0% 9%;
+  --popover: 255 255 255;
+  --popover-foreground: 0 0% 9%;
+  --radius: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
