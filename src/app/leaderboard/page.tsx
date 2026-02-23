@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { Trophy, ArrowLeft } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Leaderboard',
   description: '2026 NFL Draft prediction leaderboard. See who got the most picks right.',
