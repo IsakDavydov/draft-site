@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Prospect } from '@/types';
 import { TEAM_COLORS_BY_NAME } from '@/lib/adapters/teams';
-import { ProspectPicker } from './ProspectPicker';
 import { Zap, Trash2 } from 'lucide-react';
 import type { MockDraftFromFile } from '@/types';
 
@@ -20,9 +19,10 @@ interface PredictionFormProps {
   draftOrder: DraftOrderItem[];
   userId: string;
   mockDraftTemplate?: MockDraftFromFile | null;
+  teamNeeds?: Record<number, string[]>;
 }
 
-export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplate }: PredictionFormProps) {
+export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplate, teamNeeds = {} }: PredictionFormProps) {
   const [picks, setPicks] = useState<Record<number, string>>({});
   const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -202,7 +202,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Your First Round Picks</h2>
             <p className="text-sm text-gray-600 mt-0.5">
-              Select one prospect for each pick. Type to search—each prospect can only be used once.
+              Select one prospect for each pick. Each prospect can only be used once.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -237,26 +237,44 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {draftOrder.map(({ pick, team }) => {
             const teamColor = TEAM_COLORS_BY_NAME[team] || '#1d4ed8';
+            const needs = teamNeeds[pick] ?? [];
             return (
               <div
                 key={pick}
-                className="rounded-lg border border-gray-200 bg-white p-4"
+                className="flex flex-col min-h-[200px] rounded-lg border border-gray-200 bg-white p-4"
                 style={{ borderLeftWidth: '4px', borderLeftColor: teamColor }}
               >
-                <div className="mb-2">
+                <div className="mb-2 flex-shrink-0">
                   <span className="inline-flex h-7 min-w-[1.75rem] items-center justify-center rounded-md px-1.5 text-xs font-bold text-white"
                     style={{ backgroundColor: teamColor }}>
                     {pick}
                   </span>
                   <span className="ml-2 text-sm font-medium text-gray-900">{team}</span>
                 </div>
-                <ProspectPicker
-                  prospects={prospects}
+                {needs.length > 0 && (
+                  <p className="text-xs text-gray-500 mb-1 flex-shrink-0 line-clamp-2">
+                    Needs: {needs.join(', ')}
+                  </p>
+                )}
+                <div className="mt-auto flex-shrink-0">
+                <select
                   value={picks[pick] || ''}
-                  onChange={(id) => setPicks((prev) => ({ ...prev, [pick]: id }))}
-                  usedIds={usedIds}
+                  onChange={(e) => setPicks((prev) => ({ ...prev, [pick]: e.target.value }))}
                   disabled={loading}
-                />
+                  className="w-full text-sm border border-gray-300 rounded-md px-2 py-1.5 bg-white text-gray-900 focus:ring-2 focus:ring-nfl-blue focus:border-transparent disabled:opacity-50"
+                >
+                  <option value="">Select prospect</option>
+                  {prospects.map((prospect) => (
+                    <option
+                      key={prospect.id}
+                      value={prospect.id}
+                      disabled={usedIds.has(prospect.id) && picks[pick] !== prospect.id}
+                    >
+                      {prospect.name} ({prospect.position}, {prospect.school})
+                    </option>
+                  ))}
+                </select>
+                </div>
               </div>
             );
           })}
