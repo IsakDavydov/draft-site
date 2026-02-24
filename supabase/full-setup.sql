@@ -140,6 +140,17 @@ $$;
 
 grant execute on function public.get_leaderboard(integer) to anon;
 grant execute on function public.get_leaderboard(integer) to authenticated;
+
+create or replace function public.get_leaderboard_participants(p_year integer default 2026)
+returns table (display_name text, rank bigint)
+language sql security definer set search_path = public as $$
+  select dp.display_name, row_number() over (order by dp.display_name)::bigint as rank
+  from draft_predictions dp
+  where dp.draft_year = p_year
+  and exists (select 1 from prediction_picks pp where pp.prediction_id = dp.id limit 1);
+$$;
+grant execute on function public.get_leaderboard_participants(integer) to anon;
+grant execute on function public.get_leaderboard_participants(integer) to authenticated;
 -- draft_results stays empty until the real draft. Run supabase/seed-draft-results-test.sql for testing.
 
 

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, TrendingUp, Users, Target, Trophy, BookOpen, GraduationCap } from 'lucide-react';
+import { ArrowRight, TrendingUp, Users, Target, Trophy, BookOpen, GraduationCap, Zap } from 'lucide-react';
 import { getLatestArticles } from '@/lib/articles';
 import { formatDate } from '@/lib/utils';
 
@@ -12,25 +12,30 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
           <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
             <div className="mt-24 sm:mt-32 lg:mt-16">
-              <a href="#" className="inline-flex space-x-6">
-                <span className="rounded-full bg-white/10 px-3 py-1 text-sm font-semibold leading-6 text-white ring-1 ring-inset ring-white/20">
-                  NFL 2026 Season
-                </span>
-                <span className="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-white">
-                  <span>Live coverage</span>
-                  <ArrowRight className="h-5 w-5" aria-hidden="true" />
-                </span>
-              </a>
+              <Link
+                href="/predict"
+                className="inline-flex items-center gap-2 rounded-full bg-nfl-gold/20 px-4 py-2 text-sm font-semibold leading-6 text-white ring-2 ring-inset ring-nfl-gold hover:bg-nfl-gold/30 transition-colors"
+              >
+                <Zap className="h-4 w-4" />
+                2026 Draft Prediction Challenge — Submit your picks
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
             <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Your Ultimate NFL
-              <span className="block text-nfl-gold">Command Center</span>
+              Predict the
+              <span className="block text-nfl-gold">2026 NFL Draft</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              Comprehensive coverage of the NFL season, fantasy insights, draft analysis, and expert picks. 
-              Everything you need to dominate your fantasy league and stay ahead of the game.
+              Submit your first-round picks and compete on the leaderboard. Create groups with friends and see how your predictions hold up when draft day arrives. Plus season analysis, fantasy rankings, and expert picks.
             </p>
-            <div className="mt-10 flex items-center gap-x-6">
+            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Link
+                href="/predict"
+                className="inline-flex items-center gap-2 rounded-lg bg-nfl-gold px-5 py-3 text-base font-bold text-gray-900 shadow-lg hover:bg-nfl-gold/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-all hover:scale-105"
+              >
+                <Zap className="h-5 w-5" />
+                Submit Your Picks →
+              </Link>
               <Link
                 href="/season"
                 className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
@@ -45,9 +50,9 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-16">
-            <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+          <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-16 lg:self-start">
+            <div className="w-full max-w-3xl sm:max-w-5xl lg:max-w-none">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                   <div className="text-center">
                     <div className="mx-auto h-12 w-12 bg-nfl-gold rounded-full flex items-center justify-center mb-4">
@@ -75,16 +80,46 @@ export default function HomePage() {
                     <p className="text-gray-300 text-sm">Position-by-position rankings and tiers</p>
                   </div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                <Link
+                  href="/predict"
+                  className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-colors"
+                >
                   <div className="text-center">
                     <div className="mx-auto h-12 w-12 bg-nfl-gold rounded-full flex items-center justify-center mb-4">
                       <GraduationCap className="h-6 w-6 text-nfl-red" />
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">Draft</h3>
-                    <p className="text-gray-300 text-sm">Prospects, big board, and mock drafts</p>
+                    <p className="text-gray-300 text-sm">Predict the first round, prospects, and mock drafts</p>
                   </div>
-                </div>
+                </Link>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Draft Prediction Challenge Promo */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-nfl-blue via-nfl-red/90 to-nfl-blue">
+        <div className="relative mx-auto max-w-7xl px-6 py-14 sm:py-20 lg:px-8">
+          <div className="flex flex-col items-center text-center lg:flex-row lg:justify-between lg:text-left lg:gap-16">
+            <div className="flex-1">
+              <p className="text-sm font-bold uppercase tracking-wider text-nfl-gold">Free to play</p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                Ready to predict the first round?
+              </h2>
+              <p className="mt-4 max-w-2xl text-lg text-white/95 leading-relaxed">
+                Pick all 32 first-round selections for the 2026 NFL Draft. Compete on the global leaderboard, create private groups with friends, and see how your predictions stack up when draft day arrives.
+              </p>
+            </div>
+            <div className="mt-8 flex-shrink-0 lg:mt-0">
+              <Link
+                href="/predict"
+                className="inline-flex items-center gap-2 rounded-xl bg-nfl-gold px-8 py-4 text-lg font-bold text-gray-900 shadow-xl hover:bg-nfl-gold/90 transition-all hover:scale-105"
+              >
+                Submit Your Picks
+                <ArrowRight className="h-6 w-6" />
+              </Link>
+              <p className="mt-3 text-sm text-white/80">Sign in with email — it&apos;s quick</p>
             </div>
           </div>
         </div>
@@ -132,14 +167,20 @@ export default function HomePage() {
               <h3 className="text-lg font-semibold leading-6 text-gray-900">Draft</h3>
             </div>
             <p className="mt-4 text-sm leading-6 text-gray-600">
-              Prospect database, big board rankings, and weekly mock drafts. Stay ahead of the draft season.
+              Prospect database, big board rankings, and weekly mock drafts. Predict the first round and compete on the leaderboard.
             </p>
-            <div className="mt-6">
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/predict"
+                className="text-sm font-semibold leading-6 text-nfl-red group-hover:text-nfl-blue transition-colors"
+              >
+                Predict the Draft →
+              </Link>
               <Link
                 href="/draft"
                 className="text-sm font-semibold leading-6 text-nfl-blue group-hover:text-nfl-red transition-colors"
               >
-                View Draft <span aria-hidden="true">→</span>
+                View Prospects →
               </Link>
             </div>
           </div>

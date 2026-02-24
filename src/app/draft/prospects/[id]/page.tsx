@@ -111,7 +111,7 @@ export default async function ProspectPage({ params }: ProspectPageProps) {
               </p>
               <p className="text-gray-600 mt-1">{prospect.team}</p>
               <Link
-                href="/articles/post-super-bowl-mock-draft-2026"
+                href="/articles/pre-combine-mock-draft-2026"
                 className="inline-block mt-3 text-sm font-medium text-nfl-red hover:underline"
               >
                 Read full analysis →

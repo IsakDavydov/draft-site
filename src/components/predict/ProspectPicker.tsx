@@ -4,6 +4,8 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import { Prospect } from '@/types';
 import { Search } from 'lucide-react';
 
+const POSITIONS = ['All', 'QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S'];
+
 interface ProspectPickerProps {
   prospects: Prospect[];
   value: string;
@@ -21,25 +23,33 @@ export function ProspectPicker({
 }: ProspectPickerProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [positionFilter, setPositionFilter] = useState<string>('All');
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const selectedProspect = prospects.find((p) => p.id === value);
 
   const filtered = useMemo(() => {
+    let result = prospects;
+    if (positionFilter !== 'All') {
+      result = result.filter((p) => p.position === positionFilter);
+    }
     const q = search.trim().toLowerCase();
-    if (!q) return prospects;
-    return prospects.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.school.toLowerCase().includes(q) ||
-        p.position.toLowerCase().includes(q)
-    );
-  }, [prospects, search]);
+    if (q) {
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.school.toLowerCase().includes(q) ||
+          p.position.toLowerCase().includes(q)
+      );
+    }
+    return [...result].sort((a, b) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99));
+  }, [prospects, search, positionFilter]);
 
   useEffect(() => {
     if (open) {
       setSearch('');
+      setPositionFilter('All');
       setTimeout(() => inputRef.current?.focus(), 0);
     }
   }, [open]);
@@ -84,17 +94,30 @@ export function ProspectPicker({
           className="absolute z-50 mt-1 w-full min-w-[280px] rounded-lg border border-gray-200 bg-white shadow-lg"
           style={{ width: 'max(100%, 280px)' }}
         >
-          <div className="p-2 border-b border-gray-100">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                ref={inputRef}
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by name, school, or position..."
-                className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md bg-gray-50 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-nfl-blue focus:border-transparent focus:bg-white"
-              />
+          <div className="p-2 space-y-2 border-b border-gray-100">
+            <div className="flex gap-2">
+              <select
+                value={positionFilter}
+                onChange={(e) => setPositionFilter(e.target.value)}
+                className="flex-shrink-0 text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-gray-50 text-gray-900 focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
+              >
+                {POSITIONS.map((pos) => (
+                  <option key={pos} value={pos}>
+                    {pos === 'All' ? 'All positions' : pos}
+                  </option>
+                ))}
+              </select>
+              <div className="relative flex-1 min-w-0">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search by name or school..."
+                  className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md bg-gray-50 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-nfl-blue focus:border-transparent focus:bg-white"
+                />
+              </div>
             </div>
           </div>
           <ul className="max-h-[220px] overflow-y-auto py-1">

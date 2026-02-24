@@ -54,7 +54,7 @@ export function SiteHeader() {
               href={item.href}
               className={cn(
                 'text-sm font-semibold leading-6 text-gray-900 hover:text-nfl-red transition-colors',
-                pathname === item.href ? 'text-nfl-red' : 'text-gray-900'
+                pathname === item.href ? 'text-nfl-red' : ''
               )}
             >
               {item.name}

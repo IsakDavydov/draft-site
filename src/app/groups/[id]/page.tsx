@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { Trophy, ArrowLeft, Users } from 'lucide-react';
 import { GroupInviteCard } from '@/components/groups/GroupInviteCard';
+import { sanitizeDisplayName } from '@/lib/display-name-filter';
 
 export const metadata = {
   title: 'Group',
@@ -125,7 +126,7 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {row.display_name}
+                          {sanitizeDisplayName(row.display_name)}
                           {row.role === 'owner' && (
                             <span className="ml-2 text-xs text-amber-600 font-normal">Owner</span>
                           )}
@@ -200,7 +201,7 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {row.display_name}
+                        {sanitizeDisplayName(row.display_name)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right font-semibold">
                         {row.score} pts

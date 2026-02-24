@@ -23,14 +23,14 @@ const mockProspects: Prospect[] = [
   { id: '14', name: 'Mansoor Delane', position: 'CB', school: 'LSU', class: 'Senior', height: '6\'1"', weight: 185, ras: 8.4, bigBoardRank: 14, mockDraftRound: 1, mockDraftPick: 12, team: 'Dallas Cowboys' },
   { id: '15', name: 'Spencer Fano', position: 'OL', school: 'Utah', class: 'Junior', height: '6\'5"', weight: 305, ras: 8.8, bigBoardRank: 15, mockDraftRound: 1, mockDraftPick: 6, team: 'Cleveland Browns' },
   { id: '16', name: 'Kayden McDonald', position: 'DL', school: 'Ohio State', class: 'Junior', height: '6\'3"', weight: 326, ras: 8.7, bigBoardRank: 16, mockDraftRound: 1, mockDraftPick: 20, team: 'Dallas Cowboys' },
-  { id: '17', name: 'Peter Woods', position: 'DL', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 310, ras: 8.8, bigBoardRank: 17, mockDraftRound: 1, mockDraftPick: 17, team: 'Detroit Lions' },
-  { id: '18', name: 'Avieon Terrell', position: 'CB', school: 'Clemson', class: 'Junior', height: '5\'11"', weight: 180, ras: 8.5, bigBoardRank: 18, mockDraftRound: 1, mockDraftPick: 29, team: 'Los Angeles Rams' },
-  { id: '19', name: 'Caleb Banks', position: 'DL', school: 'Florida', class: 'Senior', height: '6\'6"', weight: 325, ras: 8.6, bigBoardRank: 19 },
-  { id: '20', name: 'Monroe Freeling', position: 'OL', school: 'Georgia', class: 'Junior', height: '6\'7"', weight: 315, ras: 8.4, bigBoardRank: 20, mockDraftRound: 1, mockDraftPick: 23, team: 'Philadelphia Eagles' },
-  { id: '21', name: 'Lee Hunter', position: 'DL', school: 'Texas Tech', class: 'Senior', height: '6\'4"', weight: 330, ras: 8.2, bigBoardRank: 21, mockDraftRound: 1, mockDraftPick: 32, team: 'Seattle Seahawks' },
-  { id: '22', name: 'Emmanuel McNeil-Warren', position: 'S', school: 'Toledo', class: 'Senior', height: '6\'3"', weight: 209, ras: 8.5, bigBoardRank: 22, mockDraftRound: 1, mockDraftPick: 18, team: 'Minnesota Vikings' },
-  { id: '23', name: 'CJ Allen', position: 'LB', school: 'Georgia', class: 'Junior', height: '6\'1"', weight: 235, ras: 8.9, bigBoardRank: 23, mockDraftRound: 1, mockDraftPick: 19, team: 'Carolina Panthers' },
-  { id: '24', name: 'Kadyn Proctor', position: 'OL', school: 'Alabama', class: 'Junior', height: '6\'7"', weight: 366, ras: 8.7, bigBoardRank: 24, mockDraftRound: 1, mockDraftPick: 28, team: 'Houston Texans' },
+  { id: '17', name: 'Peter Woods', position: 'DL', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 310, ras: 8.8, bigBoardRank: 19, mockDraftRound: 1, mockDraftPick: 17, team: 'Detroit Lions' },
+  { id: '18', name: 'Avieon Terrell', position: 'CB', school: 'Clemson', class: 'Junior', height: '5\'11"', weight: 180, ras: 8.5, bigBoardRank: 20, mockDraftRound: 1, mockDraftPick: 29, team: 'Los Angeles Rams' },
+  { id: '19', name: 'Caleb Banks', position: 'DL', school: 'Florida', class: 'Senior', height: '6\'6"', weight: 325, ras: 8.6, bigBoardRank: 17 },
+  { id: '20', name: 'Monroe Freeling', position: 'OL', school: 'Georgia', class: 'Junior', height: '6\'7"', weight: 315, ras: 8.4, bigBoardRank: 18, mockDraftRound: 1, mockDraftPick: 23, team: 'Philadelphia Eagles' },
+  { id: '21', name: 'Emmanuel McNeil-Warren', position: 'S', school: 'Toledo', class: 'Senior', height: '6\'3"', weight: 209, ras: 8.5, bigBoardRank: 21, mockDraftRound: 1, mockDraftPick: 18, team: 'Minnesota Vikings' },
+  { id: '22', name: 'CJ Allen', position: 'LB', school: 'Georgia', class: 'Junior', height: '6\'1"', weight: 235, ras: 8.9, bigBoardRank: 22, mockDraftRound: 1, mockDraftPick: 19, team: 'Carolina Panthers' },
+  { id: '23', name: 'Kadyn Proctor', position: 'OL', school: 'Alabama', class: 'Junior', height: '6\'7"', weight: 366, ras: 8.7, bigBoardRank: 23, mockDraftRound: 1, mockDraftPick: 28, team: 'Houston Texans' },
+  { id: '24', name: 'Lee Hunter', position: 'DL', school: 'Texas Tech', class: 'Senior', height: '6\'4"', weight: 330, ras: 8.2, bigBoardRank: 24, mockDraftRound: 1, mockDraftPick: 32, team: 'Seattle Seahawks' },
   { id: '25', name: 'T.J. Parker', position: 'DL', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 260, ras: 8.4, bigBoardRank: 25, mockDraftRound: 1, mockDraftPick: 25, team: 'Chicago Bears' },
   { id: '26', name: 'Keldric Faulk', position: 'DL', school: 'Auburn', class: 'Junior', height: '6\'6"', weight: 285, ras: 8.3, bigBoardRank: 26, mockDraftRound: 1, mockDraftPick: 22, team: 'Los Angeles Chargers' },
   { id: '27', name: 'Kenyon Sadiq', position: 'TE', school: 'Oregon', class: 'Junior', height: '6\'3"', weight: 245, ras: 8.2, bigBoardRank: 27, mockDraftRound: 1, mockDraftPick: 30, team: 'Denver Broncos' },
@@ -38,10 +38,10 @@ const mockProspects: Prospect[] = [
   { id: '29', name: 'Caleb Lomu', position: 'OL', school: 'Utah', class: 'Junior', height: '6\'6"', weight: 308, ras: 8.5, bigBoardRank: 29, mockDraftRound: 1, mockDraftPick: 31, team: 'New England Patriots' },
   { id: '30', name: 'Denzel Boston', position: 'WR', school: 'Washington', class: 'Junior', height: '6\'4"', weight: 210, ras: 8.4, bigBoardRank: 30, mockDraftRound: 1, mockDraftPick: 26, team: 'Buffalo Bills' },
   { id: '31', name: 'Omar Cooper Jr.', position: 'WR', school: 'Indiana', class: 'Junior', height: '6\'0"', weight: 204, ras: 8.3, bigBoardRank: 31 },
-  { id: '32', name: 'Ty Simpson', position: 'QB', school: 'Alabama', class: 'Junior', height: '6\'2"', weight: 208, ras: 8.5, bigBoardRank: 32, mockDraftRound: 1, mockDraftPick: 21, team: 'Pittsburgh Steelers' },
-  { id: '33', name: 'Emmanuel Pregnon', position: 'OL', school: 'Oregon', class: 'Senior', height: '6\'5"', weight: 318, ras: 8.4, bigBoardRank: 33, mockDraftRound: 1, mockDraftPick: 27, team: 'San Francisco 49ers' },
-  { id: '34', name: 'Cashius Howell', position: 'DL', school: 'Texas A&M', class: 'Senior', height: '6\'2"', weight: 248, ras: 8.8, bigBoardRank: 34, mockDraftRound: 1, mockDraftPick: 15, team: 'Tampa Bay Buccaneers' },
-  { id: '35', name: 'Akheem Mesidor', position: 'DL', school: 'Miami', class: 'Senior', height: '6\'3"', weight: 265, ras: 8.3, bigBoardRank: 35 },
+  { id: '32', name: 'Ty Simpson', position: 'QB', school: 'Alabama', class: 'Junior', height: '6\'2"', weight: 208, ras: 8.5, bigBoardRank: 33, mockDraftRound: 1, mockDraftPick: 21, team: 'Pittsburgh Steelers' },
+  { id: '33', name: 'Emmanuel Pregnon', position: 'OL', school: 'Oregon', class: 'Senior', height: '6\'5"', weight: 318, ras: 8.4, bigBoardRank: 34, mockDraftRound: 1, mockDraftPick: 27, team: 'San Francisco 49ers' },
+  { id: '34', name: 'Cashius Howell', position: 'DL', school: 'Texas A&M', class: 'Senior', height: '6\'2"', weight: 248, ras: 8.8, bigBoardRank: 35, mockDraftRound: 1, mockDraftPick: 15, team: 'Tampa Bay Buccaneers' },
+  { id: '35', name: 'Akheem Mesidor', position: 'DL', school: 'Miami', class: 'Senior', height: '6\'3"', weight: 265, ras: 8.3, bigBoardRank: 32 },
   { id: '36', name: 'Christen Miller', position: 'DL', school: 'Georgia', class: 'Junior', height: '6\'4"', weight: 310, ras: 8.2, bigBoardRank: 36 },
   { id: '37', name: 'Brandon Cisse', position: 'CB', school: 'South Carolina', class: 'Junior', height: '6\'0"', weight: 190, ras: 8.3, bigBoardRank: 37 },
   { id: '38', name: 'Zachariah Branch', position: 'WR', school: 'USC', class: 'Sophomore', height: '5\'10"', weight: 175, ras: 8.5, bigBoardRank: 38 },
@@ -109,22 +109,25 @@ export async function getProspects(
     filtered = filtered.filter(prospect => prospect.class === classYear);
   }
   
-  return filtered.sort((a, b) => (a.bigBoardRank || 999) - (b.bigBoardRank || 999));
+  return filtered
+    .map(enrichProspectWithMock)
+    .sort((a, b) => (a.bigBoardRank || 999) - (b.bigBoardRank || 999));
 }
 
 export async function getBigBoard(): Promise<Prospect[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
-  return mockProspects.sort((a, b) => (a.bigBoardRank || 999) - (b.bigBoardRank || 999));
+  return mockProspects.map(enrichProspectWithMock).sort((a, b) => (a.bigBoardRank || 999) - (b.bigBoardRank || 999));
 }
 
 export async function getProspectById(id: string): Promise<Prospect | null> {
   await new Promise(resolve => setTimeout(resolve, 50));
-  return mockProspects.find((p) => p.id === id) || null;
+  const prospect = mockProspects.find((p) => p.id === id) || null;
+  return prospect ? enrichProspectWithMock(prospect) : null;
 }
 
 export function getMockDraftNotesForProspect(playerName: string): string | null {
-  const picks = (postSuperBowlMock2026 as { picks: { player: string; notes: string }[] }).picks;
-  const match = picks.find((p) => p.player === playerName);
+  const picks = (preCombineMock2026 as { picks: { player: string; notes?: string }[] }).picks;
+  const match = picks.find((p) => p.player.trim().toLowerCase() === playerName.trim().toLowerCase());
   return match?.notes ?? null;
 }
 
@@ -140,9 +143,9 @@ export async function getMockDrafts(season: number = 2024): Promise<MockDraft[]>
   return mockMockDrafts.filter(draft => draft.season === season);
 }
 
-// Draft order: pick number -> team (for 2026 first round)
+// Draft order: pick number -> team (for 2026 first round, from pre-combine mock)
 export function getDraftOrder2026(): { pick: number; team: string }[] {
-  const picks = (postSuperBowlMock2026 as { picks: { pick: number; team: string }[] }).picks;
+  const picks = (preCombineMock2026 as { picks: { pick: number; team: string }[] }).picks;
   return picks.map((p) => ({ pick: p.pick, team: p.team }));
 }
 
@@ -171,6 +174,27 @@ function prospectPositionMatchesNeed(prospectPos: string, need: string): boolean
 
 export function prospectFillsTeamNeed(prospect: { position: string }, needs: string[]): boolean {
   return needs.some((need) => prospectPositionMatchesNeed(prospect.position, need));
+}
+
+// Pre-combine mock: map player name -> { pick, team } for enriching prospects
+const preCombineMockByPlayer: Map<string, { pick: number; team: string }> = new Map(
+  (preCombineMock2026 as { picks: { player: string; pick: number; team: string }[] }).picks.map(
+    (p) => [p.player.trim().toLowerCase(), { pick: p.pick, team: p.team }]
+  )
+);
+
+function enrichProspectWithMock(prospect: Prospect): Prospect {
+  const match = preCombineMockByPlayer.get(prospect.name.trim().toLowerCase());
+  if (!match) {
+    const { mockDraftRound, mockDraftPick, team, ...rest } = prospect;
+    return { ...rest };
+  }
+  return {
+    ...prospect,
+    mockDraftRound: 1,
+    mockDraftPick: match.pick,
+    team: match.team,
+  };
 }
 
 // Load mock draft from JSON file (data/mock-drafts/)

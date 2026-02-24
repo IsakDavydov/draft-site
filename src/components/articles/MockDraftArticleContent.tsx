@@ -10,6 +10,29 @@ interface PickSection {
   teamName: string;
   heading: string;
   body: string;
+  playerName?: string;
+  position?: string;
+  school?: string;
+}
+
+function parsePickDetails(heading: string): { playerName: string; position: string; school: string } | null {
+  const match = heading.match(/^[\d]+\.\s+.+?\s+—\s+(.+)$/);
+  if (!match) return null;
+  const parts = match[1].split(',').map((p) => p.trim());
+  if (parts.length < 3) return null;
+  const school = parts[parts.length - 1];
+  const position = parts[parts.length - 2];
+  const playerName = parts.slice(0, -2).join(', ');
+  return { playerName, position, school };
+}
+
+function hexToRgba(hex: string, alpha: number): string {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return `rgba(31, 41, 55, ${alpha})`;
+  const r = parseInt(result[1], 16);
+  const g = parseInt(result[2], 16);
+  const b = parseInt(result[3], 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
 function parseMockDraftContent(content: string): { intro: string; picks: PickSection[]; footer?: string } {
@@ -34,7 +57,8 @@ function parseMockDraftContent(content: string): { intro: string; picks: PickSec
     const match = heading.match(/^(\d+)\.\s+(.+?)\s+—\s+/);
     const pickNum = match ? match[1] : '';
     const teamName = match ? match[2] : '';
-    picks.push({ pickNum, teamName, heading, body });
+    const details = parsePickDetails(heading);
+    picks.push({ pickNum, teamName, heading, body, ...details });
   }
 
   return { intro, picks, footer };
@@ -65,30 +89,61 @@ export function MockDraftArticleContent({ content }: { content: string }) {
         </div>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-5">
         {picks.map((pick) => {
           const teamColor = TEAM_COLORS_BY_NAME[pick.teamName] || '#1f2937';
+          const details = pick.playerName && pick.school ? pick : null;
           return (
             <div
               key={pick.heading}
-              className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm ring-1 ring-gray-900/5 overflow-hidden"
-              style={{ borderLeftWidth: '4px', borderLeftColor: teamColor }}
+              className="relative rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm"
+              style={{
+                borderLeftWidth: '5px',
+                borderLeftColor: teamColor,
+                background: `linear-gradient(135deg, ${hexToRgba(teamColor, 0.06)} 0%, ${hexToRgba(teamColor, 0.02)} 40%, transparent 100%)`,
+              }}
             >
-              <div className="flex flex-wrap items-center gap-3 mb-4">
-                <span
-                  className="inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-lg px-2.5 text-sm font-bold text-white"
-                  style={{ backgroundColor: teamColor }}
-                >
-                  {pick.pickNum}
-                </span>
-                <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
-                  {pick.heading}
-                </h2>
-              </div>
-              <div className="text-base leading-relaxed text-gray-800 sm:text-lg [&_strong]:text-gray-900">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {pick.body}
-                </ReactMarkdown>
+              <div className="p-6 sm:p-8">
+                <div className="flex items-start gap-4">
+                  <span
+                    className="flex-shrink-0 inline-flex h-11 w-11 items-center justify-center rounded-xl text-base font-bold text-white shadow-sm"
+                    style={{ backgroundColor: teamColor }}
+                  >
+                    {pick.pickNum}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    {details ? (
+                      <>
+                        <p
+                          className="text-xs font-semibold uppercase tracking-wider"
+                          style={{ color: teamColor }}
+                        >
+                          {pick.teamName}
+                        </p>
+                        <h2 className="mt-2 text-xl font-bold text-gray-900 sm:text-2xl tracking-tight">
+                          {pick.playerName}
+                        </h2>
+                        <p className="mt-2 text-sm font-medium text-gray-500">
+                          {pick.school}
+                        </p>
+                        <p className="mt-0.5 text-xs text-gray-400">
+                          {pick.position}
+                        </p>
+                      </>
+                    ) : (
+                      <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
+                        {pick.heading}
+                      </h2>
+                    )}
+                  </div>
+                </div>
+                {pick.body && (
+                  <div className="mt-5 pt-5 border-t border-gray-200/60 text-base leading-relaxed text-gray-700 sm:text-lg [&_strong]:text-gray-900 [&_p]:mt-2 [&_p:first-child]:mt-0">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {pick.body}
+                    </ReactMarkdown>
+                  </div>
+                )}
               </div>
             </div>
           );

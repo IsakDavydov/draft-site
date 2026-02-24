@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { Prospect } from '@/types';
 import { TEAM_COLORS_BY_NAME } from '@/lib/adapters/teams';
 import { Zap, Trash2 } from 'lucide-react';
+import { ProspectPicker } from './ProspectPicker';
 import type { MockDraftFromFile } from '@/types';
 
 const DRAFT_YEAR = 2026;
@@ -257,23 +258,13 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                   </p>
                 )}
                 <div className="mt-auto flex-shrink-0">
-                <select
-                  value={picks[pick] || ''}
-                  onChange={(e) => setPicks((prev) => ({ ...prev, [pick]: e.target.value }))}
-                  disabled={loading}
-                  className="w-full text-sm border border-gray-300 rounded-md px-2 py-1.5 bg-white text-gray-900 focus:ring-2 focus:ring-nfl-blue focus:border-transparent disabled:opacity-50"
-                >
-                  <option value="">Select prospect</option>
-                  {prospects.map((prospect) => (
-                    <option
-                      key={prospect.id}
-                      value={prospect.id}
-                      disabled={usedIds.has(prospect.id) && picks[pick] !== prospect.id}
-                    >
-                      {prospect.name} ({prospect.position}, {prospect.school})
-                    </option>
-                  ))}
-                </select>
+                  <ProspectPicker
+                    prospects={prospects}
+                    value={picks[pick] || ''}
+                    onChange={(id) => setPicks((prev) => ({ ...prev, [pick]: id }))}
+                    usedIds={usedIds}
+                    disabled={loading}
+                  />
                 </div>
               </div>
             );
