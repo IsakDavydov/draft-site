@@ -14,13 +14,21 @@ export default function DraftPage() {
           description="Prospect database and big board rankings"
         />
 
-        <Link
-          href="/articles/post-super-bowl-mock-draft-2026"
-          className="mb-8 inline-flex items-center gap-2 rounded-full bg-nfl-red px-6 py-3 text-base font-semibold text-white shadow-sm transition-all hover:bg-nfl-red/90 hover:shadow-md"
-        >
-          <FileText className="h-5 w-5" />
-          Post Super Bowl Mock Draft 2026
-        </Link>
+        <div className="flex flex-wrap gap-3 mb-8">
+          <Link
+            href="/articles/pre-combine-mock-draft-2026"
+            className="inline-flex items-center gap-2 rounded-full bg-nfl-red px-6 py-3 text-base font-semibold text-white shadow-sm transition-all hover:bg-nfl-red/90 hover:shadow-md"
+          >
+            <FileText className="h-5 w-5" />
+            Pre Combine Mock Draft 2026
+          </Link>
+          <Link
+            href="/articles/post-super-bowl-mock-draft-2026"
+            className="inline-flex items-center gap-2 rounded-full border-2 border-gray-300 px-6 py-3 text-base font-semibold text-gray-700 transition-all hover:border-nfl-red hover:text-nfl-red"
+          >
+            Post Super Bowl Mock Draft 2026
+          </Link>
+        </div>
         
         <div className="space-y-8">
           {/* Prospect Directory */}

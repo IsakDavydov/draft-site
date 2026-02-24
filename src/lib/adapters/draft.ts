@@ -2,6 +2,8 @@ import { Prospect, MockDraft, MockDraftFromFile } from '@/types';
 
 // File-based mock draft (loaded from data/mock-drafts/)
 import postSuperBowlMock2026 from '../../../data/mock-drafts/post-super-bowl-mock-draft-2026.json';
+import preCombineMock2026 from '../../../data/mock-drafts/pre-combine-mock-draft-2026.json';
+import teamNeeds2026 from '../../../data/team-needs-2026.json';
 
 // 2026 NFL Draft top 50 prospects
 const mockProspects: Prospect[] = [
@@ -12,11 +14,11 @@ const mockProspects: Prospect[] = [
   { id: '5', name: 'Sonny Styles', position: 'LB', school: 'Ohio State', class: 'Senior', height: '6\'4"', weight: 243, ras: 9.1, bigBoardRank: 4, mockDraftRound: 1, mockDraftPick: 10, team: 'Cincinnati Bengals' },
   { id: '6', name: 'Jordyn Tyson', position: 'WR', school: 'Arizona State', class: 'Junior', height: '6\'2"', weight: 200, ras: 9.2, bigBoardRank: 5, mockDraftRound: 1, mockDraftPick: 8, team: 'New Orleans Saints' },
   { id: '7', name: 'David Bailey', position: 'DL', school: 'Texas Tech', class: 'Senior', height: '6\'3"', weight: 250, ras: 8.9, bigBoardRank: 7, mockDraftRound: 1, mockDraftPick: 7, team: 'Washington Commanders' },
-  { id: '8', name: 'Arvell Reese Jr.', position: 'LB', school: 'Ohio State', class: 'Junior', height: '6\'4"', weight: 243, ras: 9.5, bigBoardRank: 8, mockDraftRound: 1, mockDraftPick: 2, team: 'New York Jets' },
+  { id: '8', name: 'Arvell Reese Jr.', position: 'LB', school: 'Ohio State', class: 'Junior', height: '6\'4"', weight: 243, ras: 9.5, bigBoardRank: 12, mockDraftRound: 1, mockDraftPick: 2, team: 'New York Jets' },
   { id: '9', name: 'Makai Lemon', position: 'WR', school: 'USC', class: 'Junior', height: '5\'11"', weight: 195, ras: 8.8, bigBoardRank: 9, mockDraftRound: 1, mockDraftPick: 13, team: 'Los Angeles Rams' },
   { id: '10', name: 'Francis Mauigoa', position: 'OL', school: 'Miami', class: 'Junior', height: '6\'6"', weight: 315, ras: 9.1, bigBoardRank: 10, mockDraftRound: 1, mockDraftPick: 3, team: 'Arizona Cardinals' },
   { id: '11', name: 'Jermod McCoy', position: 'CB', school: 'Tennessee', class: 'Junior', height: '6\'0"', weight: 193, ras: 8.7, bigBoardRank: 11, mockDraftRound: 1, mockDraftPick: 11, team: 'Miami Dolphins' },
-  { id: '12', name: 'Carnell Tate', position: 'WR', school: 'Ohio State', class: 'Junior', height: '6\'3"', weight: 195, ras: 8.9, bigBoardRank: 12, mockDraftRound: 1, mockDraftPick: 16, team: 'New York Jets' },
+  { id: '12', name: 'Carnell Tate', position: 'WR', school: 'Ohio State', class: 'Junior', height: '6\'3"', weight: 195, ras: 8.9, bigBoardRank: 8, mockDraftRound: 1, mockDraftPick: 16, team: 'New York Jets' },
   { id: '13', name: 'Olaivavega Ioane', position: 'OL', school: 'Penn State', class: 'Junior', height: '6\'4"', weight: 328, ras: 8.5, bigBoardRank: 13, mockDraftRound: 1, mockDraftPick: 14, team: 'Baltimore Ravens' },
   { id: '14', name: 'Mansoor Delane', position: 'CB', school: 'LSU', class: 'Senior', height: '6\'1"', weight: 185, ras: 8.4, bigBoardRank: 14, mockDraftRound: 1, mockDraftPick: 12, team: 'Dallas Cowboys' },
   { id: '15', name: 'Spencer Fano', position: 'OL', school: 'Utah', class: 'Junior', height: '6\'5"', weight: 305, ras: 8.8, bigBoardRank: 15, mockDraftRound: 1, mockDraftPick: 6, team: 'Cleveland Browns' },
@@ -144,12 +146,42 @@ export function getDraftOrder2026(): { pick: number; team: string }[] {
   return picks.map((p) => ({ pick: p.pick, team: p.team }));
 }
 
+// Team needs by pick number for 2026 first round (from NFL.com)
+const TEAM_NEEDS_2026: Record<number, string[]> = (teamNeeds2026 as { needsByPick: Record<string, string[]> }).needsByPick
+  ? Object.fromEntries(
+      Object.entries((teamNeeds2026 as { needsByPick: Record<string, string[]> }).needsByPick).map(([k, v]) => [
+        parseInt(k, 10),
+        v,
+      ])
+    )
+  : {};
+
+export function getTeamNeeds2026(): Record<number, string[]> {
+  return TEAM_NEEDS_2026;
+}
+
+// Prospect position -> team need mapping (Edge = pass rusher often listed as DL)
+function prospectPositionMatchesNeed(prospectPos: string, need: string): boolean {
+  if (prospectPos === need) return true;
+  if ((prospectPos === 'OT' || prospectPos === 'OG') && need === 'OL') return true;
+  if (prospectPos === 'OL' && (need === 'OL' || need === 'Edge')) return false; // OL doesn't match Edge
+  if (prospectPos === 'DL' && (need === 'DL' || need === 'Edge')) return true;
+  return false;
+}
+
+export function prospectFillsTeamNeed(prospect: { position: string }, needs: string[]): boolean {
+  return needs.some((need) => prospectPositionMatchesNeed(prospect.position, need));
+}
+
 // Load mock draft from JSON file (data/mock-drafts/)
 export async function getMockDraftFromFile(filename: string): Promise<MockDraftFromFile | null> {
   await new Promise(resolve => setTimeout(resolve, 100));
 
   if (filename === 'post-super-bowl-mock-draft-2026.json') {
     return postSuperBowlMock2026 as MockDraftFromFile;
+  }
+  if (filename === 'pre-combine-mock-draft-2026.json') {
+    return preCombineMock2026 as MockDraftFromFile;
   }
   return null;
 }

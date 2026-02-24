@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
-import { getBigBoard, getDraftOrder2026, getMockDraftFromFile } from '@/lib/adapters';
+import { getBigBoard, getDraftOrder2026, getMockDraftFromFile, getTeamNeeds2026 } from '@/lib/adapters';
 import { PredictionForm } from '@/components/predict/PredictionForm';
 
 export const metadata = {
@@ -25,6 +25,7 @@ export default async function PredictPage() {
   let prospects: Awaited<ReturnType<typeof getBigBoard>>;
   let draftOrder: ReturnType<typeof getDraftOrder2026>;
   let mockDraftTemplate: Awaited<ReturnType<typeof getMockDraftFromFile>> = null;
+  const teamNeeds = getTeamNeeds2026();
 
   try {
     const supabase = await createClient();
@@ -34,7 +35,7 @@ export default async function PredictPage() {
     [prospects, draftOrder, mockDraftTemplate] = await Promise.all([
       getBigBoard(),
       Promise.resolve(getDraftOrder2026()),
-      getMockDraftFromFile('post-super-bowl-mock-draft-2026.json'),
+      getMockDraftFromFile('pre-combine-mock-draft-2026.json'),
     ]);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -75,6 +76,7 @@ export default async function PredictPage() {
           draftOrder={draftOrder}
           userId={user.id}
           mockDraftTemplate={mockDraftTemplate}
+          teamNeeds={teamNeeds}
         />
       </div>
     </div>
