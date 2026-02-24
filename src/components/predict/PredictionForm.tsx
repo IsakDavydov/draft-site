@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Prospect } from '@/types';
 import { TEAM_COLORS_BY_NAME } from '@/lib/adapters/teams';
+import { ProspectPicker } from './ProspectPicker';
+import { Zap, Trash2 } from 'lucide-react';
+import type { MockDraftFromFile } from '@/types';
 
 const DRAFT_YEAR = 2026;
 
@@ -16,9 +19,10 @@ interface PredictionFormProps {
   prospects: Prospect[];
   draftOrder: DraftOrderItem[];
   userId: string;
+  mockDraftTemplate?: MockDraftFromFile | null;
 }
 
-export function PredictionForm({ prospects, draftOrder, userId }: PredictionFormProps) {
+export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplate }: PredictionFormProps) {
   const [picks, setPicks] = useState<Record<number, string>>({});
   const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -133,9 +137,15 @@ export function PredictionForm({ prospects, draftOrder, userId }: PredictionForm
         setExistingPrediction({ id: predictionId, picks: picksToInsert });
       }
     } catch (err: unknown) {
+      const isDuplicateName =
+        err && typeof err === 'object' && 'code' in err && (err as { code: string }).code === '23505';
       setMessage({
         type: 'error',
-        text: err instanceof Error ? err.message : 'Failed to save predictions.',
+        text: isDuplicateName
+          ? 'That display name is already taken for 2026. Please choose another.'
+          : err instanceof Error
+            ? err.message
+            : 'Failed to save predictions.',
       });
     } finally {
       setLoading(false);
@@ -143,6 +153,31 @@ export function PredictionForm({ prospects, draftOrder, userId }: PredictionForm
   }
 
   const usedIds = new Set(Object.values(picks).filter(Boolean));
+
+  function fillFromBigBoard() {
+    const sorted = [...prospects].sort((a, b) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99));
+    const next: Record<number, string> = {};
+    draftOrder.forEach(({ pick }, i) => {
+      const prospect = sorted[i];
+      if (prospect) next[pick] = prospect.id;
+    });
+    setPicks(next);
+  }
+
+  function fillFromMockDraft() {
+    if (!mockDraftTemplate) return;
+    const nameToProspect = Object.fromEntries(prospects.map((p) => [p.name.toLowerCase(), p]));
+    const next: Record<number, string> = {};
+    mockDraftTemplate.picks.forEach(({ pick, player }) => {
+      const prospect = nameToProspect[player.toLowerCase()];
+      if (prospect) next[pick] = prospect.id;
+    });
+    setPicks((prev) => ({ ...prev, ...next }));
+  }
+
+  function clearAll() {
+    setPicks({});
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -157,16 +192,48 @@ export function PredictionForm({ prospects, draftOrder, userId }: PredictionForm
           onChange={(e) => setDisplayName(e.target.value)}
           required
           maxLength={30}
-          className="w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
+          className="w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
           placeholder="e.g. DraftKing"
         />
       </div>
 
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-gray-900">Your First Round Picks</h2>
-        <p className="text-sm text-gray-600">
-          Select one prospect for each pick. Each prospect can only be used once.
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900">Your First Round Picks</h2>
+            <p className="text-sm text-gray-600 mt-0.5">
+              Select one prospect for each pick. Type to search—each prospect can only be used once.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={fillFromBigBoard}
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+            >
+              <Zap className="h-4 w-4" />
+              Fill from Big Board
+            </button>
+            {mockDraftTemplate && (
+              <button
+                type="button"
+                onClick={fillFromMockDraft}
+                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+              >
+                <Zap className="h-4 w-4" />
+                Use mock draft
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={clearAll}
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+            >
+              <Trash2 className="h-4 w-4" />
+              Clear all
+            </button>
+          </div>
+        </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {draftOrder.map(({ pick, team }) => {
             const teamColor = TEAM_COLORS_BY_NAME[team] || '#1d4ed8';
@@ -183,22 +250,13 @@ export function PredictionForm({ prospects, draftOrder, userId }: PredictionForm
                   </span>
                   <span className="ml-2 text-sm font-medium text-gray-900">{team}</span>
                 </div>
-                <select
+                <ProspectPicker
+                  prospects={prospects}
                   value={picks[pick] || ''}
-                  onChange={(e) => setPicks((prev) => ({ ...prev, [pick]: e.target.value }))}
-                  className="w-full text-sm border border-gray-300 rounded-md px-2 py-1.5 focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
-                >
-                  <option value="">Select prospect</option>
-                  {prospects.map((prospect) => (
-                    <option
-                      key={prospect.id}
-                      value={prospect.id}
-                      disabled={usedIds.has(prospect.id) && picks[pick] !== prospect.id}
-                    >
-                      {prospect.name} ({prospect.position}, {prospect.school})
-                    </option>
-                  ))}
-                </select>
+                  onChange={(id) => setPicks((prev) => ({ ...prev, [pick]: id }))}
+                  usedIds={usedIds}
+                  disabled={loading}
+                />
               </div>
             );
           })}

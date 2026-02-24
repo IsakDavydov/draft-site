@@ -109,7 +109,7 @@ export default async function LeaderboardPage() {
                       {row.display_name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right font-semibold">
-                      {row.score}/32
+                      {row.score} pts
                     </td>
                   </tr>
                 ))}
@@ -119,7 +119,7 @@ export default async function LeaderboardPage() {
         )}
 
         <p className="mt-6 text-sm text-gray-500">
-          1 point per correct player at the correct pick. After the draft, results are compared to the official first round.
+          15 pts = correct player at correct pick. 5 pts = player went 1 pick before or after. Max 480 pts.
         </p>
       </div>
     </div>

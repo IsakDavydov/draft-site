@@ -38,10 +38,14 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Ensure selects and dropdowns are always readable (override dark mode inheritance) */
-select {
+/* Ensure form inputs are always readable (override dark mode inheritance) */
+input, select, textarea {
   background-color: #ffffff;
   color: #171717;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #6b7280;
 }
 
 select option {

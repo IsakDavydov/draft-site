@@ -20,6 +20,10 @@ create table if not exists public.draft_predictions (
   unique(user_id, draft_year)
 );
 
+-- Per-year unique display names
+alter table public.draft_predictions drop constraint if exists draft_predictions_display_name_draft_year_key;
+alter table public.draft_predictions add constraint draft_predictions_display_name_draft_year_key unique (display_name, draft_year);
+
 -- Individual picks: 32 per prediction
 create table if not exists public.prediction_picks (
   id uuid default gen_random_uuid() primary key,
@@ -49,6 +53,9 @@ alter table public.prediction_picks enable row level security;
 alter table public.draft_results enable row level security;
 
 -- Profiles: users can read/update own
+drop policy if exists "Users can view own profile" on public.profiles;
+drop policy if exists "Users can update own profile" on public.profiles;
+drop policy if exists "Users can insert own profile" on public.profiles;
 create policy "Users can view own profile"
   on public.profiles for select
   using (auth.uid() = id);
@@ -62,6 +69,10 @@ create policy "Users can insert own profile"
   with check (auth.uid() = id);
 
 -- Draft predictions: users can CRUD own
+drop policy if exists "Users can view own predictions" on public.draft_predictions;
+drop policy if exists "Users can insert own predictions" on public.draft_predictions;
+drop policy if exists "Users can update own predictions" on public.draft_predictions;
+drop policy if exists "Users can delete own predictions" on public.draft_predictions;
 create policy "Users can view own predictions"
   on public.draft_predictions for select
   using (auth.uid() = user_id);
@@ -79,8 +90,10 @@ create policy "Users can delete own predictions"
   using (auth.uid() = user_id);
 
 -- Leaderboard: anyone can read predictions (for scoring display)
--- We'll add a policy to allow reading all predictions for leaderboard
--- For now, users can only read their own; we can add public read for leaderboard later
+drop policy if exists "Users can view own picks" on public.prediction_picks;
+drop policy if exists "Users can insert picks for own prediction" on public.prediction_picks;
+drop policy if exists "Users can update picks for own prediction" on public.prediction_picks;
+drop policy if exists "Users can delete picks for own prediction" on public.prediction_picks;
 create policy "Users can view own picks"
   on public.prediction_picks for select
   using (
@@ -122,6 +135,7 @@ create policy "Users can delete picks for own prediction"
   );
 
 -- Draft results: public read (for scoring), only service role can write
+drop policy if exists "Anyone can read draft results" on public.draft_results;
 create policy "Anyone can read draft results"
   on public.draft_results for select
   using (true);
@@ -137,6 +151,7 @@ end;
 $$ language plpgsql security definer;
 
 -- Trigger runs on auth.users insert
-create or replace trigger on_auth_user_created
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();

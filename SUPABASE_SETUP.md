@@ -43,6 +43,14 @@ This creates the `profiles`, `draft_predictions`, `prediction_picks`, and `draft
 
 This adds the `get_leaderboard` function and seeds `draft_results` with the mock draft (so you can test the leaderboard immediately).
 
+## 4c. Run the Groups Setup (Optional)
+
+1. In **SQL Editor**, click **New query**
+2. Copy the contents of `supabase/groups.sql`
+3. Paste and click **Run**
+
+This creates the `groups` and `group_members` tables, plus the `join_group_by_code` and `get_group_leaderboard` functions. Users can then create or join groups to compete with friends.
+
 ## 5. Configure Auth (Optional)
 
 1. Go to **Authentication** → **Providers**

@@ -12,6 +12,7 @@ const navigation = [
   { name: 'Season', href: '/season' },
   { name: 'Draft', href: '/draft' },
   { name: 'Predict', href: '/predict' },
+  { name: 'Groups', href: '/groups' },
   { name: 'Picks', href: '/picks' },
   { name: 'Fantasy', href: '/fantasy' },
 ];

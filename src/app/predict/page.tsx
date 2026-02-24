@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
-import { getBigBoard, getDraftOrder2026 } from '@/lib/adapters';
+import { getBigBoard, getDraftOrder2026, getMockDraftFromFile } from '@/lib/adapters';
 import { PredictionForm } from '@/components/predict/PredictionForm';
 
 export const metadata = {
@@ -24,15 +24,17 @@ export default async function PredictPage() {
   let user: { id: string } | null = null;
   let prospects: Awaited<ReturnType<typeof getBigBoard>>;
   let draftOrder: ReturnType<typeof getDraftOrder2026>;
+  let mockDraftTemplate: Awaited<ReturnType<typeof getMockDraftFromFile>> = null;
 
   try {
     const supabase = await createClient();
     const { data } = await supabase.auth.getUser();
     user = data.user;
 
-    [prospects, draftOrder] = await Promise.all([
+    [prospects, draftOrder, mockDraftTemplate] = await Promise.all([
       getBigBoard(),
       Promise.resolve(getDraftOrder2026()),
+      getMockDraftFromFile('post-super-bowl-mock-draft-2026.json'),
     ]);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -53,17 +55,26 @@ export default async function PredictPage() {
           Predict all 32 first-round picks. Your entry will be locked when the draft begins. Compare with everyone after!
         </p>
 
-        <Link
-          href="/leaderboard"
-          className="inline-flex items-center gap-2 text-sm font-medium text-nfl-red hover:underline mb-8 block"
-        >
-          View leaderboard →
-        </Link>
+        <div className="flex flex-wrap gap-4 mb-8">
+          <Link
+            href="/leaderboard"
+            className="inline-flex items-center gap-2 text-sm font-medium text-nfl-red hover:underline"
+          >
+            View leaderboard →
+          </Link>
+          <Link
+            href="/groups"
+            className="inline-flex items-center gap-2 text-sm font-medium text-nfl-blue hover:underline"
+          >
+            Compete with friends →
+          </Link>
+        </div>
 
         <PredictionForm
           prospects={prospects}
           draftOrder={draftOrder}
           userId={user.id}
+          mockDraftTemplate={mockDraftTemplate}
         />
       </div>
     </div>
