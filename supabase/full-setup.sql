@@ -268,3 +268,17 @@ language sql security definer set search_path = public as $$
 $$;
 
 grant execute on function public.get_group_leaderboard(uuid, integer) to authenticated;
+
+create or replace function public.get_group_members(p_group_id uuid)
+returns table (display_name text, role text, rank bigint)
+language sql security definer set search_path = public as $$
+  with member_info as (
+    select gm.role, coalesce(dp.display_name, p.display_name, 'Player') as display_name
+    from public.group_members gm
+    left join public.profiles p on p.id = gm.user_id
+    left join public.draft_predictions dp on dp.user_id = gm.user_id and dp.draft_year = 2026
+    where gm.group_id = p_group_id
+  )
+  select display_name, role, row_number() over (order by display_name)::bigint as rank from member_info;
+$$;
+grant execute on function public.get_group_members(uuid) to authenticated;

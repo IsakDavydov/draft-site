@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getMockDraftFromFile } from '@/lib/adapters';
+import { getMockDraftFromFile, getTeamNeeds2026 } from '@/lib/adapters';
 import { MockDraftFromFile } from '@/types';
 
 export function WeeklyMock() {
   const [mockDraft, setMockDraft] = useState<MockDraftFromFile | null>(null);
   const [loading, setLoading] = useState(true);
+  const teamNeeds = getTeamNeeds2026();
 
   useEffect(() => {
     async function load() {
@@ -57,7 +58,9 @@ export function WeeklyMock() {
 
       {/* Picks Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {mockDraft.picks.map((pick) => (
+        {mockDraft.picks.map((pick) => {
+          const needs = teamNeeds[pick.pick] ?? [];
+          return (
           <div
             key={pick.pick}
             className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-nfl-blue/30 transition-colors"
@@ -68,6 +71,11 @@ export function WeeklyMock() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-gray-600">{pick.team}</div>
+                {needs.length > 0 && (
+                  <div className="text-xs text-gray-500 mt-0.5">
+                    Team needs: {needs.join(', ')}
+                  </div>
+                )}
                 <div className="text-lg font-semibold text-gray-900 mt-0.5">
                   {pick.player || '—'}
                 </div>
@@ -84,7 +92,8 @@ export function WeeklyMock() {
               </div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
-import { Users, Plus, LogIn, ArrowLeft } from 'lucide-react';
+import { Users, Plus, LogIn, ArrowLeft, Globe } from 'lucide-react';
 import { GroupsList } from '@/components/groups/GroupsList';
 import { CreateGroupForm } from '@/components/groups/CreateGroupForm';
 import { JoinGroupForm } from '@/components/groups/JoinGroupForm';
@@ -76,7 +76,25 @@ export default async function GroupsPage() {
           </div>
 
           <div className="bg-white rounded-xl shadow-sm ring-1 ring-gray-900/5 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">My Groups</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Leaderboards</h2>
+            <Link
+              href="/leaderboard"
+              className="flex items-center justify-between py-4 px-2 -mx-2 rounded-lg hover:bg-gray-50 transition-colors mb-4 border-b border-gray-100 pb-4"
+            >
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-amber-500/10 flex items-center justify-center">
+                  <Globe className="h-5 w-5 text-amber-600" />
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">Everyone</p>
+                  <p className="text-xs text-gray-600">
+                    See who has the best mock draft across the entire site
+                  </p>
+                </div>
+              </div>
+              <span className="text-gray-400">→</span>
+            </Link>
+            <h3 className="text-sm font-medium text-gray-700 mb-3">My Groups</h3>
             <GroupsList groups={groups} />
           </div>
         </div>

@@ -41,10 +41,12 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
     redirect('/groups/join/' + group.invite_code);
   }
 
-  const { data: leaderboard } = await supabase.rpc('get_group_leaderboard', {
-    p_group_id: id,
-    p_year: 2026,
-  });
+  const [leaderboardRes, membersRes] = await Promise.all([
+    supabase.rpc('get_group_leaderboard', { p_group_id: id, p_year: 2026 }),
+    supabase.rpc('get_group_members', { p_group_id: id }),
+  ]);
+  const leaderboard = leaderboardRes.data;
+  const members = membersRes.data;
 
   const { count: memberCount } = await supabase
     .from('group_members')
@@ -90,11 +92,67 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
           </div>
 
           {!hasResults ? (
-            <div className="bg-white rounded-xl p-8 text-center shadow-sm ring-1 ring-gray-900/5">
-              <p className="text-gray-600">
-                The leaderboard will be available after the 2026 NFL Draft when results are tallied.
+            <>
+              <p className="text-sm text-gray-600 mb-4">
+                Scores will appear after the 2026 NFL Draft. For now, here&apos;s who&apos;s in your group:
               </p>
-            </div>
+              {(!members || members.length === 0) ? (
+                <div className="bg-white rounded-xl p-8 text-center shadow-sm ring-1 ring-gray-900/5">
+                  <p className="text-gray-600">No members yet. Invite friends to join!</p>
+                </div>
+              ) : (
+              <div className="bg-white rounded-xl shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        #
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Member
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Score
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {members.map((row: { display_name: string; role: string; rank: number }, i: number) => (
+                      <tr key={row.display_name + i} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold bg-gray-100 text-gray-700">
+                            {row.rank}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {row.display_name}
+                          {row.role === 'owner' && (
+                            <span className="ml-2 text-xs text-amber-600 font-normal">Owner</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 text-right">
+                          —
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              )}
+              {members && members.length > 0 && (
+                <>
+                  <p className="mt-3 text-sm text-gray-500">
+                    Submit your predictions to be ready when the draft finishes.
+                  </p>
+                  <Link
+                    href="/predict"
+                    className="inline-block mt-2 text-nfl-red font-medium hover:underline"
+                  >
+                    Submit your predictions →
+                  </Link>
+                </>
+              )}
+            </>
           ) : !leaderboard || leaderboard.length === 0 ? (
             <div className="bg-white rounded-xl p-8 text-center shadow-sm ring-1 ring-gray-900/5">
               <p className="text-gray-600">

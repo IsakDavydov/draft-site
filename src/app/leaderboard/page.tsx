@@ -25,13 +25,21 @@ export default async function LeaderboardPage() {
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-8">
-        <Link
-          href="/predict"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-nfl-red mb-8 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Predictions
-        </Link>
+        <div className="flex flex-wrap gap-4 mb-8">
+          <Link
+            href="/predict"
+            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-nfl-red transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Predictions
+          </Link>
+          <Link
+            href="/groups"
+            className="inline-flex items-center gap-2 text-sm text-nfl-blue hover:underline transition-colors"
+          >
+            Compete with friends →
+          </Link>
+        </div>
 
         <div className="flex items-center gap-3 mb-8">
           <Trophy className="h-8 w-8 text-amber-500" />
@@ -40,7 +48,7 @@ export default async function LeaderboardPage() {
               2026 Draft Leaderboard
             </h1>
             <p className="text-gray-600 mt-1">
-              Correct first-round picks
+              Everyone who predicted — ranked by correct first-round picks
             </p>
           </div>
         </div>

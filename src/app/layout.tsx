@@ -1,18 +1,7 @@
 import type { Metadata } from 'next';
-import { Inter, Urbanist } from 'next/font/google';
 import './globals.css';
 import { SiteHeader } from '@/components/shared/SiteHeader';
 import { SiteFooter } from '@/components/shared/SiteFooter';
-
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
-
-const urbanist = Urbanist({ 
-  subsets: ['latin'],
-  variable: '--font-urbanist',
-});
 
 export const metadata: Metadata = {
   title: {
@@ -77,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${urbanist.variable}`}>
+    <html lang="en">
       <body className="min-h-screen bg-gray-50 font-sans">
         <div className="flex flex-col min-h-screen">
           <SiteHeader />
