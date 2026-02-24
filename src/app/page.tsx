@@ -9,9 +9,9 @@ export default function HomePage() {
     <div className="bg-white">
       {/* Hero Section */}
       <div className="relative isolate overflow-visible bg-gradient-to-br from-nfl-red via-nfl-blue to-nfl-purple">
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
-          <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
-            <div className="mt-24 sm:mt-32 lg:mt-16">
+        <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 xl:flex xl:px-8 xl:py-40">
+          <div className="mx-auto max-w-2xl flex-shrink-0 xl:mx-0 xl:max-w-xl xl:pt-8">
+            <div className="mt-24 sm:mt-32 xl:mt-16">
               <Link
                 href="/predict"
                 className="inline-flex items-center gap-2 rounded-full bg-nfl-gold/20 px-4 py-2 text-sm font-semibold leading-6 text-white ring-2 ring-inset ring-nfl-gold hover:bg-nfl-gold/30 transition-colors"
@@ -28,7 +28,7 @@ export default function HomePage() {
             <p className="mt-6 text-lg leading-8 text-gray-300">
               Submit your first-round picks and compete on the leaderboard. Create groups with friends and see how your predictions hold up when draft day arrives. Plus season analysis, fantasy rankings, and expert picks.
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <div className="mt-10">
               <Link
                 href="/predict"
                 className="inline-flex items-center gap-2 rounded-lg bg-nfl-gold px-5 py-3 text-base font-bold text-gray-900 shadow-lg hover:bg-nfl-gold/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-all hover:scale-105"
@@ -36,23 +36,11 @@ export default function HomePage() {
                 <Zap className="h-5 w-5" />
                 Submit Your Picks →
               </Link>
-              <Link
-                href="/season"
-                className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-              >
-                View Standings
-              </Link>
-              <Link
-                href="/fantasy"
-                className="text-sm font-semibold leading-6 text-white"
-              >
-                Fantasy Rankings <span aria-hidden="true">→</span>
-              </Link>
             </div>
           </div>
-          <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-16 lg:self-start">
-            <div className="w-full max-w-3xl sm:max-w-5xl lg:max-w-none">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+          <div className="mx-auto mt-16 min-w-0 flex max-w-2xl sm:mt-24 xl:ml-10 xl:mr-0 xl:mt-0 xl:max-w-xl xl:flex-none xl:self-start">
+            <div className="w-full min-w-0 max-w-3xl sm:max-w-5xl xl:max-w-none">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 xl:gap-6">
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                   <div className="text-center">
                     <div className="mx-auto h-12 w-12 bg-nfl-gold rounded-full flex items-center justify-center mb-4">
