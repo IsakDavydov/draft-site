@@ -52,8 +52,15 @@ export default async function PredictPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           2026 NFL Draft Predictions
         </h1>
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 mb-4">
           Predict all 32 first-round picks. Your entry will be locked when the draft begins. Compare with everyone after!
+        </p>
+        <p className="text-gray-500 text-sm mb-6">
+          By participating, you agree to the{' '}
+          <Link href="/contest-rules" className="font-medium text-nfl-red hover:underline">
+            Contest Rules
+          </Link>
+          .
         </p>
 
         <div className="flex flex-wrap gap-4 mb-8">

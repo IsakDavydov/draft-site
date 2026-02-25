@@ -80,6 +80,11 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/contest-rules" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  Contest Rules
+                </Link>
+              </li>
+              <li>
                 <Link href="/responsible-gaming" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Responsible Gaming
                 </Link>
