@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { LogoImage } from './LogoImage';
 import { useState } from 'react';
 import { Menu, X, Search } from 'lucide-react';
 import { AuthButton } from '@/components/auth/AuthButton';
@@ -29,13 +29,7 @@ export function SiteHeader() {
           <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">SAKFootball</span>
             <div className="flex items-center space-x-2">
-              <Image
-                src="/logo.png"
-                alt="SAKFootball"
-                width={50}
-                height={50}
-                className="h-[50px] w-[50px] object-contain"
-              />
+              <LogoImage width={50} height={50} className="h-[50px] w-[50px] object-contain" lightBg />
               <span className="text-xl font-bold text-gray-900">SAKFootball</span>
             </div>
           </Link>
@@ -87,13 +81,7 @@ export function SiteHeader() {
               <Link href="/" className="-m-1.5 p-1.5">
                 <span className="sr-only">SAKFootball</span>
                 <div className="flex items-center space-x-2">
-              <Image
-                src="/logo.png"
-                alt="SAKFootball"
-                width={50}
-                height={50}
-                className="h-[50px] w-[50px] object-contain"
-              />
+                  <LogoImage width={50} height={50} className="h-[50px] w-[50px] object-contain" lightBg />
                   <span className="text-xl font-bold text-gray-900">SAKFootball</span>
                 </div>
               </Link>
