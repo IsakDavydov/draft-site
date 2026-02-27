@@ -3,27 +3,29 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { X, Share2, Copy, Download } from 'lucide-react';
-import { TEAM_COLORS_BY_NAME, getTeamLogoUrl } from '@/lib/adapters/teams';
+import { TEAM_COLORS_BY_NAME, getTeamLogoSlug } from '@/lib/adapters/teams';
 
-function TeamLogo({ team, teamColor }: { team: string; teamColor: string }) {
+// Use same-origin API proxy for logos so html-to-image can capture them (no canvas tainting)
+function ShareTeamLogo({ team, teamColor }: { team: string; teamColor: string }) {
   const [fallback, setFallback] = useState(false);
-  const logoUrl = getTeamLogoUrl(team);
+  const slug = getTeamLogoSlug(team);
 
-  if (fallback || !logoUrl) {
+  if (fallback || !slug) {
+    const initial = team.split(' ').pop()?.slice(0, 1) || '?';
     return (
       <span
         className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-bold text-white"
         style={{ backgroundColor: teamColor }}
       >
-        {team.split(' ').pop()?.slice(0, 1) || '?'}
+        {initial}
       </span>
     );
   }
 
   return (
-    <span className="flex-shrink-0 w-6 h-6 relative rounded overflow-hidden bg-white/20">
+    <span className="flex-shrink-0 w-6 h-6 relative rounded-lg overflow-hidden bg-white/20">
       <Image
-        src={logoUrl}
+        src={`/api/team-logo/${slug}`}
         alt=""
         fill
         className="object-contain"
@@ -70,9 +72,25 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
     }
   }
 
+  async function waitForImages(el: HTMLElement) {
+    const imgs = el.querySelectorAll('img');
+    await Promise.all(
+      Array.from(imgs).map(
+        (img) =>
+          new Promise<void>((resolve) => {
+            if (img.complete) return resolve();
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+            setTimeout(resolve, 3000);
+          })
+      )
+    );
+  }
+
   async function handleDownload() {
     if (!cardRef.current) return;
     try {
+      await waitForImages(cardRef.current);
       const { toPng } = await import('html-to-image');
       const dataUrl = await toPng(cardRef.current, {
         pixelRatio: 2,
@@ -90,6 +108,7 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
   async function handleShare() {
     if (navigator.share && cardRef.current) {
       try {
+        await waitForImages(cardRef.current);
         const { toBlob } = await import('html-to-image');
         const blob = await toBlob(cardRef.current, {
           pixelRatio: 2,
@@ -169,7 +188,7 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
                       >
                         {pick}
                       </span>
-                      <TeamLogo team={team} teamColor={teamColor} />
+                      <ShareTeamLogo team={team} teamColor={teamColor} />
                       <span className="text-sm text-slate-200 truncate flex-1">
                         {prospectName}
                       </span>

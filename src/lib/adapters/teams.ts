@@ -709,6 +709,10 @@ export function getTeamLogoUrl(teamName: string): string | null {
   return slug ? `https://a.espncdn.com/i/teamlogos/nfl/500/${slug}.png` : null;
 }
 
+export function getTeamLogoSlug(teamName: string): string | null {
+  return TEAM_ESPN_SLUGS[teamName] ?? null;
+}
+
 export async function getTeams(): Promise<Team[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return mockTeams;
