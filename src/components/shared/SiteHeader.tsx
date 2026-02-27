@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Menu, X, Search } from 'lucide-react';
@@ -28,9 +29,13 @@ export function SiteHeader() {
           <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">SAKFootball</span>
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-nfl-red rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">S</span>
-              </div>
+              <Image
+                src="/logo.png"
+                alt="SAKFootball"
+                width={50}
+                height={50}
+                className="h-[50px] w-[50px] object-contain"
+              />
               <span className="text-xl font-bold text-gray-900">SAKFootball</span>
             </div>
           </Link>
@@ -82,9 +87,13 @@ export function SiteHeader() {
               <Link href="/" className="-m-1.5 p-1.5">
                 <span className="sr-only">SAKFootball</span>
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-nfl-red rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">S</span>
-                  </div>
+              <Image
+                src="/logo.png"
+                alt="SAKFootball"
+                width={50}
+                height={50}
+                className="h-[50px] w-[50px] object-contain"
+              />
                   <span className="text-xl font-bold text-gray-900">SAKFootball</span>
                 </div>
               </Link>

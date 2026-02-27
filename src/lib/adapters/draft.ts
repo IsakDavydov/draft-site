@@ -176,6 +176,58 @@ export function prospectFillsTeamNeed(prospect: { position: string }, needs: str
   return needs.some((need) => prospectPositionMatchesNeed(prospect.position, need));
 }
 
+// Prospect lookup for scoring: id -> { bigBoardRank, position }
+const prospectLookup = new Map(
+  mockProspects.map((p) => [p.id, { bigBoardRank: p.bigBoardRank ?? 50, position: p.position }])
+);
+
+const TEAM_NEEDS_BY_PICK = (teamNeeds2026 as { needsByPick: Record<string, string[]> }).needsByPick;
+
+/**
+ * Calculate pre-draft score (0-100) for a mock draft.
+ */
+export function calculatePreDraftScore(
+  picks: Array<{ pick_number: number; prospect_id: string; team: string }>
+): number {
+  if (picks.length === 0) return 0;
+
+  const DEFAULT_RANK = 50;
+
+  let rawValue = 0;
+  let top10Matches = 0;
+  let fitCount = 0;
+
+  for (const pick of picks) {
+    const prospect = prospectLookup.get(pick.prospect_id);
+    const rank = prospect?.bigBoardRank ?? DEFAULT_RANK;
+    const position = prospect?.position ?? '';
+
+    rawValue += pick.pick_number - rank;
+    if (pick.pick_number <= 10 && rank >= 1 && rank <= 10) {
+      top10Matches += 1;
+    }
+
+    const needs = TEAM_NEEDS_BY_PICK?.[String(pick.pick_number)];
+    if (needs && prospectFillsTeamNeed({ position }, needs)) {
+      fitCount += 1;
+    }
+  }
+
+  const valueScore = Math.max(0, Math.min(65, 50 + rawValue / 5));
+  const fitScore = (fitCount / Math.max(picks.length, 1)) * 35;
+
+  // Bonus 8-12 pts: how many of their top 10 picks are in our top 10 rankings
+  const top10Bonus =
+    top10Matches >= 10 ? 12 :
+    top10Matches >= 8 ? 11 :
+    top10Matches >= 5 ? 10 :
+    top10Matches >= 3 ? 9 : 8;
+
+  const totalScore = valueScore + fitScore + top10Bonus;
+
+  return Math.round(Math.max(0, Math.min(100, totalScore)));
+}
+
 // Pre-combine mock: map player name -> { pick, team } for enriching prospects
 const preCombineMockByPlayer: Map<string, { pick: number; team: string }> = new Map(
   (preCombineMock2026 as { picks: { player: string; pick: number; team: string }[] }).picks.map(
