@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, TrendingUp, Users, Target, Trophy, BookOpen, GraduationCap, Zap } from 'lucide-react';
+import { DraftCountdown } from '@/components/shared/DraftCountdown';
+import { WeeklyTopBanner } from '@/components/shared/WeeklyTopBanner';
 import { getLatestArticles } from '@/lib/articles';
 import { formatDate } from '@/lib/utils';
 
@@ -28,6 +30,9 @@ export default function HomePage() {
             <p className="mt-6 text-lg leading-8 text-gray-300">
               Submit your first-round picks and compete on the leaderboard. Create groups with friends and see how your predictions hold up when draft day arrives. Plus season analysis, fantasy rankings, and expert picks.
             </p>
+            <div className="mt-6">
+              <DraftCountdown variant="full" />
+            </div>
             <div className="mt-10">
               <Link
                 href="/predict"
@@ -89,6 +94,9 @@ export default function HomePage() {
       {/* Draft Prediction Challenge Promo */}
       <div className="relative overflow-hidden bg-gradient-to-r from-nfl-blue via-nfl-red/90 to-nfl-blue">
         <div className="relative mx-auto max-w-7xl px-6 py-14 sm:py-20 lg:px-8">
+          <div className="mb-8">
+            <WeeklyTopBanner variant="dark" />
+          </div>
           <div className="flex flex-col items-center text-center lg:flex-row lg:justify-between lg:text-left lg:gap-16">
             <div className="flex-1">
               <p className="text-sm font-bold uppercase tracking-wider text-nfl-gold">Free to play</p>

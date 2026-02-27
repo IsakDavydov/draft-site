@@ -2,7 +2,6 @@
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import Image from 'next/image';
 import { TEAM_COLORS_BY_NAME } from '@/lib/adapters/teams';
 import { TeamLogo } from '@/components/shared/TeamLogo';
 
@@ -70,16 +69,17 @@ export function MockDraftArticleContent({ content }: { content: string }) {
 
   return (
     <div className="text-gray-900">
-      <div className="relative -mx-6 -mt-6 mb-10 overflow-hidden rounded-2xl sm:-mx-8 sm:-mt-8 lg:rounded-3xl">
-        <Image
-          src="/draft-header.png"
-          alt="NFL Draft 2026"
-          width={1200}
-          height={300}
-          className="h-40 w-full object-cover object-center sm:h-52"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+      <div className="relative -mx-6 -mt-6 mb-10 overflow-hidden rounded-2xl sm:-mx-8 sm:-mt-8 lg:rounded-3xl h-40 sm:h-52 flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-nfl-blue/90">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(120,119,198,0.2)_0%,_transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(1,51,105,0.3)_0%,_transparent_50%)]" />
+        <div className="relative text-center">
+          <p className="text-sm font-medium text-slate-400 uppercase tracking-[0.2em] mb-1">
+            First Round Projections
+          </p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+            2026 NFL Draft
+          </h1>
+        </div>
       </div>
 
       {intro && (

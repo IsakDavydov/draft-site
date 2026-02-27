@@ -5,7 +5,8 @@ import { createClient } from '@/lib/supabase/client';
 import { Prospect } from '@/types';
 import { TEAM_COLORS_BY_NAME } from '@/lib/adapters/teams';
 import { TeamLogo } from '@/components/shared/TeamLogo';
-import { Zap, Trash2, Plus, Trophy, Share2 } from 'lucide-react';
+import Link from 'next/link';
+import { Zap, Trash2, Plus, Trophy, Share2, TrendingUp } from 'lucide-react';
 import { ShareDraftModal } from './ShareDraftModal';
 import { ProspectPicker } from './ProspectPicker';
 import { calculatePreDraftScore } from '@/lib/adapters';
@@ -57,6 +58,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [submitToLeaderboardModal, setSubmitToLeaderboardModal] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [submitResult, setSubmitResult] = useState<{ rank: number; score: number } | null>(null);
 
   const supabase = createClient();
 
@@ -238,8 +240,16 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
 
       await savePicksToDb(selectedDraftId);
       await loadDrafts();
+
+      const res = await fetch('/api/pre-draft-leaderboard');
+      const leaderboard: Array<{ display_name: string; score: number; rank: number }> = await res.json();
+      const entry = leaderboard.find((e) => e.display_name?.toLowerCase() === name.toLowerCase());
+      if (entry) {
+        setSubmitResult({ rank: entry.rank, score: entry.score });
+      }
       setMessage({ type: 'success', text: 'Submitted to leaderboard! Your best draft is now live.' });
     } catch (err: unknown) {
+      setSubmitResult(null);
       const isDuplicate =
         err && typeof err === 'object' && 'code' in err && (err as { code: string }).code === '23505';
       setMessage({
@@ -343,6 +353,23 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
         <p className={`text-sm ${message.type === 'error' ? 'text-red-600' : 'text-green-600'}`}>
           {message.text}
         </p>
+      )}
+      {submitResult && message?.type === 'success' && (
+        <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+          <p className="font-semibold text-green-800">
+            You&apos;re ranked <span className="text-green-900">#{submitResult.rank}</span> with {submitResult.score} points!
+          </p>
+          <p className="mt-1 text-sm text-green-700">
+            Beat your score and climb the leaderboard. Refine your picks and resubmit to improve your rank.
+          </p>
+          <Link
+            href="/leaderboard"
+            className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-green-800 hover:text-green-900 hover:underline"
+          >
+            <TrendingUp className="h-4 w-4" />
+            View full leaderboard →
+          </Link>
+        </div>
       )}
 
       {selectedDraftId && (

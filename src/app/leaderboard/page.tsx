@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { Trophy, ArrowLeft } from 'lucide-react';
+import { DraftCountdown } from '@/components/shared/DraftCountdown';
+import { WeeklyTopBanner } from '@/components/shared/WeeklyTopBanner';
 import { sanitizeDisplayName } from '@/lib/display-name-filter';
 import { calculatePreDraftScore } from '@/lib/adapters';
 
@@ -90,18 +92,24 @@ export default async function LeaderboardPage() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-3 mb-8">
-          <Trophy className="h-8 w-8 text-amber-500" />
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              2026 Draft Leaderboard
-            </h1>
-            <p className="text-gray-600 mt-1">
-              {hasResults
-                ? 'Everyone who predicted — ranked by correct first-round picks'
-                : 'Everyone competing'}
-            </p>
+        <div className="flex flex-col gap-4 mb-8">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Trophy className="h-8 w-8 text-amber-500" />
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  2026 Draft Leaderboard
+                </h1>
+                <p className="text-gray-600 mt-1">
+                  {hasResults
+                    ? 'Everyone who predicted — ranked by correct first-round picks'
+                    : 'Everyone competing'}
+                </p>
+              </div>
+            </div>
+            <DraftCountdown variant="compact" />
           </div>
+          <WeeklyTopBanner />
         </div>
 
         {!hasResults ? (

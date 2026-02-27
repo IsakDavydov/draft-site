@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
+import { DraftCountdown } from '@/components/shared/DraftCountdown';
+import { WeeklyTopBanner } from '@/components/shared/WeeklyTopBanner';
 import { getBigBoard, getDraftOrder2026, getMockDraftFromFile, getTeamNeeds2026 } from '@/lib/adapters';
 import { PredictionForm } from '@/components/predict/PredictionForm';
 
@@ -49,12 +51,18 @@ export default async function PredictPage() {
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          2026 NFL Draft Predictions
-        </h1>
-        <p className="text-gray-600 mb-4">
-          Predict all 32 first-round picks. Your entry will be locked when the draft begins. Compare with everyone after!
-        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              2026 NFL Draft Predictions
+            </h1>
+            <p className="text-gray-600">
+              Predict all 32 first-round picks. Your entry will be locked when the draft begins. Compare with everyone after!
+            </p>
+          </div>
+          <DraftCountdown variant="compact" />
+        </div>
+        <WeeklyTopBanner />
         <p className="text-gray-500 text-sm mb-6">
           By participating, you agree to the{' '}
           <Link href="/contest-rules" className="font-medium text-nfl-red hover:underline">
