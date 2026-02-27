@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getMockDraftFromFile, getTeamNeeds2026 } from '@/lib/adapters';
 import { MockDraftFromFile } from '@/types';
+import { TeamLogo } from '@/components/shared/TeamLogo';
 
 export function WeeklyMock() {
   const [mockDraft, setMockDraft] = useState<MockDraftFromFile | null>(null);
@@ -66,8 +67,11 @@ export function WeeklyMock() {
             className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-nfl-blue/30 transition-colors"
           >
             <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-10 h-10 bg-nfl-blue text-white rounded-lg flex items-center justify-center font-bold text-lg">
-                {pick.pick}
+              <div className="flex flex-col items-center gap-1 flex-shrink-0">
+                <span className="w-8 h-8 bg-nfl-blue text-white rounded-lg flex items-center justify-center font-bold text-sm">
+                  {pick.pick}
+                </span>
+                <TeamLogo teamName={pick.team} size={36} />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-gray-600">{pick.team}</div>

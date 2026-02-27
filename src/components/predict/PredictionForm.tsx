@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Prospect } from '@/types';
 import { TEAM_COLORS_BY_NAME } from '@/lib/adapters/teams';
-import { Zap, Trash2, Plus, Trophy } from 'lucide-react';
+import { TeamLogo } from '@/components/shared/TeamLogo';
+import { Zap, Trash2, Plus, Trophy, Share2 } from 'lucide-react';
+import { ShareDraftModal } from './ShareDraftModal';
 import { ProspectPicker } from './ProspectPicker';
 import { calculatePreDraftScore } from '@/lib/adapters';
 import type { MockDraftFromFile } from '@/types';
@@ -54,6 +56,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   const [saved, setSaved] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [submitToLeaderboardModal, setSubmitToLeaderboardModal] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
 
   const supabase = createClient();
 
@@ -381,9 +384,19 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               </button>
             )}
             {currentScore !== null && (
-              <span className="text-sm text-gray-600 font-medium">
-                Pre-draft score: <strong>{currentScore}</strong>
-              </span>
+              <>
+                <span className="text-sm text-gray-600 font-medium">
+                  Pre-draft score: <strong>{currentScore}</strong>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShareModalOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
+                >
+                  <Share2 className="h-4 w-4" />
+                  Share
+                </button>
+              </>
             )}
           </div>
 
@@ -434,14 +447,15 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                     className="flex flex-col min-h-[200px] rounded-lg border border-gray-200 bg-white p-4"
                     style={{ borderLeftWidth: '4px', borderLeftColor: teamColor }}
                   >
-                    <div className="mb-2 flex-shrink-0">
+                    <div className="mb-2 flex-shrink-0 flex items-center gap-2">
                       <span
                         className="inline-flex h-7 min-w-[1.75rem] items-center justify-center rounded-md px-1.5 text-xs font-bold text-white"
                         style={{ backgroundColor: teamColor }}
                       >
                         {pick}
                       </span>
-                      <span className="ml-2 text-sm font-medium text-gray-900">{team}</span>
+                      <TeamLogo teamName={team} size={28} />
+                      <span className="text-sm font-medium text-gray-900">{team}</span>
                     </div>
                     {needs.length > 0 && (
                       <p className="text-xs text-gray-500 mb-1 flex-shrink-0 line-clamp-2">
@@ -477,6 +491,23 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
         <p className="text-gray-500 text-sm">
           Click &quot;New draft&quot; to create your first mock draft, or your drafts will load shortly.
         </p>
+      )}
+
+      {/* Share draft modal */}
+      {shareModalOpen && currentScore !== null && (
+        <ShareDraftModal
+          onClose={() => setShareModalOpen(false)}
+          score={currentScore}
+          topPicks={draftOrder.slice(0, 5).map(({ pick, team }) => {
+            const prospectId = picks[pick];
+            const prospect = prospects.find((p) => p.id === prospectId);
+            return {
+              pick,
+              team,
+              prospectName: prospect?.name ?? '—',
+            };
+          })}
+        />
       )}
 
       {/* Submit to leaderboard modal */}

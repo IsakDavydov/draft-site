@@ -5,7 +5,7 @@ import { SiteFooter } from '@/components/shared/SiteFooter';
 
 export const metadata: Metadata = {
   title: {
-    default: 'SAKFootball - NFL Analysis, Fantasy, Draft & Picks',
+    default: 'SAKFootball - Submit Your 2026 Mock Draft & Compete',
     template: '%s | SAKFootball',
   },
   description: 'Comprehensive NFL coverage including season analysis, fantasy rankings, draft prospects, and weekly picks. Your go-to source for football insights.',
@@ -26,23 +26,27 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://sakfootball.com',
-    title: 'SAKFootball - NFL Analysis, Fantasy, Draft & Picks',
+    title: 'SAKFootball - Submit Your 2026 Mock Draft & Compete',
     description: 'Comprehensive NFL coverage including season analysis, fantasy rankings, draft prospects, and weekly picks.',
     siteName: 'SAKFootball',
     images: [
       {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'SAKFootball - NFL Analysis & Insights',
+        url: '/LOGO.png',
+        width: 512,
+        height: 512,
+        alt: 'SAKFootball',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SAKFootball - NFL Analysis, Fantasy, Draft & Picks',
+    title: 'SAKFootball - Submit Your 2026 Mock Draft & Compete',
     description: 'Comprehensive NFL coverage including season analysis, fantasy rankings, draft prospects, and weekly picks.',
-    images: ['/og-image.jpg'],
+    images: ['/LOGO.png'],
+  },
+  icons: {
+    icon: '/LOGO.png',
+    apple: '/LOGO.png',
   },
   robots: {
     index: true,

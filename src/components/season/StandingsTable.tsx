@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getStandings, getTeams } from '@/lib/adapters';
 import { Standings, Team } from '@/types';
+import { TeamLogo } from '@/components/shared/TeamLogo';
 export function StandingsTable() {
   const [standings, setStandings] = useState<Standings[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
@@ -108,19 +109,10 @@ export function StandingsTable() {
                   return (
                     <tr key={standing.teamId} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-8 w-8">
-                            <div
-                              className="h-8 w-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                              style={{ backgroundColor: team.colors.primary }}
-                            >
-                              {team.nickname.charAt(0)}
-                            </div>
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {team.city} {team.nickname}
-                            </div>
+                        <div className="flex items-center gap-3">
+                          <TeamLogo teamName={team.name} size={32} />
+                          <div className="text-sm font-medium text-gray-900">
+                            {team.city} {team.nickname}
                           </div>
                         </div>
                       </td>

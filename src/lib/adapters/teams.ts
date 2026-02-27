@@ -668,6 +668,47 @@ export const TEAM_COLORS_BY_NAME: Record<string, string> = Object.fromEntries(
   mockTeams.map((t) => [t.name, t.colors.primary])
 );
 
+// ESPN CDN logo URLs (500x500) - team full name -> logo URL
+const TEAM_ESPN_SLUGS: Record<string, string> = {
+  'Buffalo Bills': 'buf',
+  'Miami Dolphins': 'mia',
+  'New York Jets': 'nyj',
+  'New England Patriots': 'ne',
+  'Baltimore Ravens': 'bal',
+  'Cincinnati Bengals': 'cin',
+  'Cleveland Browns': 'cle',
+  'Pittsburgh Steelers': 'pit',
+  'Houston Texans': 'hou',
+  'Indianapolis Colts': 'ind',
+  'Jacksonville Jaguars': 'jax',
+  'Tennessee Titans': 'ten',
+  'Denver Broncos': 'den',
+  'Kansas City Chiefs': 'kc',
+  'Las Vegas Raiders': 'lv',
+  'Los Angeles Chargers': 'lac',
+  'Dallas Cowboys': 'dal',
+  'New York Giants': 'nyg',
+  'Philadelphia Eagles': 'phi',
+  'Washington Commanders': 'was',
+  'Chicago Bears': 'chi',
+  'Detroit Lions': 'det',
+  'Green Bay Packers': 'gb',
+  'Minnesota Vikings': 'min',
+  'Atlanta Falcons': 'atl',
+  'Carolina Panthers': 'car',
+  'New Orleans Saints': 'no',
+  'Tampa Bay Buccaneers': 'tb',
+  'Arizona Cardinals': 'ari',
+  'Los Angeles Rams': 'lar',
+  'San Francisco 49ers': 'sf',
+  'Seattle Seahawks': 'sea',
+};
+
+export function getTeamLogoUrl(teamName: string): string | null {
+  const slug = TEAM_ESPN_SLUGS[teamName];
+  return slug ? `https://a.espncdn.com/i/teamlogos/nfl/500/${slug}.png` : null;
+}
+
 export async function getTeams(): Promise<Team[]> {
   await new Promise(resolve => setTimeout(resolve, 100));
   return mockTeams;

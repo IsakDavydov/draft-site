@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getProspectById, getBigBoard, getMockDraftNotesForProspect } from '@/lib/adapters';
 import { TEAM_COLORS_BY_NAME } from '@/lib/adapters/teams';
+import { TeamLogo } from '@/components/shared/TeamLogo';
 
 interface ProspectPageProps {
   params: {
@@ -106,10 +107,15 @@ export default async function ProspectPage({ params }: ProspectPageProps) {
               <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">
                 Mock Draft
               </h2>
-              <p className="text-lg font-semibold text-gray-900">
-                Round {prospect.mockDraftRound}, Pick {prospect.mockDraftPick}
-              </p>
-              <p className="text-gray-600 mt-1">{prospect.team}</p>
+              <div className="flex items-center gap-3">
+                <TeamLogo teamName={prospect.team} size={40} />
+                <div>
+                  <p className="text-lg font-semibold text-gray-900">
+                    Round {prospect.mockDraftRound}, Pick {prospect.mockDraftPick}
+                  </p>
+                  <p className="text-gray-600 mt-0.5">{prospect.team}</p>
+                </div>
+              </div>
               <Link
                 href="/articles/pre-combine-mock-draft-2026"
                 className="inline-block mt-3 text-sm font-medium text-nfl-red hover:underline"

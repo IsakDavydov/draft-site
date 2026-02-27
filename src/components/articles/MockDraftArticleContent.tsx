@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Image from 'next/image';
 import { TEAM_COLORS_BY_NAME } from '@/lib/adapters/teams';
+import { TeamLogo } from '@/components/shared/TeamLogo';
 
 interface PickSection {
   pickNum: string;
@@ -105,12 +106,15 @@ export function MockDraftArticleContent({ content }: { content: string }) {
             >
               <div className="p-6 sm:p-8">
                 <div className="flex items-start gap-4">
-                  <span
-                    className="flex-shrink-0 inline-flex h-11 w-11 items-center justify-center rounded-xl text-base font-bold text-white shadow-sm"
-                    style={{ backgroundColor: teamColor }}
-                  >
-                    {pick.pickNum}
-                  </span>
+                  <div className="flex flex-col items-center gap-1.5 flex-shrink-0">
+                    <span
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-base font-bold text-white shadow-sm"
+                      style={{ backgroundColor: teamColor }}
+                    >
+                      {pick.pickNum}
+                    </span>
+                    <TeamLogo teamName={pick.teamName} size={40} />
+                  </div>
                   <div className="min-w-0 flex-1">
                     {details ? (
                       <>

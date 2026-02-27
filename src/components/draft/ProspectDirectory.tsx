@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getProspects } from '@/lib/adapters';
 import { Prospect } from '@/types';
+import { TeamLogo } from '@/components/shared/TeamLogo';
 
 const PROSPECTS_PER_PAGE = 12;
 
@@ -163,18 +164,19 @@ export function ProspectDirectory() {
 
             {prospect.mockDraftRound && (
               <div className="mt-3 pt-3 border-t border-gray-200">
-                <div className="text-center">
-                  <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">
-                    Mock Draft
-                  </div>
-                  <div className="text-sm font-medium text-gray-900">
-                    Round {prospect.mockDraftRound}, Pick {prospect.mockDraftPick}
-                  </div>
+                <div className="flex items-center justify-center gap-2">
                   {prospect.team && (
-                    <div className="text-xs text-gray-600 mt-1">
-                      to {prospect.team}
-                    </div>
+                    <TeamLogo teamName={prospect.team} size={28} />
                   )}
+                  <div className="text-center">
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-0.5">
+                      Mock Draft
+                    </div>
+                    <div className="text-sm font-medium text-gray-900">
+                      Round {prospect.mockDraftRound}, Pick {prospect.mockDraftPick}
+                      {prospect.team && <> · {prospect.team}</>}
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

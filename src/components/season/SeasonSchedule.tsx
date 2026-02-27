@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { getSchedules, getTeams } from '@/lib/adapters';
 import { Game, Team } from '@/types';
 import { formatDate, formatTime, getTeamColors } from '@/lib/utils';
+import { TeamLogo } from '@/components/shared/TeamLogo';
 import { Calendar, Clock, Tv, MapPin, Users } from 'lucide-react';
 
 export function SeasonSchedule() {
@@ -169,12 +170,7 @@ export function SeasonSchedule() {
                           <div className="flex items-center space-x-6">
                             {/* Away Team */}
                             <div className="flex items-center space-x-3">
-                              <div 
-                                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm"
-                                style={{ backgroundColor: getTeamColors(awayTeam.slug).primary }}
-                              >
-                                {awayTeam.nickname.charAt(0)}
-                              </div>
+                              <TeamLogo teamName={awayTeam.name} size={48} className="shadow-sm" />
                               <div>
                                 <div className="font-semibold text-gray-900">{awayTeam.city} {awayTeam.nickname}</div>
                                 {game.awayScore !== undefined && (
@@ -188,12 +184,7 @@ export function SeasonSchedule() {
 
                             {/* Home Team */}
                             <div className="flex items-center space-x-3">
-                              <div 
-                                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm"
-                                style={{ backgroundColor: getTeamColors(homeTeam.slug).primary }}
-                              >
-                                {homeTeam.nickname.charAt(0)}
-                              </div>
+                              <TeamLogo teamName={homeTeam.name} size={48} className="shadow-sm" />
                               <div>
                                 <div className="font-semibold text-gray-900">{homeTeam.city} {homeTeam.nickname}</div>
                                 {game.homeScore !== undefined && (

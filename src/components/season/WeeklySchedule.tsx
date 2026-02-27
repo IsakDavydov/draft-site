@@ -5,6 +5,7 @@ import { getSchedules, getTeams, getUpcomingGames, getTodaysGames } from '@/lib/
 import { Game, Team } from '@/types';
 import { formatDate, formatTime, getTeamColors } from '@/lib/utils';
 import { Calendar, Clock, Tv, TrendingUp } from 'lucide-react';
+import { TeamLogo } from '@/components/shared/TeamLogo';
 
 export function WeeklySchedule() {
   const [games, setGames] = useState<Game[]>([]);
@@ -208,12 +209,7 @@ export function WeeklySchedule() {
                   <div className="flex items-center space-x-6">
                     {/* Away Team */}
                     <div className="flex items-center space-x-4">
-                      <div 
-                        className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg"
-                        style={{ backgroundColor: getTeamColors(awayTeam.slug).primary }}
-                      >
-                        {awayTeam.nickname.charAt(0)}
-                    </div>
+                      <TeamLogo teamName={awayTeam.name} size={56} className="shadow-lg" />
                       <div>
                         <div className="font-semibold text-gray-900 text-lg">{awayTeam.city} {awayTeam.nickname}</div>
                         {game.awayScore !== undefined && (
@@ -227,14 +223,9 @@ export function WeeklySchedule() {
 
                     {/* Home Team */}
                     <div className="flex items-center space-x-4">
-                      <div 
-                        className="w-16 h-16 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg"
-                        style={{ backgroundColor: getTeamColors(homeTeam.slug).primary }}
-                      >
-                        {homeTeam.nickname.charAt(0)}
-                      </div>
+                      <TeamLogo teamName={homeTeam.name} size={56} className="shadow-lg" />
                       <div>
-                        <div className="font-semibold text-gray-900 text-lg">{homeTeam.city} {awayTeam.nickname}</div>
+                        <div className="font-semibold text-gray-900 text-lg">{homeTeam.city} {homeTeam.nickname}</div>
                         {game.homeScore !== undefined && (
                           <div className="text-3xl font-bold text-gray-900">{game.homeScore}</div>
                         )}
