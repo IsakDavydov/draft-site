@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
-import { WeeklyTopBanner } from '@/components/shared/WeeklyTopBanner';
 import { getBigBoard, getDraftOrder2026, getMockDraftFromFile, getTeamNeeds2026 } from '@/lib/adapters';
 import { PredictionForm } from '@/components/predict/PredictionForm';
 
@@ -62,7 +61,6 @@ export default async function PredictPage() {
           </div>
           <DraftCountdown variant="compact" />
         </div>
-        <WeeklyTopBanner />
         <p className="text-gray-500 text-sm mb-6">
           By participating, you agree to the{' '}
           <Link href="/contest-rules" className="font-medium text-nfl-red hover:underline">

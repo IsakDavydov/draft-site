@@ -9,50 +9,50 @@ import teamNeeds2026 from '../../../data/team-needs-2026.json';
 const mockProspects: Prospect[] = [
   { id: '1', name: 'Fernando Mendoza', position: 'QB', school: 'Indiana', class: 'Junior', height: '6\'5"', weight: 225, ras: 9.2, bigBoardRank: 1, mockDraftRound: 1, mockDraftPick: 1, team: 'Las Vegas Raiders' },
   { id: '2', name: 'Jeremiyah Love', position: 'RB', school: 'Notre Dame', class: 'Junior', height: '6\'0"', weight: 214, ras: 9.4, bigBoardRank: 2, mockDraftRound: 1, mockDraftPick: 9, team: 'Kansas City Chiefs' },
-  { id: '3', name: 'Rueben Bain Jr.', position: 'DL', school: 'Miami', class: 'Junior', height: '6\'3"', weight: 275, ras: 9.0, bigBoardRank: 6, mockDraftRound: 1, mockDraftPick: 4, team: 'Tennessee Titans' },
+  { id: '3', name: 'Rueben Bain Jr.', position: 'EDGE', school: 'Miami', class: 'Junior', height: '6\'3"', weight: 275, ras: 9.0, bigBoardRank: 6, mockDraftRound: 1, mockDraftPick: 4, team: 'Tennessee Titans' },
   { id: '4', name: 'Caleb Downs', position: 'S', school: 'Ohio State', class: 'Junior', height: '6\'0"', weight: 205, ras: 9.3, bigBoardRank: 3, mockDraftRound: 1, mockDraftPick: 5, team: 'New York Giants' },
   { id: '5', name: 'Sonny Styles', position: 'LB', school: 'Ohio State', class: 'Senior', height: '6\'4"', weight: 243, ras: 9.1, bigBoardRank: 4, mockDraftRound: 1, mockDraftPick: 10, team: 'Cincinnati Bengals' },
   { id: '6', name: 'Jordyn Tyson', position: 'WR', school: 'Arizona State', class: 'Junior', height: '6\'2"', weight: 200, ras: 9.2, bigBoardRank: 5, mockDraftRound: 1, mockDraftPick: 8, team: 'New Orleans Saints' },
-  { id: '7', name: 'David Bailey', position: 'DL', school: 'Texas Tech', class: 'Senior', height: '6\'3"', weight: 250, ras: 8.9, bigBoardRank: 7, mockDraftRound: 1, mockDraftPick: 7, team: 'Washington Commanders' },
+  { id: '7', name: 'David Bailey', position: 'EDGE', school: 'Texas Tech', class: 'Senior', height: '6\'3"', weight: 250, ras: 8.9, bigBoardRank: 7, mockDraftRound: 1, mockDraftPick: 7, team: 'Washington Commanders' },
   { id: '8', name: 'Arvell Reese Jr.', position: 'LB', school: 'Ohio State', class: 'Junior', height: '6\'4"', weight: 243, ras: 9.5, bigBoardRank: 12, mockDraftRound: 1, mockDraftPick: 2, team: 'New York Jets' },
   { id: '9', name: 'Makai Lemon', position: 'WR', school: 'USC', class: 'Junior', height: '5\'11"', weight: 195, ras: 8.8, bigBoardRank: 9, mockDraftRound: 1, mockDraftPick: 13, team: 'Los Angeles Rams' },
-  { id: '10', name: 'Francis Mauigoa', position: 'OL', school: 'Miami', class: 'Junior', height: '6\'6"', weight: 315, ras: 9.1, bigBoardRank: 10, mockDraftRound: 1, mockDraftPick: 3, team: 'Arizona Cardinals' },
+  { id: '10', name: 'Francis Mauigoa', position: 'OT', school: 'Miami', class: 'Junior', height: '6\'6"', weight: 315, ras: 9.1, bigBoardRank: 10, mockDraftRound: 1, mockDraftPick: 3, team: 'Arizona Cardinals' },
   { id: '11', name: 'Jermod McCoy', position: 'CB', school: 'Tennessee', class: 'Junior', height: '6\'0"', weight: 193, ras: 8.7, bigBoardRank: 11, mockDraftRound: 1, mockDraftPick: 11, team: 'Miami Dolphins' },
   { id: '12', name: 'Carnell Tate', position: 'WR', school: 'Ohio State', class: 'Junior', height: '6\'3"', weight: 195, ras: 8.9, bigBoardRank: 8, mockDraftRound: 1, mockDraftPick: 16, team: 'New York Jets' },
-  { id: '13', name: 'Olaivavega Ioane', position: 'OL', school: 'Penn State', class: 'Junior', height: '6\'4"', weight: 328, ras: 8.5, bigBoardRank: 13, mockDraftRound: 1, mockDraftPick: 14, team: 'Baltimore Ravens' },
+  { id: '13', name: 'Olaivavega Ioane', position: 'IOL', school: 'Penn State', class: 'Junior', height: '6\'4"', weight: 328, ras: 8.5, bigBoardRank: 13, mockDraftRound: 1, mockDraftPick: 14, team: 'Baltimore Ravens' },
   { id: '14', name: 'Mansoor Delane', position: 'CB', school: 'LSU', class: 'Senior', height: '6\'1"', weight: 185, ras: 8.4, bigBoardRank: 14, mockDraftRound: 1, mockDraftPick: 12, team: 'Dallas Cowboys' },
-  { id: '15', name: 'Spencer Fano', position: 'OL', school: 'Utah', class: 'Junior', height: '6\'5"', weight: 305, ras: 8.8, bigBoardRank: 15, mockDraftRound: 1, mockDraftPick: 6, team: 'Cleveland Browns' },
-  { id: '16', name: 'Kayden McDonald', position: 'DL', school: 'Ohio State', class: 'Junior', height: '6\'3"', weight: 326, ras: 8.7, bigBoardRank: 16, mockDraftRound: 1, mockDraftPick: 20, team: 'Dallas Cowboys' },
-  { id: '17', name: 'Peter Woods', position: 'DL', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 310, ras: 8.8, bigBoardRank: 19, mockDraftRound: 1, mockDraftPick: 17, team: 'Detroit Lions' },
+  { id: '15', name: 'Spencer Fano', position: 'OT', school: 'Utah', class: 'Junior', height: '6\'5"', weight: 305, ras: 8.8, bigBoardRank: 15, mockDraftRound: 1, mockDraftPick: 6, team: 'Cleveland Browns' },
+  { id: '16', name: 'Kayden McDonald', position: 'DT', school: 'Ohio State', class: 'Junior', height: '6\'3"', weight: 326, ras: 8.7, bigBoardRank: 18, mockDraftRound: 1, mockDraftPick: 20, team: 'Dallas Cowboys' },
+  { id: '17', name: 'Peter Woods', position: 'DT', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 310, ras: 8.8, bigBoardRank: 19, mockDraftRound: 1, mockDraftPick: 17, team: 'Detroit Lions' },
   { id: '18', name: 'Avieon Terrell', position: 'CB', school: 'Clemson', class: 'Junior', height: '5\'11"', weight: 180, ras: 8.5, bigBoardRank: 20, mockDraftRound: 1, mockDraftPick: 29, team: 'Los Angeles Rams' },
-  { id: '19', name: 'Caleb Banks', position: 'DL', school: 'Florida', class: 'Senior', height: '6\'6"', weight: 325, ras: 8.6, bigBoardRank: 17 },
-  { id: '20', name: 'Monroe Freeling', position: 'OL', school: 'Georgia', class: 'Junior', height: '6\'7"', weight: 315, ras: 8.4, bigBoardRank: 18, mockDraftRound: 1, mockDraftPick: 23, team: 'Philadelphia Eagles' },
+  { id: '19', name: 'Caleb Banks', position: 'DT', school: 'Florida', class: 'Senior', height: '6\'6"', weight: 325, ras: 8.6, bigBoardRank: 16 },
+  { id: '20', name: 'Monroe Freeling', position: 'OT', school: 'Georgia', class: 'Junior', height: '6\'7"', weight: 315, ras: 8.4, bigBoardRank: 17, mockDraftRound: 1, mockDraftPick: 23, team: 'Philadelphia Eagles' },
   { id: '21', name: 'Emmanuel McNeil-Warren', position: 'S', school: 'Toledo', class: 'Senior', height: '6\'3"', weight: 209, ras: 8.5, bigBoardRank: 21, mockDraftRound: 1, mockDraftPick: 18, team: 'Minnesota Vikings' },
   { id: '22', name: 'CJ Allen', position: 'LB', school: 'Georgia', class: 'Junior', height: '6\'1"', weight: 235, ras: 8.9, bigBoardRank: 22, mockDraftRound: 1, mockDraftPick: 19, team: 'Carolina Panthers' },
-  { id: '23', name: 'Kadyn Proctor', position: 'OL', school: 'Alabama', class: 'Junior', height: '6\'7"', weight: 366, ras: 8.7, bigBoardRank: 23, mockDraftRound: 1, mockDraftPick: 28, team: 'Houston Texans' },
-  { id: '24', name: 'Lee Hunter', position: 'DL', school: 'Texas Tech', class: 'Senior', height: '6\'4"', weight: 330, ras: 8.2, bigBoardRank: 24, mockDraftRound: 1, mockDraftPick: 32, team: 'Seattle Seahawks' },
-  { id: '25', name: 'T.J. Parker', position: 'DL', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 260, ras: 8.4, bigBoardRank: 25, mockDraftRound: 1, mockDraftPick: 25, team: 'Chicago Bears' },
-  { id: '26', name: 'Keldric Faulk', position: 'DL', school: 'Auburn', class: 'Junior', height: '6\'6"', weight: 285, ras: 8.3, bigBoardRank: 26, mockDraftRound: 1, mockDraftPick: 22, team: 'Los Angeles Chargers' },
+  { id: '23', name: 'Kadyn Proctor', position: 'OT', school: 'Alabama', class: 'Junior', height: '6\'7"', weight: 366, ras: 8.7, bigBoardRank: 23, mockDraftRound: 1, mockDraftPick: 28, team: 'Houston Texans' },
+  { id: '24', name: 'Lee Hunter', position: 'DT', school: 'Texas Tech', class: 'Senior', height: '6\'4"', weight: 330, ras: 8.2, bigBoardRank: 24, mockDraftRound: 1, mockDraftPick: 32, team: 'Seattle Seahawks' },
+  { id: '25', name: 'T.J. Parker', position: 'EDGE', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 260, ras: 8.4, bigBoardRank: 25, mockDraftRound: 1, mockDraftPick: 25, team: 'Chicago Bears' },
+  { id: '26', name: 'Keldric Faulk', position: 'EDGE', school: 'Auburn', class: 'Junior', height: '6\'6"', weight: 285, ras: 8.3, bigBoardRank: 26, mockDraftRound: 1, mockDraftPick: 22, team: 'Los Angeles Chargers' },
   { id: '27', name: 'Kenyon Sadiq', position: 'TE', school: 'Oregon', class: 'Junior', height: '6\'3"', weight: 245, ras: 8.2, bigBoardRank: 27, mockDraftRound: 1, mockDraftPick: 30, team: 'Denver Broncos' },
   { id: '28', name: 'KC Concepcion', position: 'WR', school: 'Texas A&M', class: 'Junior', height: '5\'11"', weight: 190, ras: 8.6, bigBoardRank: 28, mockDraftRound: 1, mockDraftPick: 24, team: 'Cleveland Browns' },
-  { id: '29', name: 'Caleb Lomu', position: 'OL', school: 'Utah', class: 'Junior', height: '6\'6"', weight: 308, ras: 8.5, bigBoardRank: 29, mockDraftRound: 1, mockDraftPick: 31, team: 'New England Patriots' },
+  { id: '29', name: 'Caleb Lomu', position: 'OT', school: 'Utah', class: 'Junior', height: '6\'6"', weight: 308, ras: 8.5, bigBoardRank: 29, mockDraftRound: 1, mockDraftPick: 31, team: 'New England Patriots' },
   { id: '30', name: 'Denzel Boston', position: 'WR', school: 'Washington', class: 'Junior', height: '6\'4"', weight: 210, ras: 8.4, bigBoardRank: 30, mockDraftRound: 1, mockDraftPick: 26, team: 'Buffalo Bills' },
   { id: '31', name: 'Omar Cooper Jr.', position: 'WR', school: 'Indiana', class: 'Junior', height: '6\'0"', weight: 204, ras: 8.3, bigBoardRank: 31 },
   { id: '32', name: 'Ty Simpson', position: 'QB', school: 'Alabama', class: 'Junior', height: '6\'2"', weight: 208, ras: 8.5, bigBoardRank: 33, mockDraftRound: 1, mockDraftPick: 21, team: 'Pittsburgh Steelers' },
-  { id: '33', name: 'Emmanuel Pregnon', position: 'OL', school: 'Oregon', class: 'Senior', height: '6\'5"', weight: 318, ras: 8.4, bigBoardRank: 34, mockDraftRound: 1, mockDraftPick: 27, team: 'San Francisco 49ers' },
-  { id: '34', name: 'Cashius Howell', position: 'DL', school: 'Texas A&M', class: 'Senior', height: '6\'2"', weight: 248, ras: 8.8, bigBoardRank: 35, mockDraftRound: 1, mockDraftPick: 15, team: 'Tampa Bay Buccaneers' },
-  { id: '35', name: 'Akheem Mesidor', position: 'DL', school: 'Miami', class: 'Senior', height: '6\'3"', weight: 265, ras: 8.3, bigBoardRank: 32 },
-  { id: '36', name: 'Christen Miller', position: 'DL', school: 'Georgia', class: 'Junior', height: '6\'4"', weight: 310, ras: 8.2, bigBoardRank: 36 },
+  { id: '33', name: 'Emmanuel Pregnon', position: 'IOL', school: 'Oregon', class: 'Senior', height: '6\'5"', weight: 318, ras: 8.4, bigBoardRank: 34, mockDraftRound: 1, mockDraftPick: 27, team: 'San Francisco 49ers' },
+  { id: '34', name: 'Cashius Howell', position: 'EDGE', school: 'Texas A&M', class: 'Senior', height: '6\'2"', weight: 248, ras: 8.8, bigBoardRank: 35, mockDraftRound: 1, mockDraftPick: 15, team: 'Tampa Bay Buccaneers' },
+  { id: '35', name: 'Akheem Mesidor', position: 'EDGE', school: 'Miami', class: 'Senior', height: '6\'3"', weight: 265, ras: 8.3, bigBoardRank: 32 },
+  { id: '36', name: 'Christen Miller', position: 'DT', school: 'Georgia', class: 'Junior', height: '6\'4"', weight: 310, ras: 8.2, bigBoardRank: 36 },
   { id: '37', name: 'Brandon Cisse', position: 'CB', school: 'South Carolina', class: 'Junior', height: '6\'0"', weight: 190, ras: 8.3, bigBoardRank: 37 },
   { id: '38', name: 'Zachariah Branch', position: 'WR', school: 'USC', class: 'Sophomore', height: '5\'10"', weight: 175, ras: 8.5, bigBoardRank: 38 },
-  { id: '39', name: 'Blake Miller', position: 'OL', school: 'Clemson', class: 'Senior', height: '6\'6"', weight: 310, ras: 8.1, bigBoardRank: 39 },
+  { id: '39', name: 'Blake Miller', position: 'OT', school: 'Clemson', class: 'Senior', height: '6\'6"', weight: 310, ras: 8.1, bigBoardRank: 39 },
   { id: '40', name: 'Colton Hood', position: 'CB', school: 'Tennessee', class: 'Senior', height: '6\'0"', weight: 193, ras: 8.2, bigBoardRank: 40 },
   { id: '41', name: 'Keith Abney II', position: 'CB', school: 'Arizona State', class: 'Junior', height: '6\'0"', weight: 190, ras: 8.2, bigBoardRank: 41 },
-  { id: '42', name: 'R Mason Thomas', position: 'DL', school: 'Oklahoma', class: 'Junior', height: '6\'2"', weight: 249, ras: 8.4, bigBoardRank: 42 },
+  { id: '42', name: 'R Mason Thomas', position: 'EDGE', school: 'Oklahoma', class: 'Junior', height: '6\'2"', weight: 249, ras: 8.4, bigBoardRank: 42 },
   { id: '43', name: 'Dillon Thieneman', position: 'S', school: 'Oregon', class: 'Junior', height: '6\'1"', weight: 210, ras: 8.5, bigBoardRank: 43 },
-  { id: '44', name: 'Max Iheanachor', position: 'OL', school: 'Arizona State', class: 'Senior', height: '6\'6"', weight: 330, ras: 8.0, bigBoardRank: 44 },
+  { id: '44', name: 'Max Iheanachor', position: 'IOL', school: 'Arizona State', class: 'Senior', height: '6\'6"', weight: 330, ras: 8.0, bigBoardRank: 44 },
   { id: '45', name: 'Chris Brazzell II', position: 'WR', school: 'Tennessee', class: 'Junior', height: '6\'5"', weight: 200, ras: 8.2, bigBoardRank: 45 },
-  { id: '46', name: 'Zion Young', position: 'DL', school: 'Missouri', class: 'Senior', height: '6\'5"', weight: 258, ras: 8.1, bigBoardRank: 46 },
+  { id: '46', name: 'Zion Young', position: 'EDGE', school: 'Missouri', class: 'Senior', height: '6\'5"', weight: 258, ras: 8.1, bigBoardRank: 46 },
   { id: '47', name: 'Eli Stowers', position: 'TE', school: 'Vanderbilt', class: 'Senior', height: '6\'4"', weight: 234, ras: 8.0, bigBoardRank: 47 },
   { id: '48', name: 'Jadarian Price', position: 'RB', school: 'Notre Dame', class: 'Junior', height: '5\'11"', weight: 210, ras: 8.3, bigBoardRank: 48 },
   { id: '49', name: 'D\'Angelo Ponds', position: 'CB', school: 'Indiana', class: 'Junior', height: '5\'9"', weight: 172, ras: 8.2, bigBoardRank: 49 },
@@ -163,12 +163,12 @@ export function getTeamNeeds2026(): Record<number, string[]> {
   return TEAM_NEEDS_2026;
 }
 
-// Prospect position -> team need mapping (Edge = pass rusher often listed as DL)
+// Prospect position -> team need mapping (OT/IOL = OL needs; DT/EDGE = DL/Edge needs)
 function prospectPositionMatchesNeed(prospectPos: string, need: string): boolean {
   if (prospectPos === need) return true;
-  if ((prospectPos === 'OT' || prospectPos === 'OG') && need === 'OL') return true;
-  if (prospectPos === 'OL' && (need === 'OL' || need === 'Edge')) return false; // OL doesn't match Edge
-  if (prospectPos === 'DL' && (need === 'DL' || need === 'Edge')) return true;
+  if ((prospectPos === 'OT' || prospectPos === 'IOL') && need === 'OL') return true;
+  if ((prospectPos === 'DT' || prospectPos === 'EDGE') && need === 'DL') return true;
+  if (prospectPos === 'EDGE' && need === 'Edge') return true;
   return false;
 }
 

@@ -82,7 +82,7 @@ export interface Standings {
 export interface Prospect {
   id: string;
   name: string;
-  position: 'QB' | 'RB' | 'WR' | 'TE' | 'OL' | 'DL' | 'LB' | 'CB' | 'S' | 'K' | 'P';
+  position: 'QB' | 'RB' | 'WR' | 'TE' | 'OT' | 'IOL' | 'OL' | 'DT' | 'EDGE' | 'DL' | 'LB' | 'CB' | 'S' | 'K' | 'P';
   school: string;
   class: 'Freshman' | 'Sophomore' | 'Junior' | 'Senior' | 'Graduate';
   height: string;

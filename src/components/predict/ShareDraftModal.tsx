@@ -1,11 +1,10 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Image from 'next/image';
 import { X, Share2, Copy, Download } from 'lucide-react';
 import { TEAM_COLORS_BY_NAME, getTeamLogoSlug } from '@/lib/adapters/teams';
 
-// Use same-origin API proxy for logos so html-to-image can capture them (no canvas tainting)
+// Native <img> tags (not Next.js Image) so html-to-image can capture them without canvas tainting
 function ShareTeamLogo({ team, teamColor }: { team: string; teamColor: string }) {
   const [fallback, setFallback] = useState(false);
   const slug = getTeamLogoSlug(team);
@@ -23,13 +22,14 @@ function ShareTeamLogo({ team, teamColor }: { team: string; teamColor: string })
   }
 
   return (
-    <span className="flex-shrink-0 w-6 h-6 relative rounded-lg overflow-hidden bg-white/20">
-      <Image
+    <span className="flex-shrink-0 w-6 h-6 rounded-lg overflow-hidden bg-white/20 inline-block">
+      <img
         src={`/api/team-logo/${slug}`}
         alt=""
-        fill
-        className="object-contain"
-        unoptimized
+        width={24}
+        height={24}
+        fetchPriority="high"
+        className="w-full h-full object-contain"
         onError={() => setFallback(true)}
       />
     </span>
@@ -91,10 +91,12 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
     if (!cardRef.current) return;
     try {
       await waitForImages(cardRef.current);
+      await new Promise((r) => setTimeout(r, 300));
       const { toPng } = await import('html-to-image');
       const dataUrl = await toPng(cardRef.current, {
         pixelRatio: 2,
         backgroundColor: '#0f172a',
+        cacheBust: true,
       });
       const link = document.createElement('a');
       link.download = `sakfootball-draft-${score}.png`;
@@ -109,10 +111,12 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
     if (navigator.share && cardRef.current) {
       try {
         await waitForImages(cardRef.current);
+        await new Promise((r) => setTimeout(r, 300));
         const { toBlob } = await import('html-to-image');
         const blob = await toBlob(cardRef.current, {
           pixelRatio: 2,
           backgroundColor: '#0f172a',
+          cacheBust: true,
         });
         if (blob) {
           const file = new File([blob], 'my-mock-draft.png', { type: 'image/png' });
@@ -159,12 +163,14 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
                 Check out my top 5 picks!
               </p>
               <div className="flex items-center gap-3 mb-5">
-                <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-white/10 flex-shrink-0">
-                  <Image
+                <div className="w-12 h-12 rounded-lg overflow-hidden bg-white/10 flex-shrink-0 flex items-center justify-center p-1">
+                  <img
                     src="/LOGO.png"
                     alt="SAKFootball"
-                    fill
-                    className="object-contain p-1"
+                    width={40}
+                    height={40}
+                    fetchPriority="high"
+                    className="object-contain w-full h-full"
                   />
                 </div>
                 <div>

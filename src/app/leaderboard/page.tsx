@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { Trophy, ArrowLeft } from 'lucide-react';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
-import { WeeklyTopBanner } from '@/components/shared/WeeklyTopBanner';
 import { sanitizeDisplayName } from '@/lib/display-name-filter';
 import { calculatePreDraftScore } from '@/lib/adapters';
 
@@ -109,7 +108,6 @@ export default async function LeaderboardPage() {
             </div>
             <DraftCountdown variant="compact" />
           </div>
-          <WeeklyTopBanner />
         </div>
 
         {!hasResults ? (

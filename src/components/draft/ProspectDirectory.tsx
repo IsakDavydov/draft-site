@@ -40,7 +40,7 @@ export function ProspectDirectory() {
     }
   }
 
-  const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
+  const positions = ['QB', 'RB', 'WR', 'TE', 'OT', 'IOL', 'DT', 'EDGE', 'LB', 'CB', 'S', 'K', 'P'];
   const schools = Array.from(new Set(prospects.map(p => p.school))).sort();
 
   const totalPages = Math.ceil(prospects.length / PROSPECTS_PER_PAGE) || 1;
