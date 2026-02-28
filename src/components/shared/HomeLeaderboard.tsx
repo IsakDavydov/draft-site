@@ -18,14 +18,14 @@ export function HomeLeaderboard() {
     fetch('/api/pre-draft-leaderboard')
       .then((res) => res.json())
       .then((data: LeaderboardEntry[]) => {
-        if (Array.isArray(data) && data.length >= 3) {
+        if (Array.isArray(data)) {
           setEntries(data.slice(0, 5));
         }
       })
       .catch(() => {});
   }, []);
 
-  if (entries.length < 3) return null;
+  if (entries.length < 1) return null;
 
   return (
     <div className="mt-6 rounded-xl bg-black/20 px-4 py-3 backdrop-blur-sm">

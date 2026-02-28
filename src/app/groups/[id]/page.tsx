@@ -3,9 +3,13 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { Trophy, ArrowLeft, Users } from 'lucide-react';
 import { sanitizeDisplayName } from '@/lib/display-name-filter';
-import { calculatePreDraftScore, getDraftOrder2026, getEffectiveDraftOrder } from '@/lib/adapters';
+import { calculatePreDraftScore } from '@/lib/adapters';
 
 export const dynamic = 'force-dynamic';
+
+interface GroupDetailPageProps {
+  params: Promise<{ id: string }>;
+}
 
 export async function generateMetadata({ params }: GroupDetailPageProps) {
   const { id: groupId } = await params;
@@ -20,10 +24,6 @@ export async function generateMetadata({ params }: GroupDetailPageProps) {
   };
 }
 
-interface GroupDetailPageProps {
-  params: Promise<{ id: string }>;
-}
-
 export default async function GroupDetailPage({ params }: GroupDetailPageProps) {
   const { id: groupId } = await params;
   const supabase = await createClient();
@@ -33,7 +33,6 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
     redirect('/auth/signin?next=/groups/' + groupId);
   }
 
-  // Verify membership and load group
   const { data: membership } = await supabase
     .from('group_members')
     .select('role')
@@ -67,7 +66,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
 
   const hasResults = (resultsCount ?? 0) > 0;
 
-  // Pre-draft scores when no results yet
+  // Pre-draft scores when no results yet (works with base schema - no is_leaderboard_entry or custom_draft_order)
   let preDraftLeaderboard: { display_name: string; score: number; rank: number }[] = [];
   if (!hasResults) {
     const { data: memberRows } = await supabase
@@ -77,10 +76,9 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
 
     if (memberRows && memberRows.length > 0) {
       const memberIds = memberRows.map((r: { user_id: string }) => r.user_id);
-      const defaultOrder = getDraftOrder2026();
       const { data: predictions } = await supabase
         .from('draft_predictions')
-        .select('id, display_name, custom_draft_order')
+        .select('id, display_name')
         .eq('draft_year', 2026)
         .eq('is_leaderboard_entry', true)
         .in('user_id', memberIds);
@@ -89,16 +87,12 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
         const { data: picks } = await supabase
           .from('prediction_picks')
           .select('prediction_id, pick_number, prospect_id, team')
-          .in('prediction_id', predictions.map((p: { id: string }) => p.id));
+          .in('prediction_id', predictions.map((p) => p.id));
 
         const picksByPrediction = new Map<string, Array<{ pick_number: number; prospect_id: string; team: string }>>();
         for (const pick of picks ?? []) {
           const list = picksByPrediction.get(pick.prediction_id) ?? [];
-          list.push({
-            pick_number: pick.pick_number,
-            prospect_id: pick.prospect_id,
-            team: pick.team,
-          });
+          list.push({ pick_number: pick.pick_number, prospect_id: pick.prospect_id, team: pick.team });
           picksByPrediction.set(pick.prediction_id, list);
         }
 
@@ -106,23 +100,15 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
           .map((pred) => {
             const predPicks = picksByPrediction.get(pred.id) ?? [];
             if (predPicks.length === 0) return null;
-            const effectiveOrder = getEffectiveDraftOrder(defaultOrder, pred.custom_draft_order ?? null);
-            const picksWithTeam = predPicks.map((p) => ({
-              ...p,
-              team: effectiveOrder.find((d) => d.pick === p.pick_number)?.team ?? p.team,
-            }));
             return {
               display_name: pred.display_name || 'Player',
-              score: calculatePreDraftScore(picksWithTeam),
+              score: calculatePreDraftScore(predPicks),
             };
           })
           .filter((x): x is { display_name: string; score: number } => x !== null);
 
         withScores.sort((a, b) => b.score - a.score);
-        preDraftLeaderboard = withScores.map((row, i) => ({
-          ...row,
-          rank: i + 1,
-        }));
+        preDraftLeaderboard = withScores.map((row, i) => ({ ...row, rank: i + 1 }));
       }
     }
   }
@@ -175,15 +161,9 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        #
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Name
-                      </th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Score
-                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -192,13 +172,10 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-                              row.rank === 1
-                                ? 'bg-amber-400 text-amber-900'
-                                : row.rank === 2
-                                  ? 'bg-gray-300 text-gray-700'
-                                  : row.rank === 3
-                                    ? 'bg-amber-700 text-amber-100'
-                                    : 'bg-gray-100 text-gray-700'
+                              row.rank === 1 ? 'bg-amber-400 text-amber-900' :
+                              row.rank === 2 ? 'bg-gray-300 text-gray-700' :
+                              row.rank === 3 ? 'bg-amber-700 text-amber-100' :
+                              'bg-gray-100 text-gray-700'
                             }`}
                           >
                             {row.rank}
@@ -220,15 +197,9 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        #
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Name
-                      </th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Score
-                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -251,10 +222,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
             ) : (
               <div className="bg-white rounded-xl p-8 text-center shadow-sm ring-1 ring-gray-900/5">
                 <p className="text-gray-600">No members have submitted predictions yet.</p>
-                <Link
-                  href="/predict"
-                  className="inline-block mt-4 text-nfl-red font-medium hover:underline"
-                >
+                <Link href="/predict" className="inline-block mt-4 text-nfl-red font-medium hover:underline">
                   Submit your predictions →
                 </Link>
               </div>
@@ -281,15 +249,9 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Rank
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Score
-                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -298,13 +260,10 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-                          row.rank === 1
-                            ? 'bg-amber-400 text-amber-900'
-                            : row.rank === 2
-                              ? 'bg-gray-300 text-gray-700'
-                              : row.rank === 3
-                                ? 'bg-amber-700 text-amber-100'
-                                : 'bg-gray-100 text-gray-700'
+                          row.rank === 1 ? 'bg-amber-400 text-amber-900' :
+                          row.rank === 2 ? 'bg-gray-300 text-gray-700' :
+                          row.rank === 3 ? 'bg-amber-700 text-amber-100' :
+                          'bg-gray-100 text-gray-700'
                         }`}
                       >
                         {row.rank}

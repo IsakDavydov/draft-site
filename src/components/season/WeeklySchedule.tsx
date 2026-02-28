@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getSchedules, getTeams, getUpcomingGames, getTodaysGames } from '@/lib/adapters';
+import { useState, useEffect, useRef } from 'react';
+import { getTeams } from '@/lib/adapters';
 import { Game, Team } from '@/types';
 import { formatDate, formatTime, getTeamColors } from '@/lib/utils';
 import { Calendar, Clock, Tv, TrendingUp } from 'lucide-react';
 import { TeamLogo } from '@/components/shared/TeamLogo';
+
+const CACHE_KEY = (mode: string, week?: number) => (mode === 'weekly' ? `weekly-${week}` : mode);
 
 export function WeeklySchedule() {
   const [games, setGames] = useState<Game[]>([]);
@@ -14,33 +16,30 @@ export function WeeklySchedule() {
   const [selectedWeek, setSelectedWeek] = useState(1);
   const [viewMode, setViewMode] = useState<'weekly' | 'upcoming' | 'today'>('weekly');
   const [apiStatus, setApiStatus] = useState<'real' | 'mock'>('mock');
+  const gamesCacheRef = useRef<Record<string, Game[]>>({});
 
   useEffect(() => {
     async function loadData() {
+      const cacheKey = CACHE_KEY(viewMode, viewMode === 'weekly' ? selectedWeek : undefined);
+      const cached = gamesCacheRef.current[cacheKey];
+
+      if (cached?.length) {
+        setGames(cached);
+        return;
+      }
+
       try {
         setLoading(true);
-        let gamesData: Game[];
         const teamsData = await getTeams();
-
-        // Load games based on view mode
-        switch (viewMode) {
-          case 'weekly':
-            gamesData = await getSchedules(selectedWeek);
-            break;
-          case 'upcoming':
-            gamesData = await getUpcomingGames(20);
-            break;
-          case 'today':
-            gamesData = await getTodaysGames();
-            break;
-          default:
-            gamesData = await getSchedules(selectedWeek);
-        }
+        const params = new URLSearchParams({ mode: viewMode });
+        if (viewMode === 'weekly') params.set('week', String(selectedWeek));
+        const res = await fetch(`/api/schedule?${params}`);
+        const gamesData: Game[] = res.ok ? await res.json() : [];
 
         setGames(gamesData);
         setTeams(teamsData);
-        
-        // Check if we got real data or mock data
+        gamesCacheRef.current = { ...gamesCacheRef.current, [cacheKey]: gamesData };
+
         if (gamesData.length > 0 && gamesData[0].id !== '1') {
           setApiStatus('real');
         } else {

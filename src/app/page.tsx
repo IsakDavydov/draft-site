@@ -11,19 +11,17 @@ export default function HomePage() {
     <div className="bg-white">
       {/* Hero Section */}
       <div className="relative isolate overflow-visible bg-gradient-to-br from-nfl-red via-nfl-blue to-nfl-purple">
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 xl:flex xl:px-8 xl:py-40">
-          <div className="mx-auto max-w-2xl flex-shrink-0 xl:mx-0 xl:max-w-xl xl:pt-8">
-            <div className="mt-24 sm:mt-32 xl:mt-16">
-              <Link
-                href="/predict"
-                className="inline-flex items-center gap-2 rounded-full bg-nfl-gold/20 px-4 py-2 text-sm font-semibold leading-6 text-white ring-2 ring-inset ring-nfl-gold hover:bg-nfl-gold/30 transition-colors"
-              >
-                <Zap className="h-4 w-4" />
-                2026 Draft Prediction Challenge — Submit your picks
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-            <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
+        <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 xl:flex xl:items-stretch xl:gap-10 xl:px-8 xl:py-16">
+          <div className="mx-auto max-w-2xl flex-shrink-0 xl:mx-0 xl:max-w-xl">
+            <Link
+              href="/predict"
+              className="inline-flex items-center gap-2 rounded-full bg-nfl-gold/20 px-4 py-2 text-sm font-semibold leading-6 text-white ring-2 ring-inset ring-nfl-gold hover:bg-nfl-gold/30 transition-colors"
+            >
+              <Zap className="h-4 w-4" />
+              2026 Draft Prediction Challenge — Submit your picks
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <h1 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-6xl">
               Predict the
               <span className="block text-nfl-gold">2026 NFL Draft</span>
             </h1>
@@ -44,8 +42,8 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="mx-auto mt-16 min-w-0 flex max-w-2xl sm:mt-24 xl:ml-10 xl:mr-0 xl:mt-0 xl:max-w-xl xl:flex-none xl:self-start">
-            <div className="w-full min-w-0 max-w-3xl sm:max-w-5xl xl:max-w-none">
+          <div className="mx-auto mt-16 min-w-0 flex max-w-2xl sm:mt-24 xl:mt-0 xl:flex-1 xl:flex xl:justify-center xl:items-center">
+            <div className="w-full min-w-0 max-w-3xl sm:max-w-5xl xl:max-w-xl">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 xl:gap-6">
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                   <div className="text-center">
@@ -288,58 +286,6 @@ export default function HomePage() {
           </div>
         </div>
       )}
-
-      {/* Live Callouts Section */}
-      <div className="bg-gray-50">
-        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Live Updates & Breaking News
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Stay informed with real-time updates, injury reports, and breaking news from around the NFL.
-            </p>
-          </div>
-          
-          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8">
-              <div className="flex items-center gap-x-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
-                  <div className="h-2 w-2 rounded-full bg-red-600"></div>
-                </div>
-                <h3 className="text-lg font-medium text-gray-900">Live Games</h3>
-              </div>
-              <p className="mt-4 text-sm leading-6 text-gray-600">
-                Real-time scores, stats, and game updates as they happen.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8">
-              <div className="flex items-center gap-x-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-100">
-                  <div className="h-2 w-2 rounded-full bg-yellow-600"></div>
-                </div>
-                <h3 className="text-lg font-medium text-gray-900">Injury Updates</h3>
-              </div>
-              <p className="mt-4 text-sm leading-6 text-gray-600">
-                Latest injury reports and player status updates.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8">
-              <div className="flex items-center gap-x-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
-                  <div className="h-2 w-2 rounded-full bg-green-600"></div>
-                </div>
-                <h3 className="text-lg font-medium text-gray-900">Trade Rumors</h3>
-              </div>
-              <p className="mt-4 text-sm leading-6 text-gray-600">
-                Breaking news on trades, signings, and roster moves.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

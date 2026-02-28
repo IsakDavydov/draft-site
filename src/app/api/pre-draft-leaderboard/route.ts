@@ -1,19 +1,19 @@
 import { createClient } from '@/lib/supabase/server';
-import { calculatePreDraftScore, getDraftOrder2026, getEffectiveDraftOrder } from '@/lib/adapters';
+import { calculatePreDraftScore } from '@/lib/adapters';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
     const supabase = await createClient();
-    const defaultOrder = getDraftOrder2026();
+
     const { data: predictions, error: predError } = await supabase
       .from('draft_predictions')
-      .select('id, display_name, custom_draft_order')
+      .select('id, display_name')
       .eq('draft_year', 2026)
       .eq('is_leaderboard_entry', true);
 
-    if (predError || !predictions || predictions.length === 0) {
+    if (predError || !predictions?.length) {
       return Response.json([]);
     }
 
@@ -33,14 +33,9 @@ export async function GET() {
       .map((pred) => {
         const predPicks = picksByPrediction.get(pred.id) ?? [];
         if (predPicks.length === 0) return null;
-        const effectiveOrder = getEffectiveDraftOrder(defaultOrder, pred.custom_draft_order ?? null);
-        const picksWithTeam = predPicks.map((p) => ({
-          ...p,
-          team: effectiveOrder.find((d) => d.pick === p.pick_number)?.team ?? p.team,
-        }));
         return {
           display_name: pred.display_name,
-          score: calculatePreDraftScore(picksWithTeam),
+          score: calculatePreDraftScore(predPicks),
         };
       })
       .filter((x): x is { display_name: string; score: number } => x !== null);

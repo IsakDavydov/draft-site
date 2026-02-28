@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Trophy, ArrowLeft } from 'lucide-react';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
 import { sanitizeDisplayName } from '@/lib/display-name-filter';
-import { calculatePreDraftScore, getDraftOrder2026, getEffectiveDraftOrder } from '@/lib/adapters';
+import { calculatePreDraftScore } from '@/lib/adapters';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,13 +27,12 @@ export default async function LeaderboardPage() {
 
   const hasResults = (resultsCount ?? 0) > 0;
 
-  // Pre-draft scores when no results yet
+  // Pre-draft scores when no results yet (works with base schema - no is_leaderboard_entry or custom_draft_order)
   let preDraftLeaderboard: { display_name: string; score: number; rank: number }[] = [];
   if (!hasResults) {
-    const defaultOrder = getDraftOrder2026();
     const { data: predictions } = await supabase
       .from('draft_predictions')
-      .select('id, display_name, custom_draft_order')
+      .select('id, display_name')
       .eq('draft_year', 2026)
       .eq('is_leaderboard_entry', true);
 
@@ -41,7 +40,7 @@ export default async function LeaderboardPage() {
       const { data: picks } = await supabase
         .from('prediction_picks')
         .select('prediction_id, pick_number, prospect_id, team')
-        .in('prediction_id', predictions.map((p: { id: string }) => p.id));
+        .in('prediction_id', predictions.map((p) => p.id));
 
       const picksByPrediction = new Map<string, Array<{ pick_number: number; prospect_id: string; team: string }>>();
       for (const pick of picks ?? []) {
@@ -55,17 +54,12 @@ export default async function LeaderboardPage() {
       }
 
       const withScores = predictions
-        .map((pred: { id: string; display_name: string; custom_draft_order?: Record<string, string> | null }) => {
+        .map((pred) => {
           const predPicks = picksByPrediction.get(pred.id) ?? [];
           if (predPicks.length === 0) return null;
-          const effectiveOrder = getEffectiveDraftOrder(defaultOrder, pred.custom_draft_order ?? null);
-          const picksWithTeam = predPicks.map((p) => ({
-            ...p,
-            team: effectiveOrder.find((d) => d.pick === p.pick_number)?.team ?? p.team,
-          }));
           return {
             display_name: pred.display_name,
-            score: calculatePreDraftScore(picksWithTeam),
+            score: calculatePreDraftScore(predPicks),
           };
         })
         .filter((x): x is { display_name: string; score: number } => x !== null);
@@ -134,7 +128,7 @@ export default async function LeaderboardPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {preDraftLeaderboard.map((row: { display_name: string; score: number; rank: number }, i: number) => (
+                    {preDraftLeaderboard.map((row, i) => (
                       <tr key={row.display_name + i} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span

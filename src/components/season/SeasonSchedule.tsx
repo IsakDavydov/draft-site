@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getSchedules, getTeams } from '@/lib/adapters';
+import { getTeams } from '@/lib/adapters';
 import { Game, Team } from '@/types';
 import { formatDate, formatTime, getTeamColors } from '@/lib/utils';
 import { TeamLogo } from '@/components/shared/TeamLogo';
@@ -18,10 +18,11 @@ export function SeasonSchedule() {
     async function loadData() {
       try {
         setLoading(true);
-        const [gamesData, teamsData] = await Promise.all([
-          getSchedules(), // Get all games
+        const [gamesRes, teamsData] = await Promise.all([
+          fetch('/api/schedule'),
           getTeams(),
         ]);
+        const gamesData = gamesRes.ok ? await gamesRes.json() : [];
         setAllGames(gamesData);
         setTeams(teamsData);
       } catch (error) {

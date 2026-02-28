@@ -1,7 +1,8 @@
 import { Game, Team } from '@/types';
 
-// The Odds API configuration
-const ODDS_API_KEY = process.env.NEXT_PUBLIC_ODDS_API_KEY || 'demo';
+// The Odds API configuration (server-side only - do not use NEXT_PUBLIC_)
+const ODDS_API_KEY = process.env.ODDS_API_KEY || 'demo';
+const HAS_REAL_API_KEY = !!process.env.ODDS_API_KEY && process.env.ODDS_API_KEY !== 'demo';
 const ODDS_API_BASE = 'https://api.the-odds-api.com/v4/sports';
 
 // NFL Schedule API endpoints
@@ -222,9 +223,17 @@ const mockGames: Game[] = [
 
 // Fetch real NFL schedule from The Odds API
 async function fetchNFLSchedule(week?: number, season: number = 2026): Promise<Game[]> {
+  // Use mock immediately when no real API key (saves failed requests)
+  if (!HAS_REAL_API_KEY) {
+    await new Promise((r) => setTimeout(r, 50));
+    return week ? mockGames.filter((g) => g.week === week) : mockGames;
+  }
+
   try {
-    // The Odds API provides upcoming games
-    const response = await fetch(`${ODDS_API_BASE}/${NFL_SPORT_KEY}/odds?apiKey=${ODDS_API_KEY}&regions=us&markets=spreads,totals,h2h&oddsFormat=american`);
+    const url = `${ODDS_API_BASE}/${NFL_SPORT_KEY}/odds?apiKey=${ODDS_API_KEY}&regions=us&markets=spreads,totals,h2h&oddsFormat=american`;
+    const response = await fetch(url, {
+      next: { revalidate: 600 },
+    });
     
     if (!response.ok) {
       throw new Error(`API request failed: ${response.status}`);
