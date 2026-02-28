@@ -142,10 +142,12 @@ language sql security definer set search_path = public as $$
 $$;
 
 -- 10. RLS: anyone can read leaderboard submissions (for public leaderboard display)
+drop policy if exists "Anyone can read leaderboard predictions" on public.draft_predictions;
 create policy "Anyone can read leaderboard predictions"
   on public.draft_predictions for select
   using (is_leaderboard_entry = true);
 
+drop policy if exists "Anyone can read leaderboard picks" on public.prediction_picks;
 create policy "Anyone can read leaderboard picks"
   on public.prediction_picks for select
   using (

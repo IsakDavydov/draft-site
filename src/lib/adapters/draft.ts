@@ -149,6 +149,50 @@ export function getDraftOrder2026(): { pick: number; team: string }[] {
   return picks.map((p) => ({ pick: p.pick, team: p.team }));
 }
 
+// Resolve effective draft order: custom_draft_order overrides default when present
+export function getEffectiveDraftOrder(
+  defaultOrder: { pick: number; team: string }[],
+  customOrder: Record<string, string> | null | undefined
+): { pick: number; team: string }[] {
+  if (!customOrder || typeof customOrder !== 'object') {
+    return defaultOrder;
+  }
+  return defaultOrder.map(({ pick }) => ({
+    pick,
+    team: (customOrder[String(pick)] as string) ?? defaultOrder.find((d) => d.pick === pick)?.team ?? '',
+  }));
+}
+
+// Apply a pick swap to an order: swap teams at pick A and pick B
+export function applyPickSwap(
+  order: { pick: number; team: string }[],
+  pickA: number,
+  pickB: number
+): { pick: number; team: string }[] {
+  const teamA = order.find((d) => d.pick === pickA)?.team;
+  const teamB = order.find((d) => d.pick === pickB)?.team;
+  if (!teamA || !teamB) return order;
+  return order.map((d) => {
+    if (d.pick === pickA) return { ...d, team: teamB };
+    if (d.pick === pickB) return { ...d, team: teamA };
+    return d;
+  });
+}
+
+// Assign a team to a pick (for trade-into-first-round: team with no R1 pick acquires one)
+export function applyTeamToPick(
+  order: { pick: number; team: string }[],
+  pickNum: number,
+  newTeam: string
+): { pick: number; team: string }[] {
+  return order.map((d) => (d.pick === pickNum ? { ...d, team: newTeam } : d));
+}
+
+// Serialize draft order to custom_draft_order format (pick -> team)
+export function serializeDraftOrder(order: { pick: number; team: string }[]): Record<string, string> {
+  return Object.fromEntries(order.map((d) => [String(d.pick), d.team]));
+}
+
 // Team needs by pick number for 2026 first round (from NFL.com)
 const TEAM_NEEDS_2026: Record<number, string[]> = (teamNeeds2026 as { needsByPick: Record<string, string[]> }).needsByPick
   ? Object.fromEntries(
@@ -181,10 +225,17 @@ const prospectLookup = new Map(
   mockProspects.map((p) => [p.id, { bigBoardRank: p.bigBoardRank ?? 50, position: p.position }])
 );
 
-const TEAM_NEEDS_BY_PICK = (teamNeeds2026 as { needsByPick: Record<string, string[]> }).needsByPick;
+const NEEDS_BY_PICK = (teamNeeds2026 as { needsByPick: Record<string, string[]> }).needsByPick;
+
+// Team needs by team name (derived from default order + needsByPick) for scoring with trades
+const DEFAULT_ORDER_2026 = getDraftOrder2026();
+const NEEDS_BY_TEAM: Record<string, string[]> = Object.fromEntries(
+  DEFAULT_ORDER_2026.map(({ pick, team }) => [team, (NEEDS_BY_PICK?.[String(pick)] ?? [])])
+);
 
 /**
  * Calculate pre-draft score (0-100) for a mock draft.
+ * Uses team from each pick for need-matching (works with default order and trades).
  */
 export function calculatePreDraftScore(
   picks: Array<{ pick_number: number; prospect_id: string; team: string }>
@@ -207,7 +258,7 @@ export function calculatePreDraftScore(
       top10Matches += 1;
     }
 
-    const needs = TEAM_NEEDS_BY_PICK?.[String(pick.pick_number)];
+    const needs = NEEDS_BY_TEAM[pick.team] ?? NEEDS_BY_PICK?.[String(pick.pick_number)];
     if (needs && prospectFillsTeamNeed({ position }, needs)) {
       fitCount += 1;
     }

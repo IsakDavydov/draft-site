@@ -627,6 +627,9 @@ const mockTeams: Team[] = [
   },
 ];
 
+/** All 32 NFL team names (for trade-into-first-round dropdown) */
+export const NFL_TEAM_NAMES: string[] = mockTeams.map((t) => t.name);
+
 // Mock data for players (keeping existing data)
 const mockPlayers: Player[] = [
   {

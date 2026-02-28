@@ -3,13 +3,19 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Prospect } from '@/types';
-import { TEAM_COLORS_BY_NAME } from '@/lib/adapters/teams';
+import { TEAM_COLORS_BY_NAME, NFL_TEAM_NAMES } from '@/lib/adapters/teams';
 import { TeamLogo } from '@/components/shared/TeamLogo';
 import Link from 'next/link';
-import { Zap, Trash2, Plus, Trophy, Share2, TrendingUp } from 'lucide-react';
+import { Zap, Trash2, Plus, Trophy, Share2, TrendingUp, ArrowLeftRight } from 'lucide-react';
 import { ShareDraftModal } from './ShareDraftModal';
 import { ProspectPicker } from './ProspectPicker';
-import { calculatePreDraftScore } from '@/lib/adapters';
+import {
+  calculatePreDraftScore,
+  getEffectiveDraftOrder,
+  applyPickSwap,
+  applyTeamToPick,
+  serializeDraftOrder,
+} from '@/lib/adapters';
 import type { MockDraftFromFile } from '@/types';
 
 const DRAFT_YEAR = 2026;
@@ -20,11 +26,173 @@ interface DraftOrderItem {
   team: string;
 }
 
+type TradeMode = 'swap' | 'assign';
+
+function TradeModal({
+  effectiveOrder,
+  onSwap,
+  onAssign,
+  onClose,
+  loading,
+}: {
+  effectiveOrder: DraftOrderItem[];
+  onSwap: (pickA: number, pickB: number) => void;
+  onAssign: (pick: number, team: string) => void;
+  onClose: () => void;
+  loading: boolean;
+}) {
+  const [mode, setMode] = useState<TradeMode>('swap');
+  const [pickA, setPickA] = useState(1);
+  const [pickB, setPickB] = useState(2);
+  const [assignPick, setAssignPick] = useState(1);
+  const [assignTeam, setAssignTeam] = useState(NFL_TEAM_NAMES[0] ?? '');
+  const teamA = effectiveOrder.find((d) => d.pick === pickA)?.team ?? '—';
+  const teamB = effectiveOrder.find((d) => d.pick === pickB)?.team ?? '—';
+  const currentHolder = effectiveOrder.find((d) => d.pick === assignPick)?.team ?? '—';
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl max-h-[90vh] overflow-y-auto">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Trade Picks</h3>
+        <div className="flex gap-2 mb-4">
+          <button
+            type="button"
+            onClick={() => setMode('swap')}
+            className={`px-3 py-1.5 text-sm font-medium rounded-lg ${mode === 'swap' ? 'bg-nfl-red text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+          >
+            Swap two
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode('assign')}
+            className={`px-3 py-1.5 text-sm font-medium rounded-lg ${mode === 'assign' ? 'bg-nfl-red text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+          >
+            Assign team
+          </button>
+        </div>
+        {mode === 'swap' ? (
+          <>
+            <p className="text-sm text-gray-600 mb-4">
+              Select two picks to swap. The teams at those spots will exchange draft positions.
+            </p>
+            <div className="flex gap-4 mb-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Pick A</label>
+                <select
+                  value={pickA}
+                  onChange={(e) => setPickA(Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                >
+                  {effectiveOrder.map((d) => (
+                    <option key={d.pick} value={d.pick}>
+                      {d.pick}. {d.team}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Pick B</label>
+                <select
+                  value={pickB}
+                  onChange={(e) => setPickB(Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                >
+                  {effectiveOrder.map((d) => (
+                    <option key={d.pick} value={d.pick}>
+                      {d.pick}. {d.team}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {pickA !== pickB && (
+              <p className="text-sm text-gray-600 mb-4">
+                After swap: <strong>{pickA}. {teamB}</strong> ↔ <strong>{pickB}. {teamA}</strong>
+              </p>
+            )}
+          </>
+        ) : (
+          <>
+            <p className="text-sm text-gray-600 mb-4">
+              Assign a team (e.g. one without a first-round pick) to a specific pick—for when a team trades into the first round.
+            </p>
+            <div className="flex gap-4 mb-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Pick</label>
+                <select
+                  value={assignPick}
+                  onChange={(e) => setAssignPick(Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                >
+                  {effectiveOrder.map((d) => (
+                    <option key={d.pick} value={d.pick}>
+                      {d.pick}. {d.team}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">New team</label>
+                <select
+                  value={assignTeam}
+                  onChange={(e) => setAssignTeam(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                >
+                  {NFL_TEAM_NAMES.map((name) => (
+                    <option key={name} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">
+              Pick <strong>{assignPick}</strong> will be held by <strong>{assignTeam}</strong>
+              {assignTeam !== currentHolder && (
+                <span className="block mt-1 text-gray-500">(currently {currentHolder})</span>
+              )}
+            </p>
+          </>
+        )}
+        <div className="flex gap-2 justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+          >
+            Cancel
+          </button>
+          {mode === 'swap' ? (
+            <button
+              type="button"
+              onClick={() => pickA !== pickB && onSwap(pickA, pickB)}
+              disabled={loading || pickA === pickB}
+              className="px-4 py-2 text-sm font-semibold bg-nfl-red text-white rounded-lg hover:bg-nfl-red/90 disabled:opacity-50"
+            >
+              Swap
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => onAssign(assignPick, assignTeam)}
+              disabled={loading}
+              className="px-4 py-2 text-sm font-semibold bg-nfl-red text-white rounded-lg hover:bg-nfl-red/90 disabled:opacity-50"
+            >
+              Assign
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 interface DraftSummary {
   id: string;
   name: string | null;
   display_name: string | null;
   is_leaderboard_entry: boolean;
+  custom_draft_order: Record<string, string> | null;
   picks: Array<{ pick_number: number; prospect_id: string; prospect_name: string; team: string }>;
 }
 
@@ -38,11 +206,11 @@ interface PredictionFormProps {
 
 function computeScore(
   picks: Array<{ pick_number: number; prospect_id: string; team: string }>,
-  draftOrder: DraftOrderItem[]
+  order: DraftOrderItem[]
 ): number {
   const picksWithTeam = picks.map((p) => ({
     ...p,
-    team: draftOrder.find((d) => d.pick === p.pick_number)?.team ?? '',
+    team: order.find((d) => d.pick === p.pick_number)?.team ?? '',
   }));
   return calculatePreDraftScore(picksWithTeam);
 }
@@ -57,8 +225,13 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   const [saved, setSaved] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [submitToLeaderboardModal, setSubmitToLeaderboardModal] = useState(false);
+  const [changeNameModalOpen, setChangeNameModalOpen] = useState(false);
+  const [tradeModalOpen, setTradeModalOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [submitResult, setSubmitResult] = useState<{ rank: number; score: number } | null>(null);
+
+  const selectedDraft = drafts.find((d) => d.id === selectedDraftId);
+  const effectiveOrder = getEffectiveDraftOrder(draftOrder, selectedDraft?.custom_draft_order ?? null);
 
   const supabase = createClient();
 
@@ -95,6 +268,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
         name,
         display_name,
         is_leaderboard_entry,
+        custom_draft_order,
         prediction_picks (pick_number, prospect_id, prospect_name, team)
       `)
       .eq('user_id', userId)
@@ -102,11 +276,12 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       .order('created_at', { ascending: true });
 
     if (!error && data) {
-      const summaries: DraftSummary[] = data.map((d: { id: string; name: string | null; display_name: string | null; is_leaderboard_entry: boolean; prediction_picks: Array<{ pick_number: number; prospect_id: string; prospect_name: string; team: string }> }) => ({
+      const summaries: DraftSummary[] = data.map((d: { id: string; name: string | null; display_name: string | null; is_leaderboard_entry: boolean; custom_draft_order: Record<string, string> | null; prediction_picks: Array<{ pick_number: number; prospect_id: string; prospect_name: string; team: string }> }) => ({
         id: d.id,
         name: d.name,
         display_name: d.display_name,
         is_leaderboard_entry: d.is_leaderboard_entry ?? false,
+        custom_draft_order: d.custom_draft_order ?? null,
         picks: d.prediction_picks || [],
       }));
       setDrafts(summaries);
@@ -117,7 +292,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
     } else if (error) {
       setMessage({
         type: 'error',
-        text: `Couldn't load drafts. Run the migration in Supabase: supabase/migrations/20260212_multiple_drafts.sql`,
+        text: `Couldn't load drafts. Run these migrations in Supabase SQL Editor (in order): 1) supabase/migrations/20260212_multiple_drafts.sql 2) supabase/migrations/20260212_custom_draft_order.sql`,
       });
     }
   }
@@ -153,7 +328,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       const msg =
         err instanceof Error ? err.message : (err as { message?: string })?.message ?? String(err);
       const hint = /null value|violates not-null|duplicate key|violates unique/.test(msg)
-        ? ' Run the migration: supabase/migrations/20260212_multiple_drafts.sql in Supabase SQL Editor.'
+        ? ' Run migrations: 20260212_multiple_drafts.sql then 20260212_custom_draft_order.sql in Supabase SQL Editor.'
         : '';
       setMessage({ type: 'error', text: msg + hint });
     } finally {
@@ -165,7 +340,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
     await supabase.from('draft_predictions').update({ name: draftName.trim() || null }).eq('id', predictionId);
     await supabase.from('prediction_picks').delete().eq('prediction_id', predictionId);
     const prospectMap = Object.fromEntries(prospects.map((p) => [p.id, p]));
-    const picksToInsert = draftOrder.map(({ pick, team }) => {
+    const picksToInsert = effectiveOrder.map(({ pick, team }) => {
       const prospectId = picks[pick];
       const prospect = prospectMap[prospectId];
       return {
@@ -263,9 +438,114 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
     }
   }
 
+  async function handleApplyTrade(pickA: number, pickB: number) {
+    if (!selectedDraftId) return;
+    const newOrder = applyPickSwap(effectiveOrder, pickA, pickB);
+    const customOrder = serializeDraftOrder(newOrder);
+
+    setLoading(true);
+    setMessage(null);
+    setTradeModalOpen(false);
+
+    try {
+      const { error } = await supabase
+        .from('draft_predictions')
+        .update({ custom_draft_order: customOrder })
+        .eq('id', selectedDraftId);
+
+      if (error) throw error;
+      await loadDrafts();
+      setMessage({ type: 'success', text: 'Trade applied. Pick cards updated.' });
+    } catch (err) {
+      setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to apply trade.' });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleAssignTeam(pick: number, team: string) {
+    if (!selectedDraftId) return;
+    const newOrder = applyTeamToPick(effectiveOrder, pick, team);
+    const customOrder = serializeDraftOrder(newOrder);
+
+    setLoading(true);
+    setMessage(null);
+    setTradeModalOpen(false);
+
+    try {
+      const { error } = await supabase
+        .from('draft_predictions')
+        .update({ custom_draft_order: customOrder })
+        .eq('id', selectedDraftId);
+
+      if (error) throw error;
+      await loadDrafts();
+      setMessage({ type: 'success', text: 'Trade applied. Pick cards updated.' });
+    } catch (err) {
+      setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to apply trade.' });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleClearTrades() {
+    if (!selectedDraftId) return;
+
+    setLoading(true);
+    setMessage(null);
+    setTradeModalOpen(false);
+
+    try {
+      const { error } = await supabase
+        .from('draft_predictions')
+        .update({ custom_draft_order: null })
+        .eq('id', selectedDraftId);
+
+      if (error) throw error;
+      await loadDrafts();
+      setMessage({ type: 'success', text: 'Trades cleared. Back to default order.' });
+    } catch (err) {
+      setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to clear trades.' });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleUpdateDisplayName() {
+    const name = displayName.trim();
+    if (!name || !selectedDraftId) return;
+    const draft = drafts.find((d) => d.id === selectedDraftId);
+    if (!draft?.is_leaderboard_entry) return;
+
+    setLoading(true);
+    setMessage(null);
+    setChangeNameModalOpen(false);
+
+    try {
+      const { error } = await supabase
+        .from('draft_predictions')
+        .update({ display_name: name })
+        .eq('id', selectedDraftId);
+
+      if (error) throw error;
+      await loadDrafts();
+      setMessage({ type: 'success', text: 'Display name updated on the leaderboard.' });
+    } catch (err: unknown) {
+      const isDuplicate =
+        err && typeof err === 'object' && 'code' in err && (err as { code: string }).code === '23505';
+      setMessage({
+        type: 'error',
+        text: isDuplicate
+          ? 'That display name is already taken. Choose another.'
+          : err instanceof Error ? err.message : 'Failed to update.',
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const usedIds = new Set(Object.values(picks).filter(Boolean));
-  const selectedDraft = drafts.find((d) => d.id === selectedDraftId);
-  const currentPicksForScore = draftOrder.map(({ pick, team }) => ({
+  const currentPicksForScore = effectiveOrder.map(({ pick, team }) => ({
     pick_number: pick,
     prospect_id: picks[pick] ?? '',
     team,
@@ -274,14 +554,14 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
     currentPicksForScore.length === 32
       ? computeScore(
           currentPicksForScore.map((p) => ({ pick_number: p.pick_number, prospect_id: p.prospect_id, team: p.team })),
-          draftOrder
+          effectiveOrder
         )
       : null;
 
   function fillFromBigBoard() {
     const sorted = [...prospects].sort((a, b) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99));
     const next: Record<number, string> = {};
-    draftOrder.forEach(({ pick }, i) => {
+    effectiveOrder.forEach(({ pick }, i) => {
       const prospect = sorted[i];
       if (prospect) next[pick] = prospect.id;
     });
@@ -312,7 +592,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
             const score = draft.picks.length === 32
               ? computeScore(
                   draft.picks.map((p) => ({ pick_number: p.pick_number, prospect_id: p.prospect_id, team: p.team })),
-                  draftOrder
+                  effectiveOrder
                 )
               : null;
             const isSelected = draft.id === selectedDraftId;
@@ -399,6 +679,16 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               <div className="flex items-center gap-2 text-sm text-amber-700 bg-amber-50 px-3 py-2 rounded-lg">
                 <Trophy className="h-4 w-4" />
                 On leaderboard as {selectedDraft.display_name}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDisplayName(selectedDraft?.display_name || '');
+                    setChangeNameModalOpen(true);
+                  }}
+                  className="ml-1 text-amber-800 font-medium hover:underline"
+                >
+                  Change
+                </button>
               </div>
             ) : (
               <button
@@ -438,6 +728,24 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
+                  onClick={() => setTradeModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
+                >
+                  <ArrowLeftRight className="h-4 w-4" />
+                  Add trade
+                </button>
+                {selectedDraft?.custom_draft_order && (
+                  <button
+                    type="button"
+                    onClick={handleClearTrades}
+                    disabled={loading}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg text-amber-700 hover:bg-amber-50"
+                  >
+                    Reset trades
+                  </button>
+                )}
+                <button
+                  type="button"
                   onClick={fillFromBigBoard}
                   className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
                 >
@@ -465,7 +773,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               </div>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {draftOrder.map(({ pick, team }) => {
+              {effectiveOrder.map(({ pick, team }) => {
                 const teamColor = TEAM_COLORS_BY_NAME[team] || '#1d4ed8';
                 const needs = teamNeeds[pick] ?? [];
                 return (
@@ -525,7 +833,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
         <ShareDraftModal
           onClose={() => setShareModalOpen(false)}
           score={currentScore}
-          topPicks={draftOrder.slice(0, 5).map(({ pick, team }) => {
+          topPicks={effectiveOrder.slice(0, 5).map(({ pick, team }) => {
             const prospectId = picks[pick];
             const prospect = prospects.find((p) => p.id === prospectId);
             return {
@@ -535,6 +843,54 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
             };
           })}
         />
+      )}
+
+      {/* Trade modal: swap two picks */}
+      {tradeModalOpen && (
+        <TradeModal
+          effectiveOrder={effectiveOrder}
+          onSwap={(pickA, pickB) => handleApplyTrade(pickA, pickB)}
+          onAssign={(pick, team) => handleAssignTeam(pick, team)}
+          onClose={() => setTradeModalOpen(false)}
+          loading={loading}
+        />
+      )}
+
+      {/* Change display name modal (for drafts already on leaderboard) */}
+      {changeNameModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Change Leaderboard Name</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Update the name shown on the public leaderboard.
+            </p>
+            <input
+              type="text"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              placeholder="e.g. DraftKing"
+              maxLength={30}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
+            />
+            <div className="flex gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => setChangeNameModalOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleUpdateDisplayName}
+                disabled={loading || !displayName.trim()}
+                className="px-4 py-2 text-sm font-semibold bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:opacity-50"
+              >
+                Update
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Submit to leaderboard modal */}
