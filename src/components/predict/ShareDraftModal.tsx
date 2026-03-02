@@ -165,7 +165,7 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
               <div className="flex items-center gap-3 mb-5">
                 <div className="w-12 h-12 rounded-lg overflow-hidden bg-white/10 flex-shrink-0 flex items-center justify-center p-1">
                   <img
-                    src="/LOGO.png"
+                    src="/TransparentLogo.png"
                     alt="SAKFootball"
                     width={40}
                     height={40}

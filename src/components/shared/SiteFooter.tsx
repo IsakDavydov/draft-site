@@ -8,7 +8,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <LogoImage width={32} height={32} className="h-8 w-8 object-contain" lightBg={false} />
+              <LogoImage width={40} height={40} className="h-10 w-10 object-contain" lightBg={false} />
               <span className="text-xl font-bold">SAKFootball</span>
             </div>
             <p className="text-gray-300 text-sm mb-4">

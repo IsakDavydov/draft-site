@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: 'a.espncdn.com',
         pathname: '/i/teamlogos/nfl/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'a.espncdn.com',
+        pathname: '/i/teamlogos/ncaa/**',
+      },
     ],
   },
 };

@@ -35,7 +35,7 @@ export function LogoImage({ width = 50, height = 50, className = '', lightBg = t
 
   return (
     <Image
-      src="/LOGO.png"
+      src="/TransparentLogo.png"
       alt="SAKFootball"
       width={width}
       height={height}

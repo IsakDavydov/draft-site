@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getProspects } from '@/lib/adapters';
 import { Prospect } from '@/types';
 import { TeamLogo } from '@/components/shared/TeamLogo';
+import { CollegeLogo } from '@/components/shared/CollegeLogo';
 
 const PROSPECTS_PER_PAGE = 12;
 
@@ -100,14 +101,17 @@ export function ProspectDirectory() {
             className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md hover:border-nfl-blue/30 transition-all block"
           >
             <div className="flex items-start justify-between mb-3">
-              <div>
-                <h3 className="font-semibold text-gray-900 text-lg">{prospect.name}</h3>
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
-                  <span className="font-medium">{prospect.position}</span>
-                  <span>•</span>
-                  <span>{prospect.school}</span>
-                  <span>•</span>
-                  <span>{prospect.class}</span>
+              <div className="flex items-start gap-3">
+                <CollegeLogo school={prospect.school} size={40} />
+                <div>
+                  <h3 className="font-semibold text-gray-900 text-lg">{prospect.name}</h3>
+                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                    <span className="font-medium">{prospect.position}</span>
+                    <span>•</span>
+                    <span>{prospect.school}</span>
+                    <span>•</span>
+                    <span>{prospect.class}</span>
+                  </div>
                 </div>
               </div>
               {prospect.bigBoardRank && (
@@ -126,12 +130,6 @@ export function ProspectDirectory() {
                 <span>Weight:</span>
                 <span className="font-medium">{prospect.weight} lbs</span>
               </div>
-              {prospect.ras && (
-                <div className="flex justify-between">
-                  <span>RAS:</span>
-                  <span className="font-medium">{prospect.ras}/10</span>
-                </div>
-              )}
             </div>
 
             {prospect.measurables && (

@@ -1,4 +1,6 @@
 import { Prospect, MockDraft, MockDraftFromFile } from '@/types';
+import { getProspectProfile } from '@/data/prospect-profiles';
+import { getProspectStats } from '@/data/prospect-stats';
 
 // File-based mock draft (loaded from data/mock-drafts/)
 import postSuperBowlMock2026 from '../../../data/mock-drafts/post-super-bowl-mock-draft-2026.json';
@@ -122,7 +124,11 @@ export async function getBigBoard(): Promise<Prospect[]> {
 export async function getProspectById(id: string): Promise<Prospect | null> {
   await new Promise(resolve => setTimeout(resolve, 50));
   const prospect = mockProspects.find((p) => p.id === id) || null;
-  return prospect ? enrichProspectWithMock(prospect) : null;
+  if (!prospect) return null;
+  const enriched = enrichProspectWithMock(prospect);
+  const profile = getProspectProfile(id);
+  const lastSeasonStats = getProspectStats(id);
+  return { ...enriched, profile, lastSeasonStats: lastSeasonStats ?? undefined };
 }
 
 export function getMockDraftNotesForProspect(playerName: string): string | null {

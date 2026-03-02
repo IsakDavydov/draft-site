@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getBigBoard } from '@/lib/adapters';
+import { CollegeLogo } from '@/components/shared/CollegeLogo';
 import { Prospect } from '@/types';
 
 const ROWS_PER_PAGE = 15;
@@ -66,9 +67,6 @@ export function BigBoard() {
                 School
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                RAS
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Mock Draft
               </th>
             </tr>
@@ -88,11 +86,11 @@ export function BigBoard() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {prospect.position}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {prospect.school}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {prospect.ras ? `${prospect.ras}/10` : 'N/A'}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex items-center gap-2">
+                    <CollegeLogo school={prospect.school} size={28} />
+                    <span className="text-sm text-gray-900">{prospect.school}</span>
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {prospect.mockDraftRound && prospect.mockDraftPick ? (

@@ -1,5 +1,5 @@
-import type { Metadata } from 'next';
 import './globals.css';
+import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/shared/SiteHeader';
 import { SiteFooter } from '@/components/shared/SiteFooter';
 
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     siteName: 'SAKFootball',
     images: [
       {
-        url: '/LOGO.png',
+        url: '/TransparentLogo.png',
         width: 512,
         height: 512,
         alt: 'SAKFootball',
@@ -42,11 +42,11 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'SAK Football - 2026 NFL Mock Draft Site | Predict & Compete',
     description: 'SAK Football is a free mock draft site. Submit your 2026 NFL Draft predictions and compete on the leaderboard.',
-    images: ['/LOGO.png'],
+    images: ['/TransparentLogo.png'],
   },
   icons: {
-    icon: '/LOGO.png',
-    apple: '/LOGO.png',
+    icon: '/TransparentLogo.png',
+    apple: '/TransparentLogo.png',
   },
   robots: {
     index: true,
@@ -77,7 +77,12 @@ export default function RootLayout({
         '@id': 'https://sakfootball.com/#organization',
         name: 'SAK Football',
         url: 'https://sakfootball.com',
-        logo: { '@type': 'ImageObject', url: 'https://sakfootball.com/LOGO.png' },
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://sakfootball.com/TransparentLogo.png',
+          width: 512,
+          height: 512,
+        },
         description: 'SAK Football is a free mock draft site for the 2026 NFL Draft. Submit predictions and compete on the leaderboard.',
       },
       {
@@ -99,6 +104,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Urbanist:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
         <meta name="google-adsense-account" content="ca-pub-6988824671874303" />
         <script
           type="application/ld+json"

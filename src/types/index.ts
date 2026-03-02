@@ -100,6 +100,41 @@ export interface Prospect {
   mockDraftRound?: number;
   mockDraftPick?: number;
   team?: string;
+  /** Profile data: impact meters, tags, analysis (from prospect-profiles) */
+  profile?: {
+    immediateImpact: number;
+    potential: number;
+    riskLevel: number;
+    playStyleTags: string[];
+    analysis: string;
+  };
+  /** 2025 college season stats (from cfbstats.com) */
+  lastSeasonStats?: {
+    season: number;
+    games?: number;
+    passComp?: number;
+    passAtt?: number;
+    passYds?: number;
+    passTd?: number;
+    passInt?: number;
+    compPct?: number;
+    passerRating?: number;
+    rushAtt?: number;
+    rushYds?: number;
+    rushAvg?: number;
+    rushTd?: number;
+    receptions?: number;
+    recYds?: number;
+    recAvg?: number;
+    recTd?: number;
+    tackles?: number;
+    tfl?: number;
+    sacks?: number;
+    qbHits?: number;
+    int?: number;
+    pd?: number;
+    ff?: number;
+  };
 }
 
 export interface MockDraft {
