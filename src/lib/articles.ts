@@ -16,34 +16,38 @@ export interface Article {
 const articlesDirectory = path.join(process.cwd(), 'data/articles');
 
 export function getAllArticles(): Article[] {
-  if (!fs.existsSync(articlesDirectory)) {
+  try {
+    if (!fs.existsSync(articlesDirectory)) {
+      return [];
+    }
+
+    const fileNames = fs.readdirSync(articlesDirectory);
+    const allArticlesData = fileNames
+      .filter((name) => name.endsWith('.md'))
+      .map((fileName) => {
+        const slug = fileName.replace(/\.md$/, '');
+        const fullPath = path.join(articlesDirectory, fileName);
+        const fileContents = fs.readFileSync(fullPath, 'utf8');
+        const { data, content } = matter(fileContents);
+
+        return {
+          slug,
+          title: data.title || 'Untitled',
+          date: data.date || new Date().toISOString(),
+          excerpt: data.excerpt || '',
+          author: data.author || 'SAKFootball',
+          category: data.category || 'General',
+          format: data.format || undefined,
+          content,
+        };
+      });
+
+    return allArticlesData.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  } catch {
     return [];
   }
-
-  const fileNames = fs.readdirSync(articlesDirectory);
-  const allArticlesData = fileNames
-    .filter((name) => name.endsWith('.md'))
-    .map((fileName) => {
-      const slug = fileName.replace(/\.md$/, '');
-      const fullPath = path.join(articlesDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
-      const { data, content } = matter(fileContents);
-
-      return {
-        slug,
-        title: data.title || 'Untitled',
-        date: data.date || new Date().toISOString(),
-        excerpt: data.excerpt || '',
-        author: data.author || 'SAKFootball',
-        category: data.category || 'General',
-        format: data.format || undefined,
-        content,
-      };
-    });
-
-  return allArticlesData.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
 }
 
 export function getArticleBySlug(slug: string): Article | null {

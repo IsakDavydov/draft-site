@@ -9,18 +9,23 @@ export function AuthButton() {
   const [user, setUser] = useState<{ email: string } | null>(null);
 
   useEffect(() => {
+    let sub: { unsubscribe: () => void } | undefined;
     try {
       const supabase = createClient();
-      supabase.auth.getUser().then(({ data: { user } }) => {
-        setUser(user ? { email: user.email || '' } : null);
-      }).catch(() => setUser(null));
+      supabase.auth
+        .getUser()
+        .then(({ data: { user } }) => {
+          setUser(user ? { email: user.email || '' } : null);
+        })
+        .catch(() => setUser(null));
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
         setUser(session?.user ? { email: session.user.email || '' } : null);
       });
-      return () => subscription.unsubscribe();
+      sub = subscription;
     } catch {
       setUser(null);
     }
+    return () => sub?.unsubscribe();
   }, []);
 
   if (user) {
