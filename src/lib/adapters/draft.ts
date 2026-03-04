@@ -2,63 +2,104 @@ import { Prospect, MockDraft, MockDraftFromFile } from '@/types';
 import { getProspectProfile } from '@/data/prospect-profiles';
 import { getProspectStats } from '@/data/prospect-stats';
 
+const DRAFT_YEAR = 2026;
+
+/** Age at time of draft (April 2026). Returns null if birthYear not set. */
+export function getProspectAge(prospect: Prospect): number | null {
+  if (prospect.birthYear == null) return null;
+  return DRAFT_YEAR - prospect.birthYear;
+}
+
 // File-based mock draft (loaded from data/mock-drafts/)
 import postSuperBowlMock2026 from '../../../data/mock-drafts/post-super-bowl-mock-draft-2026.json';
 import preCombineMock2026 from '../../../data/mock-drafts/pre-combine-mock-draft-2026.json';
 import teamNeeds2026 from '../../../data/team-needs-2026.json';
+import bigBoardRankingsJson from '../../../data/big-board-rankings.json';
 
-// 2026 NFL Draft top 50 prospects
+// Big board order: array position = rank (1-based). Reorder in data/big-board-rankings.json to change rankings.
+const bigBoardRankings = bigBoardRankingsJson as string[];
+function getBigBoardRank(prospectId: string): number {
+  const idx = bigBoardRankings.indexOf(prospectId);
+  return idx >= 0 ? idx + 1 : 50;
+}
+
+// 2026 NFL Draft prospects (pool of 75)
 const mockProspects: Prospect[] = [
-  { id: '1', name: 'Fernando Mendoza', position: 'QB', school: 'Indiana', class: 'Junior', height: '6\'5"', weight: 225, ras: 9.2, bigBoardRank: 1, mockDraftRound: 1, mockDraftPick: 1, team: 'Las Vegas Raiders' },
-  { id: '2', name: 'Jeremiyah Love', position: 'RB', school: 'Notre Dame', class: 'Junior', height: '6\'0"', weight: 214, ras: 9.4, bigBoardRank: 2, mockDraftRound: 1, mockDraftPick: 9, team: 'Kansas City Chiefs' },
-  { id: '3', name: 'Rueben Bain Jr.', position: 'EDGE', school: 'Miami', class: 'Junior', height: '6\'3"', weight: 275, ras: 9.0, bigBoardRank: 6, mockDraftRound: 1, mockDraftPick: 4, team: 'Tennessee Titans' },
-  { id: '4', name: 'Caleb Downs', position: 'S', school: 'Ohio State', class: 'Junior', height: '6\'0"', weight: 205, ras: 9.3, bigBoardRank: 3, mockDraftRound: 1, mockDraftPick: 5, team: 'New York Giants' },
-  { id: '5', name: 'Sonny Styles', position: 'LB', school: 'Ohio State', class: 'Senior', height: '6\'4"', weight: 243, ras: 9.1, bigBoardRank: 4, mockDraftRound: 1, mockDraftPick: 10, team: 'Cincinnati Bengals' },
-  { id: '6', name: 'Jordyn Tyson', position: 'WR', school: 'Arizona State', class: 'Junior', height: '6\'2"', weight: 200, ras: 9.2, bigBoardRank: 5, mockDraftRound: 1, mockDraftPick: 8, team: 'New Orleans Saints' },
-  { id: '7', name: 'David Bailey', position: 'EDGE', school: 'Texas Tech', class: 'Senior', height: '6\'3"', weight: 250, ras: 8.9, bigBoardRank: 7, mockDraftRound: 1, mockDraftPick: 7, team: 'Washington Commanders' },
-  { id: '8', name: 'Arvell Reese Jr.', position: 'LB', school: 'Ohio State', class: 'Junior', height: '6\'4"', weight: 243, ras: 9.5, bigBoardRank: 12, mockDraftRound: 1, mockDraftPick: 2, team: 'New York Jets' },
-  { id: '9', name: 'Makai Lemon', position: 'WR', school: 'USC', class: 'Junior', height: '5\'11"', weight: 195, ras: 8.8, bigBoardRank: 9, mockDraftRound: 1, mockDraftPick: 13, team: 'Los Angeles Rams' },
-  { id: '10', name: 'Francis Mauigoa', position: 'OT', school: 'Miami', class: 'Junior', height: '6\'6"', weight: 315, ras: 9.1, bigBoardRank: 10, mockDraftRound: 1, mockDraftPick: 3, team: 'Arizona Cardinals' },
-  { id: '11', name: 'Jermod McCoy', position: 'CB', school: 'Tennessee', class: 'Junior', height: '6\'0"', weight: 193, ras: 8.7, bigBoardRank: 11, mockDraftRound: 1, mockDraftPick: 11, team: 'Miami Dolphins' },
-  { id: '12', name: 'Carnell Tate', position: 'WR', school: 'Ohio State', class: 'Junior', height: '6\'3"', weight: 195, ras: 8.9, bigBoardRank: 8, mockDraftRound: 1, mockDraftPick: 16, team: 'New York Jets' },
-  { id: '13', name: 'Olaivavega Ioane', position: 'IOL', school: 'Penn State', class: 'Junior', height: '6\'4"', weight: 328, ras: 8.5, bigBoardRank: 13, mockDraftRound: 1, mockDraftPick: 14, team: 'Baltimore Ravens' },
-  { id: '14', name: 'Mansoor Delane', position: 'CB', school: 'LSU', class: 'Senior', height: '6\'1"', weight: 185, ras: 8.4, bigBoardRank: 14, mockDraftRound: 1, mockDraftPick: 12, team: 'Dallas Cowboys' },
-  { id: '15', name: 'Spencer Fano', position: 'OT', school: 'Utah', class: 'Junior', height: '6\'5"', weight: 305, ras: 8.8, bigBoardRank: 15, mockDraftRound: 1, mockDraftPick: 6, team: 'Cleveland Browns' },
-  { id: '16', name: 'Kayden McDonald', position: 'DT', school: 'Ohio State', class: 'Junior', height: '6\'3"', weight: 326, ras: 8.7, bigBoardRank: 18, mockDraftRound: 1, mockDraftPick: 20, team: 'Dallas Cowboys' },
-  { id: '17', name: 'Peter Woods', position: 'DT', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 310, ras: 8.8, bigBoardRank: 19, mockDraftRound: 1, mockDraftPick: 17, team: 'Detroit Lions' },
-  { id: '18', name: 'Avieon Terrell', position: 'CB', school: 'Clemson', class: 'Junior', height: '5\'11"', weight: 180, ras: 8.5, bigBoardRank: 20, mockDraftRound: 1, mockDraftPick: 29, team: 'Los Angeles Rams' },
-  { id: '19', name: 'Caleb Banks', position: 'DT', school: 'Florida', class: 'Senior', height: '6\'6"', weight: 325, ras: 8.6, bigBoardRank: 16 },
-  { id: '20', name: 'Monroe Freeling', position: 'OT', school: 'Georgia', class: 'Junior', height: '6\'7"', weight: 315, ras: 8.4, bigBoardRank: 17, mockDraftRound: 1, mockDraftPick: 23, team: 'Philadelphia Eagles' },
-  { id: '21', name: 'Emmanuel McNeil-Warren', position: 'S', school: 'Toledo', class: 'Senior', height: '6\'3"', weight: 209, ras: 8.5, bigBoardRank: 21, mockDraftRound: 1, mockDraftPick: 18, team: 'Minnesota Vikings' },
-  { id: '22', name: 'CJ Allen', position: 'LB', school: 'Georgia', class: 'Junior', height: '6\'1"', weight: 235, ras: 8.9, bigBoardRank: 22, mockDraftRound: 1, mockDraftPick: 19, team: 'Carolina Panthers' },
-  { id: '23', name: 'Kadyn Proctor', position: 'OT', school: 'Alabama', class: 'Junior', height: '6\'7"', weight: 366, ras: 8.7, bigBoardRank: 23, mockDraftRound: 1, mockDraftPick: 28, team: 'Houston Texans' },
-  { id: '24', name: 'Lee Hunter', position: 'DT', school: 'Texas Tech', class: 'Senior', height: '6\'4"', weight: 330, ras: 8.2, bigBoardRank: 24, mockDraftRound: 1, mockDraftPick: 32, team: 'Seattle Seahawks' },
-  { id: '25', name: 'T.J. Parker', position: 'EDGE', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 260, ras: 8.4, bigBoardRank: 25, mockDraftRound: 1, mockDraftPick: 25, team: 'Chicago Bears' },
-  { id: '26', name: 'Keldric Faulk', position: 'EDGE', school: 'Auburn', class: 'Junior', height: '6\'6"', weight: 285, ras: 8.3, bigBoardRank: 26, mockDraftRound: 1, mockDraftPick: 22, team: 'Los Angeles Chargers' },
-  { id: '27', name: 'Kenyon Sadiq', position: 'TE', school: 'Oregon', class: 'Junior', height: '6\'3"', weight: 245, ras: 8.2, bigBoardRank: 27, mockDraftRound: 1, mockDraftPick: 30, team: 'Denver Broncos' },
-  { id: '28', name: 'KC Concepcion', position: 'WR', school: 'Texas A&M', class: 'Junior', height: '5\'11"', weight: 190, ras: 8.6, bigBoardRank: 28, mockDraftRound: 1, mockDraftPick: 24, team: 'Cleveland Browns' },
-  { id: '29', name: 'Caleb Lomu', position: 'OT', school: 'Utah', class: 'Junior', height: '6\'6"', weight: 308, ras: 8.5, bigBoardRank: 29, mockDraftRound: 1, mockDraftPick: 31, team: 'New England Patriots' },
-  { id: '30', name: 'Denzel Boston', position: 'WR', school: 'Washington', class: 'Junior', height: '6\'4"', weight: 210, ras: 8.4, bigBoardRank: 30, mockDraftRound: 1, mockDraftPick: 26, team: 'Buffalo Bills' },
-  { id: '31', name: 'Omar Cooper Jr.', position: 'WR', school: 'Indiana', class: 'Junior', height: '6\'0"', weight: 204, ras: 8.3, bigBoardRank: 31 },
-  { id: '32', name: 'Ty Simpson', position: 'QB', school: 'Alabama', class: 'Junior', height: '6\'2"', weight: 208, ras: 8.5, bigBoardRank: 33, mockDraftRound: 1, mockDraftPick: 21, team: 'Pittsburgh Steelers' },
-  { id: '33', name: 'Emmanuel Pregnon', position: 'IOL', school: 'Oregon', class: 'Senior', height: '6\'5"', weight: 318, ras: 8.4, bigBoardRank: 34, mockDraftRound: 1, mockDraftPick: 27, team: 'San Francisco 49ers' },
-  { id: '34', name: 'Cashius Howell', position: 'EDGE', school: 'Texas A&M', class: 'Senior', height: '6\'2"', weight: 248, ras: 8.8, bigBoardRank: 35, mockDraftRound: 1, mockDraftPick: 15, team: 'Tampa Bay Buccaneers' },
-  { id: '35', name: 'Akheem Mesidor', position: 'EDGE', school: 'Miami', class: 'Senior', height: '6\'3"', weight: 265, ras: 8.3, bigBoardRank: 32 },
-  { id: '36', name: 'Christen Miller', position: 'DT', school: 'Georgia', class: 'Junior', height: '6\'4"', weight: 310, ras: 8.2, bigBoardRank: 36 },
-  { id: '37', name: 'Brandon Cisse', position: 'CB', school: 'South Carolina', class: 'Junior', height: '6\'0"', weight: 190, ras: 8.3, bigBoardRank: 37 },
-  { id: '38', name: 'Zachariah Branch', position: 'WR', school: 'USC', class: 'Sophomore', height: '5\'10"', weight: 175, ras: 8.5, bigBoardRank: 38 },
-  { id: '39', name: 'Blake Miller', position: 'OT', school: 'Clemson', class: 'Senior', height: '6\'6"', weight: 310, ras: 8.1, bigBoardRank: 39 },
-  { id: '40', name: 'Colton Hood', position: 'CB', school: 'Tennessee', class: 'Senior', height: '6\'0"', weight: 193, ras: 8.2, bigBoardRank: 40 },
-  { id: '41', name: 'Keith Abney II', position: 'CB', school: 'Arizona State', class: 'Junior', height: '6\'0"', weight: 190, ras: 8.2, bigBoardRank: 41 },
-  { id: '42', name: 'R Mason Thomas', position: 'EDGE', school: 'Oklahoma', class: 'Junior', height: '6\'2"', weight: 249, ras: 8.4, bigBoardRank: 42 },
-  { id: '43', name: 'Dillon Thieneman', position: 'S', school: 'Oregon', class: 'Junior', height: '6\'1"', weight: 210, ras: 8.5, bigBoardRank: 43 },
-  { id: '44', name: 'Max Iheanachor', position: 'IOL', school: 'Arizona State', class: 'Senior', height: '6\'6"', weight: 330, ras: 8.0, bigBoardRank: 44 },
-  { id: '45', name: 'Chris Brazzell II', position: 'WR', school: 'Tennessee', class: 'Junior', height: '6\'5"', weight: 200, ras: 8.2, bigBoardRank: 45 },
-  { id: '46', name: 'Zion Young', position: 'EDGE', school: 'Missouri', class: 'Senior', height: '6\'5"', weight: 258, ras: 8.1, bigBoardRank: 46 },
-  { id: '47', name: 'Eli Stowers', position: 'TE', school: 'Vanderbilt', class: 'Senior', height: '6\'4"', weight: 234, ras: 8.0, bigBoardRank: 47 },
-  { id: '48', name: 'Jadarian Price', position: 'RB', school: 'Notre Dame', class: 'Junior', height: '5\'11"', weight: 210, ras: 8.3, bigBoardRank: 48 },
-  { id: '49', name: 'D\'Angelo Ponds', position: 'CB', school: 'Indiana', class: 'Junior', height: '5\'9"', weight: 172, ras: 8.2, bigBoardRank: 49 },
-  { id: '50', name: 'Jake Golday', position: 'LB', school: 'Cincinnati', class: 'Senior', height: '6\'4"', weight: 240, ras: 8.1, bigBoardRank: 50 },
+  { id: '1', name: 'Fernando Mendoza', position: 'QB', school: 'Indiana', class: 'Junior', height: '6\'5"', weight: 225, birthYear: 2003, ras: 9.2, bigBoardRank: 1, mockDraftRound: 1, mockDraftPick: 1, team: 'Las Vegas Raiders' },
+  { id: '2', name: 'Jeremiyah Love', position: 'RB', school: 'Notre Dame', class: 'Junior', height: '6\'0"', weight: 214, birthYear: 2005, ras: 9.4, bigBoardRank: 2, mockDraftRound: 1, mockDraftPick: 9, team: 'Kansas City Chiefs' },
+  { id: '3', name: 'Rueben Bain Jr.', position: 'EDGE', school: 'Miami', class: 'Junior', height: '6\'3"', weight: 275, birthYear: 2004, ras: 9.0, bigBoardRank: 6, mockDraftRound: 1, mockDraftPick: 4, team: 'Tennessee Titans' },
+  { id: '4', name: 'Caleb Downs', position: 'S', school: 'Ohio State', class: 'Junior', height: '6\'0"', weight: 205, birthYear: 2004, ras: 9.3, bigBoardRank: 3, mockDraftRound: 1, mockDraftPick: 5, team: 'New York Giants' },
+  { id: '5', name: 'Sonny Styles', position: 'LB', school: 'Ohio State', class: 'Senior', height: '6\'4"', weight: 243, birthYear: 2004, ras: 9.1, bigBoardRank: 4, mockDraftRound: 1, mockDraftPick: 10, team: 'Cincinnati Bengals' },
+  { id: '6', name: 'Jordyn Tyson', position: 'WR', school: 'Arizona State', class: 'Junior', height: '6\'2"', weight: 200, birthYear: 2004, ras: 9.2, bigBoardRank: 5, mockDraftRound: 1, mockDraftPick: 8, team: 'New Orleans Saints' },
+  { id: '7', name: 'David Bailey', position: 'EDGE', school: 'Texas Tech', class: 'Senior', height: '6\'3"', weight: 250, birthYear: 2003, ras: 8.9, bigBoardRank: 7, mockDraftRound: 1, mockDraftPick: 7, team: 'Washington Commanders' },
+  { id: '8', name: 'Arvell Reese Jr.', position: 'LB', school: 'Ohio State', class: 'Junior', height: '6\'4"', weight: 243, birthYear: 2005, ras: 9.5, bigBoardRank: 12, mockDraftRound: 1, mockDraftPick: 2, team: 'New York Jets' },
+  { id: '9', name: 'Makai Lemon', position: 'WR', school: 'USC', class: 'Junior', height: '5\'11"', weight: 195, birthYear: 2004, ras: 8.8, bigBoardRank: 9, mockDraftRound: 1, mockDraftPick: 13, team: 'Los Angeles Rams' },
+  { id: '10', name: 'Francis Mauigoa', position: 'OT', school: 'Miami', class: 'Junior', height: '6\'6"', weight: 315, birthYear: 2005, ras: 9.1, bigBoardRank: 10, mockDraftRound: 1, mockDraftPick: 3, team: 'Arizona Cardinals' },
+  { id: '11', name: 'Jermod McCoy', position: 'CB', school: 'Tennessee', class: 'Junior', height: '6\'0"', weight: 193, birthYear: 2005, ras: 8.7, bigBoardRank: 11, mockDraftRound: 1, mockDraftPick: 11, team: 'Miami Dolphins' },
+  { id: '12', name: 'Carnell Tate', position: 'WR', school: 'Ohio State', class: 'Junior', height: '6\'3"', weight: 195, birthYear: 2005, ras: 8.9, bigBoardRank: 8, mockDraftRound: 1, mockDraftPick: 16, team: 'New York Jets' },
+  { id: '13', name: 'Olaivavega Ioane', position: 'IOL', school: 'Penn State', class: 'Junior', height: '6\'4"', weight: 328, birthYear: 2003, ras: 8.5, bigBoardRank: 13, mockDraftRound: 1, mockDraftPick: 14, team: 'Baltimore Ravens' },
+  { id: '14', name: 'Mansoor Delane', position: 'CB', school: 'LSU', class: 'Senior', height: '6\'1"', weight: 185, birthYear: 2003, ras: 8.4, bigBoardRank: 14, mockDraftRound: 1, mockDraftPick: 12, team: 'Dallas Cowboys' },
+  { id: '15', name: 'Spencer Fano', position: 'OT', school: 'Utah', class: 'Junior', height: '6\'5"', weight: 305, birthYear: 2004, ras: 8.8, bigBoardRank: 15, mockDraftRound: 1, mockDraftPick: 6, team: 'Cleveland Browns' },
+  { id: '16', name: 'Kayden McDonald', position: 'DT', school: 'Ohio State', class: 'Junior', height: '6\'3"', weight: 326, birthYear: 2004, ras: 8.7, bigBoardRank: 18, mockDraftRound: 1, mockDraftPick: 20, team: 'Dallas Cowboys' },
+  { id: '17', name: 'Peter Woods', position: 'DT', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 310, birthYear: 2005, ras: 8.8, bigBoardRank: 19, mockDraftRound: 1, mockDraftPick: 17, team: 'Detroit Lions' },
+  { id: '18', name: 'Avieon Terrell', position: 'CB', school: 'Clemson', class: 'Junior', height: '5\'11"', weight: 180, birthYear: 2005, ras: 8.5, bigBoardRank: 20, mockDraftRound: 1, mockDraftPick: 29, team: 'Los Angeles Rams' },
+  { id: '19', name: 'Caleb Banks', position: 'DT', school: 'Florida', class: 'Senior', height: '6\'6"', weight: 325, birthYear: 2003, ras: 8.6, bigBoardRank: 16 },
+  { id: '20', name: 'Monroe Freeling', position: 'OT', school: 'Georgia', class: 'Junior', height: '6\'7"', weight: 315, birthYear: 2004, ras: 8.4, bigBoardRank: 17, mockDraftRound: 1, mockDraftPick: 23, team: 'Philadelphia Eagles' },
+  { id: '21', name: 'Emmanuel McNeil-Warren', position: 'S', school: 'Toledo', class: 'Senior', height: '6\'3"', weight: 209, birthYear: 2003, ras: 8.5, bigBoardRank: 21, mockDraftRound: 1, mockDraftPick: 18, team: 'Minnesota Vikings' },
+  { id: '22', name: 'CJ Allen', position: 'LB', school: 'Georgia', class: 'Junior', height: '6\'1"', weight: 235, birthYear: 2005, ras: 8.9, bigBoardRank: 22, mockDraftRound: 1, mockDraftPick: 19, team: 'Carolina Panthers' },
+  { id: '23', name: 'Kadyn Proctor', position: 'OT', school: 'Alabama', class: 'Junior', height: '6\'7"', weight: 366, birthYear: 2005, ras: 8.7, bigBoardRank: 23, mockDraftRound: 1, mockDraftPick: 28, team: 'Houston Texans' },
+  { id: '24', name: 'Lee Hunter', position: 'DT', school: 'Texas Tech', class: 'Senior', height: '6\'4"', weight: 330, birthYear: 2002, ras: 8.2, bigBoardRank: 24, mockDraftRound: 1, mockDraftPick: 32, team: 'Seattle Seahawks' },
+  { id: '25', name: 'T.J. Parker', position: 'EDGE', school: 'Clemson', class: 'Junior', height: '6\'3"', weight: 260, birthYear: 2004, ras: 8.4, bigBoardRank: 25, mockDraftRound: 1, mockDraftPick: 25, team: 'Chicago Bears' },
+  { id: '26', name: 'Keldric Faulk', position: 'EDGE', school: 'Auburn', class: 'Junior', height: '6\'6"', weight: 285, birthYear: 2005, ras: 8.3, bigBoardRank: 26, mockDraftRound: 1, mockDraftPick: 22, team: 'Los Angeles Chargers' },
+  { id: '27', name: 'Kenyon Sadiq', position: 'TE', school: 'Oregon', class: 'Junior', height: '6\'3"', weight: 245, birthYear: 2005, ras: 8.2, bigBoardRank: 27, mockDraftRound: 1, mockDraftPick: 30, team: 'Denver Broncos' },
+  { id: '28', name: 'KC Concepcion', position: 'WR', school: 'Texas A&M', class: 'Junior', height: '5\'11"', weight: 190, birthYear: 2004, ras: 8.6, bigBoardRank: 28, mockDraftRound: 1, mockDraftPick: 24, team: 'Cleveland Browns' },
+  { id: '29', name: 'Caleb Lomu', position: 'OT', school: 'Utah', class: 'Junior', height: '6\'6"', weight: 308, birthYear: 2004, ras: 8.5, bigBoardRank: 29, mockDraftRound: 1, mockDraftPick: 31, team: 'New England Patriots' },
+  { id: '30', name: 'Denzel Boston', position: 'WR', school: 'Washington', class: 'Junior', height: '6\'4"', weight: 210, birthYear: 2003, ras: 8.4, bigBoardRank: 30, mockDraftRound: 1, mockDraftPick: 26, team: 'Buffalo Bills' },
+  { id: '31', name: 'Omar Cooper Jr.', position: 'WR', school: 'Indiana', class: 'Junior', height: '6\'0"', weight: 204, birthYear: 2003, ras: 8.3, bigBoardRank: 31 },
+  { id: '32', name: 'Ty Simpson', position: 'QB', school: 'Alabama', class: 'Junior', height: '6\'2"', weight: 208, birthYear: 2002, ras: 8.5, bigBoardRank: 33, mockDraftRound: 1, mockDraftPick: 21, team: 'Pittsburgh Steelers' },
+  { id: '33', name: 'Emmanuel Pregnon', position: 'IOL', school: 'Oregon', class: 'Senior', height: '6\'5"', weight: 318, birthYear: 2002, ras: 8.4, bigBoardRank: 34, mockDraftRound: 1, mockDraftPick: 27, team: 'San Francisco 49ers' },
+  { id: '34', name: 'Cashius Howell', position: 'EDGE', school: 'Texas A&M', class: 'Senior', height: '6\'2"', weight: 248, birthYear: 2002, ras: 8.8, bigBoardRank: 35, mockDraftRound: 1, mockDraftPick: 15, team: 'Tampa Bay Buccaneers' },
+  { id: '35', name: 'Akheem Mesidor', position: 'EDGE', school: 'Miami', class: 'Senior', height: '6\'3"', weight: 265, birthYear: 2001, ras: 8.3, bigBoardRank: 32 },
+  { id: '36', name: 'Christen Miller', position: 'DT', school: 'Georgia', class: 'Junior', height: '6\'4"', weight: 310, birthYear: 2004, ras: 8.2, bigBoardRank: 36 },
+  { id: '37', name: 'Brandon Cisse', position: 'CB', school: 'South Carolina', class: 'Junior', height: '6\'0"', weight: 190, birthYear: 2005, ras: 8.3, bigBoardRank: 37 },
+  { id: '38', name: 'Zachariah Branch', position: 'WR', school: 'USC', class: 'Sophomore', height: '5\'10"', weight: 175, birthYear: 2004, ras: 8.5, bigBoardRank: 38 },
+  { id: '39', name: 'Blake Miller', position: 'OT', school: 'Clemson', class: 'Senior', height: '6\'6"', weight: 310, birthYear: 2004, ras: 8.1, bigBoardRank: 39 },
+  { id: '40', name: 'Colton Hood', position: 'CB', school: 'Tennessee', class: 'Senior', height: '6\'0"', weight: 193, birthYear: 2005, ras: 8.2, bigBoardRank: 40 },
+  { id: '41', name: 'Keith Abney II', position: 'CB', school: 'Arizona State', class: 'Junior', height: '6\'0"', weight: 190, birthYear: 2004, ras: 8.2, bigBoardRank: 41 },
+  { id: '42', name: 'R Mason Thomas', position: 'EDGE', school: 'Oklahoma', class: 'Junior', height: '6\'2"', weight: 249, birthYear: 2004, ras: 8.4, bigBoardRank: 42 },
+  { id: '43', name: 'Dillon Thieneman', position: 'S', school: 'Oregon', class: 'Junior', height: '6\'1"', weight: 210, birthYear: 2004, ras: 8.5, bigBoardRank: 43 },
+  { id: '44', name: 'Max Iheanachor', position: 'IOL', school: 'Arizona State', class: 'Senior', height: '6\'6"', weight: 330, birthYear: 2003, ras: 8.0, bigBoardRank: 44 },
+  { id: '45', name: 'Chris Brazzell II', position: 'WR', school: 'Tennessee', class: 'Junior', height: '6\'5"', weight: 200, birthYear: 2003, ras: 8.2, bigBoardRank: 45 },
+  { id: '46', name: 'Zion Young', position: 'EDGE', school: 'Missouri', class: 'Senior', height: '6\'5"', weight: 258, birthYear: 2004, ras: 8.1, bigBoardRank: 46 },
+  { id: '47', name: 'Eli Stowers', position: 'TE', school: 'Vanderbilt', class: 'Senior', height: '6\'4"', weight: 234, birthYear: 2003, ras: 8.0, bigBoardRank: 47 },
+  { id: '48', name: 'Jadarian Price', position: 'RB', school: 'Notre Dame', class: 'Junior', height: '5\'11"', weight: 210, birthYear: 2003, ras: 8.3, bigBoardRank: 48 },
+  { id: '49', name: 'D\'Angelo Ponds', position: 'CB', school: 'Indiana', class: 'Junior', height: '5\'9"', weight: 172, birthYear: 2005, ras: 8.2, bigBoardRank: 49 },
+  { id: '50', name: 'Jake Golday', position: 'LB', school: 'Cincinnati', class: 'Senior', height: '6\'4"', weight: 240, birthYear: 2003, ras: 8.1, bigBoardRank: 50 },
+  { id: '51', name: 'Jacob Rodriguez', position: 'LB', school: 'Texas Tech', class: 'Senior', height: '6\'1"', weight: 235, birthYear: 2002, ras: 8.2, bigBoardRank: 51 },
+  { id: '52', name: 'Chase Bisontis', position: 'IOL', school: 'Texas A&M', class: 'Junior', height: '6\'5"', weight: 315, birthYear: 2004, ras: 8.0, bigBoardRank: 52 },
+  { id: '53', name: 'Anthony Hill Jr.', position: 'LB', school: 'Texas', class: 'Junior', height: '6\'3"', weight: 238, birthYear: 2005, ras: 8.4, bigBoardRank: 53 },
+  { id: '54', name: 'Romello Height', position: 'EDGE', school: 'Texas Tech', class: 'Senior', height: '6\'3"', weight: 240, birthYear: 2001, ras: 8.3, bigBoardRank: 54 },
+  { id: '55', name: 'Keionte Scott', position: 'S', school: 'Miami', class: 'Senior', height: '6\'0"', weight: 195, birthYear: 2001, ras: 8.5, bigBoardRank: 55 },
+  { id: '56', name: 'Chris Bell', position: 'WR', school: 'Louisville', class: 'Senior', height: '6\'2"', weight: 220, birthYear: 2004, ras: 8.2, bigBoardRank: 56 },
+  { id: '57', name: 'Josiah Trotter', position: 'LB', school: 'Missouri', class: 'Sophomore', height: '6\'2"', weight: 237, birthYear: 2005, ras: 8.2, bigBoardRank: 57 },
+  { id: '58', name: 'Caleb Tiernan', position: 'OT', school: 'Northwestern', class: 'Senior', height: '6\'7"', weight: 320, birthYear: 2003, ras: 8.1, bigBoardRank: 58 },
+  { id: '59', name: 'Deion Burks', position: 'WR', school: 'Oklahoma', class: 'Junior', height: '5\'9"', weight: 190, birthYear: 2003, ras: 8.4, bigBoardRank: 59 },
+  { id: '60', name: 'Derrick Moore', position: 'EDGE', school: 'Michigan', class: 'Senior', height: '6\'3"', weight: 260, birthYear: 2002, ras: 8.4, bigBoardRank: 60 },
+  { id: '61', name: 'Gabe Jacas', position: 'EDGE', school: 'Illinois', class: 'Senior', height: '6\'3"', weight: 270, birthYear: 2004, ras: 8.3, bigBoardRank: 61 },
+  { id: '62', name: 'Zakee Wheatley', position: 'S', school: 'Penn State', class: 'Senior', height: '6\'2"', weight: 202, birthYear: 2002, ras: 8.2, bigBoardRank: 62 },
+  { id: '63', name: 'Malik Muhammad', position: 'CB', school: 'Texas', class: 'Junior', height: '6\'0"', weight: 188, birthYear: 2004, ras: 8.2, bigBoardRank: 63 },
+  { id: '64', name: 'Germie Bernard', position: 'WR', school: 'Alabama', class: 'Senior', height: '6\'1"', weight: 204, birthYear: 2003, ras: 8.3, bigBoardRank: 64 },
+  { id: '65', name: 'Chris Johnson', position: 'CB', school: 'San Diego State', class: 'Senior', height: '6\'0"', weight: 195, birthYear: 2004, ras: 8.4, bigBoardRank: 65 },
+  { id: '66', name: 'Jakobi Lane', position: 'WR', school: 'USC', class: 'Junior', height: '6\'4"', weight: 210, birthYear: 2004, ras: 8.3, bigBoardRank: 66 },
+  { id: '67', name: 'Daylen Everette', position: 'CB', school: 'Georgia', class: 'Senior', height: '6\'1"', weight: 190, birthYear: 2004, ras: 8.2, bigBoardRank: 67 },
+  { id: '68', name: 'Mike Washington Jr.', position: 'RB', school: 'Arkansas', class: 'Senior', height: '6\'2"', weight: 228, birthYear: 2003, ras: 8.2, bigBoardRank: 68 },
+  { id: '69', name: 'Eric McAlister', position: 'WR', school: 'TCU', class: 'Senior', height: '6\'3"', weight: 205, birthYear: 2002, ras: 8.3, bigBoardRank: 69 },
+  { id: '70', name: 'Davison Igbinosun', position: 'CB', school: 'Ohio State', class: 'Senior', height: '6\'2"', weight: 195, birthYear: 2004, ras: 8.3, bigBoardRank: 70 },
+  { id: '71', name: 'Max Klare', position: 'TE', school: 'Ohio State', class: 'Junior', height: '6\'5"', weight: 243, birthYear: 2003, ras: 8.2, bigBoardRank: 71 },
+  { id: '72', name: 'Connor Lew', position: 'IOL', school: 'Auburn', class: 'Junior', height: '6\'3"', weight: 300, birthYear: 2005, ras: 8.1, bigBoardRank: 72 },
+  { id: '73', name: 'A.J. Haulcy', position: 'S', school: 'LSU', class: 'Senior', height: '6\'0"', weight: 222, birthYear: 2004, ras: 8.3, bigBoardRank: 73 },
+  { id: '74', name: 'Gracen Halton', position: 'DT', school: 'Oklahoma', class: 'Senior', height: '6\'2"', weight: 292, birthYear: 2004, ras: 8.2, bigBoardRank: 74 },
+  { id: '75', name: 'Elijah Sarratt', position: 'WR', school: 'Indiana', class: 'Senior', height: '6\'2"', weight: 213, birthYear: 2003, ras: 8.4, bigBoardRank: 75 },
 ];
 
 // Mock data for mock drafts
@@ -226,9 +267,9 @@ export function prospectFillsTeamNeed(prospect: { position: string }, needs: str
   return needs.some((need) => prospectPositionMatchesNeed(prospect.position, need));
 }
 
-// Prospect lookup for scoring: id -> { bigBoardRank, position }
+// Prospect lookup for scoring: id -> { bigBoardRank, position } (rank from big-board-rankings.json)
 const prospectLookup = new Map(
-  mockProspects.map((p) => [p.id, { bigBoardRank: p.bigBoardRank ?? 50, position: p.position }])
+  mockProspects.map((p) => [p.id, { bigBoardRank: getBigBoardRank(p.id), position: p.position }])
 );
 
 const NEEDS_BY_PICK = (teamNeeds2026 as { needsByPick: Record<string, string[]> }).needsByPick;
@@ -293,13 +334,14 @@ const preCombineMockByPlayer: Map<string, { pick: number; team: string }> = new 
 );
 
 function enrichProspectWithMock(prospect: Prospect): Prospect {
+  const base = { ...prospect, bigBoardRank: getBigBoardRank(prospect.id) };
   const match = preCombineMockByPlayer.get(prospect.name.trim().toLowerCase());
   if (!match) {
-    const { mockDraftRound, mockDraftPick, team, ...rest } = prospect;
+    const { mockDraftRound, mockDraftPick, team, ...rest } = base;
     return { ...rest };
   }
   return {
-    ...prospect,
+    ...base,
     mockDraftRound: 1,
     mockDraftPick: match.pick,
     team: match.team,

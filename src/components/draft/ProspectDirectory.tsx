@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getProspects } from '@/lib/adapters';
+import { getProspects, getProspectAge } from '@/lib/adapters';
 import { Prospect } from '@/types';
-import { TeamLogo } from '@/components/shared/TeamLogo';
 import { CollegeLogo } from '@/components/shared/CollegeLogo';
 
 const PROSPECTS_PER_PAGE = 12;
@@ -41,7 +40,7 @@ export function ProspectDirectory() {
     }
   }
 
-  const positions = ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'CB', 'S', 'K', 'P'];
+  const positions = ['QB', 'RB', 'WR', 'TE', 'OT', 'IOL', 'EDGE', 'DT', 'LB', 'CB', 'S'];
   const schools = Array.from(new Set(prospects.map(p => p.school))).sort();
 
   const totalPages = Math.ceil(prospects.length / PROSPECTS_PER_PAGE) || 1;
@@ -93,91 +92,83 @@ export function ProspectDirectory() {
       </div>
 
       {/* Prospects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {paginatedProspects.map((prospect) => (
           <Link
             key={prospect.id}
             href={`/draft/prospects/${prospect.id}`}
-            className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md hover:border-nfl-blue/30 transition-all block"
+            className="group relative bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-lg hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
           >
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-start gap-3">
-                <CollegeLogo school={prospect.school} size={40} />
-                <div>
-                  <h3 className="font-semibold text-gray-900 text-lg">{prospect.name}</h3>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <span className="font-medium">{prospect.position}</span>
-                    <span>•</span>
-                    <span>{prospect.school}</span>
-                    <span>•</span>
-                    <span>{prospect.class}</span>
+            {/* Subtle top accent */}
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gray-100 to-gray-200 group-hover:from-nfl-blue/20 group-hover:to-nfl-blue/5" />
+
+            <div className="p-5">
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <div className="flex items-start gap-3 min-w-0">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center ring-1 ring-gray-100">
+                    <CollegeLogo school={prospect.school} size={32} />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-gray-900 text-base truncate group-hover:text-nfl-blue transition-colors">
+                      {prospect.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 truncate">
+                      {prospect.position} · {prospect.school}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-0.5">{prospect.class}</p>
                   </div>
                 </div>
+                {prospect.bigBoardRank && (
+                  <span className="flex-shrink-0 inline-flex h-8 min-w-[2rem] items-center justify-center rounded-lg bg-gray-900 text-white text-xs font-bold">
+                    #{prospect.bigBoardRank}
+                  </span>
+                )}
               </div>
-              {prospect.bigBoardRank && (
-                <div className="bg-nfl-blue text-white text-xs font-bold px-2 py-1 rounded-full">
-                  #{prospect.bigBoardRank}
+
+              {/* Stats grid */}
+              <div className="grid grid-cols-3 gap-3 py-4 border-y border-gray-100">
+                <div className="text-center">
+                  <p className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Ht</p>
+                  <p className="text-sm font-semibold text-gray-900">{prospect.height}</p>
                 </div>
-              )}
-            </div>
-
-            <div className="space-y-2 text-sm text-gray-600">
-              <div className="flex justify-between">
-                <span>Height:</span>
-                <span className="font-medium">{prospect.height}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Weight:</span>
-                <span className="font-medium">{prospect.weight} lbs</span>
-              </div>
-            </div>
-
-            {prospect.measurables && (
-              <div className="mt-3 pt-3 border-t border-gray-200">
-                <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
-                  Measurables
-                </h4>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  {prospect.measurables.fortyYardDash && (
-                    <div className="flex justify-between">
-                      <span>40:</span>
-                      <span className="font-medium">{prospect.measurables.fortyYardDash}s</span>
-                    </div>
-                  )}
-                  {prospect.measurables.verticalJump && (
-                    <div className="flex justify-between">
-                      <span>Vert:</span>
-                      <span className="font-medium">{prospect.measurables.verticalJump}"</span>
-                    </div>
-                  )}
-                  {prospect.measurables.benchPress && (
-                    <div className="flex justify-between">
-                      <span>Bench:</span>
-                      <span className="font-medium">{prospect.measurables.benchPress}</span>
-                    </div>
-                  )}
+                <div className="text-center border-x border-gray-100">
+                  <p className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Wt</p>
+                  <p className="text-sm font-semibold text-gray-900">{prospect.weight}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Age</p>
+                  <p className="text-sm font-semibold text-gray-900">
+                    {getProspectAge(prospect) != null ? `${getProspectAge(prospect)}` : '—'}
+                  </p>
                 </div>
               </div>
-            )}
 
-            {prospect.mockDraftRound && (
-              <div className="mt-3 pt-3 border-t border-gray-200">
-                <div className="flex items-center justify-center gap-2">
-                  {prospect.team && (
-                    <TeamLogo teamName={prospect.team} size={28} />
-                  )}
-                  <div className="text-center">
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-0.5">
-                      Mock Draft
-                    </div>
-                    <div className="text-sm font-medium text-gray-900">
-                      Round {prospect.mockDraftRound}, Pick {prospect.mockDraftPick}
-                      {prospect.team && <> · {prospect.team}</>}
-                    </div>
+              {prospect.measurables &&
+                (prospect.measurables.fortyYardDash ||
+                  prospect.measurables.verticalJump ||
+                  prospect.measurables.benchPress) && (
+                  <div className="mt-4 flex gap-4">
+                    {prospect.measurables.fortyYardDash && (
+                      <div className="flex-1 rounded-lg bg-gray-50 px-2 py-1.5 text-center">
+                        <span className="text-[10px] text-gray-500">40</span>
+                        <p className="text-xs font-semibold text-gray-900">{prospect.measurables.fortyYardDash}s</p>
+                      </div>
+                    )}
+                    {prospect.measurables.verticalJump && (
+                      <div className="flex-1 rounded-lg bg-gray-50 px-2 py-1.5 text-center">
+                        <span className="text-[10px] text-gray-500">Vert</span>
+                        <p className="text-xs font-semibold text-gray-900">{prospect.measurables.verticalJump}"</p>
+                      </div>
+                    )}
+                    {prospect.measurables.benchPress && (
+                      <div className="flex-1 rounded-lg bg-gray-50 px-2 py-1.5 text-center">
+                        <span className="text-[10px] text-gray-500">Bench</span>
+                        <p className="text-xs font-semibold text-gray-900">{prospect.measurables.benchPress}</p>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </div>
-            )}
+                )}
+            </div>
           </Link>
         ))}
       </div>

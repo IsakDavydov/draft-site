@@ -87,6 +87,8 @@ export interface Prospect {
   class: 'Freshman' | 'Sophomore' | 'Junior' | 'Senior' | 'Graduate';
   height: string;
   weight: number;
+  /** Birth year for age calculation (age at 2026 draft). If omitted, estimated from class. */
+  birthYear?: number;
   ras?: number; // Relative Athletic Score
   measurables?: {
     fortyYardDash?: number;

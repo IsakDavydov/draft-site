@@ -35,6 +35,10 @@ The structure includes:
 - Divisions (East, North, South, West)
 - Teams with wins, losses, ties, win percentage, and points
 
+## Big Board Rankings
+
+Draft prospect rankings are stored in `data/big-board-rankings.json`. The file is an array of prospect IDs in order: position 1 = rank 1, position 2 = rank 2, etc. To reorder players, simply move IDs around in the array. For example, to move prospect `"4"` from 3rd to 1st, put `"4"` at the start of the array.
+
 ## Mock Drafts
 
 Mock drafts are stored in `data/mock-drafts/` as JSON files. Name them descriptively (e.g., `week-15-2024.json`).

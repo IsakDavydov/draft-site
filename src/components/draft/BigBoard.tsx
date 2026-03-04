@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getBigBoard } from '@/lib/adapters';
+import { getBigBoard, getProspectAge } from '@/lib/adapters';
 import { CollegeLogo } from '@/components/shared/CollegeLogo';
 import { Prospect } from '@/types';
 
@@ -66,9 +66,6 @@ export function BigBoard() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 School
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Mock Draft
-              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -80,7 +77,7 @@ export function BigBoard() {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <Link href={`/draft/prospects/${prospect.id}`} className="block hover:text-nfl-red transition-colors">
                     <div className="text-sm font-medium text-gray-900">{prospect.name}</div>
-                  <div className="text-sm text-gray-500">{prospect.height}, {prospect.weight} lbs</div>
+                  <div className="text-sm text-gray-500">{prospect.height}, {prospect.weight} lbs{getProspectAge(prospect) != null ? `, ${getProspectAge(prospect)} yrs` : ''}</div>
                   </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -91,15 +88,6 @@ export function BigBoard() {
                     <CollegeLogo school={prospect.school} size={28} />
                     <span className="text-sm text-gray-900">{prospect.school}</span>
                   </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {prospect.mockDraftRound && prospect.mockDraftPick ? (
-                    <span>
-                      Round {prospect.mockDraftRound}, Pick {prospect.mockDraftPick}
-                    </span>
-                  ) : (
-                    'N/A'
-                  )}
                 </td>
               </tr>
             ))}

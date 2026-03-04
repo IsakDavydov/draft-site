@@ -19,57 +19,51 @@ export default async function LeaderboardPage() {
     { data: leaderboard, error },
     { data: participants },
     { count: resultsCount },
+    { data: predictions },
   ] = await Promise.all([
     supabase.rpc('get_leaderboard', { p_year: 2026 }),
     supabase.rpc('get_leaderboard_participants', { p_year: 2026 }),
     supabase.from('draft_results').select('*', { count: 'exact', head: true }).eq('draft_year', 2026),
+    supabase.from('draft_predictions').select('id, display_name').eq('draft_year', 2026).eq('is_leaderboard_entry', true),
   ]);
 
   const hasResults = (resultsCount ?? 0) > 0;
 
   // Pre-draft scores when no results yet (works with base schema - no is_leaderboard_entry or custom_draft_order)
   let preDraftLeaderboard: { display_name: string; score: number; rank: number }[] = [];
-  if (!hasResults) {
-    const { data: predictions } = await supabase
-      .from('draft_predictions')
-      .select('id, display_name')
-      .eq('draft_year', 2026)
-      .eq('is_leaderboard_entry', true);
+  if (!hasResults && predictions && predictions.length > 0) {
+    const { data: picks } = await supabase
+      .from('prediction_picks')
+      .select('prediction_id, pick_number, prospect_id, team')
+      .in('prediction_id', predictions.map((p) => p.id));
 
-    if (predictions && predictions.length > 0) {
-      const { data: picks } = await supabase
-        .from('prediction_picks')
-        .select('prediction_id, pick_number, prospect_id, team')
-        .in('prediction_id', predictions.map((p) => p.id));
-
-      const picksByPrediction = new Map<string, Array<{ pick_number: number; prospect_id: string; team: string }>>();
-      for (const pick of picks ?? []) {
-        const list = picksByPrediction.get(pick.prediction_id) ?? [];
-        list.push({
-          pick_number: pick.pick_number,
-          prospect_id: pick.prospect_id,
-          team: pick.team,
-        });
-        picksByPrediction.set(pick.prediction_id, list);
-      }
-
-      const withScores = predictions
-        .map((pred) => {
-          const predPicks = picksByPrediction.get(pred.id) ?? [];
-          if (predPicks.length === 0) return null;
-          return {
-            display_name: pred.display_name,
-            score: calculatePreDraftScore(predPicks),
-          };
-        })
-        .filter((x): x is { display_name: string; score: number } => x !== null);
-
-      withScores.sort((a, b) => b.score - a.score);
-      preDraftLeaderboard = withScores.map((row, i) => ({
-        ...row,
-        rank: i + 1,
-      }));
+    const picksByPrediction = new Map<string, Array<{ pick_number: number; prospect_id: string; team: string }>>();
+    for (const pick of picks ?? []) {
+      const list = picksByPrediction.get(pick.prediction_id) ?? [];
+      list.push({
+        pick_number: pick.pick_number,
+        prospect_id: pick.prospect_id,
+        team: pick.team,
+      });
+      picksByPrediction.set(pick.prediction_id, list);
     }
+
+    const withScores = predictions
+      .map((pred) => {
+        const predPicks = picksByPrediction.get(pred.id) ?? [];
+        if (predPicks.length === 0) return null;
+        return {
+          display_name: pred.display_name,
+          score: calculatePreDraftScore(predPicks),
+        };
+      })
+      .filter((x): x is { display_name: string; score: number } => x !== null);
+
+    withScores.sort((a, b) => b.score - a.score);
+    preDraftLeaderboard = withScores.map((row, i) => ({
+      ...row,
+      rank: i + 1,
+    }));
   }
 
   return (

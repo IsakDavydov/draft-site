@@ -4,12 +4,12 @@ interface SeasonStatsProps {
   prospect: Prospect;
 }
 
-function StatChip({ label, value }: { label: string; value: string | number }) {
+function StatCell({ label, value }: { label: string; value: string | number }) {
   return (
-    <span className="text-sm">
-      <span className="text-gray-500">{label}:</span>{' '}
-      <span className="font-semibold text-gray-900">{value}</span>
-    </span>
+    <div className="flex items-baseline gap-1.5">
+      <span className="text-xs font-medium text-gray-500 uppercase">{label}</span>
+      <span className="text-xs font-semibold text-gray-900 tabular-nums">{value}</span>
+    </div>
   );
 }
 
@@ -52,39 +52,36 @@ export function SeasonStats({ prospect }: SeasonStatsProps) {
   if (stats.games) rows.push({ label: 'Games', value: stats.games });
 
   if (isQB) {
-    if (stats.passComp != null && stats.passAtt != null) {
-      rows.push({ label: 'Comp/Att', value: `${stats.passComp}/${stats.passAtt}` });
-    }
-    if (stats.passYds != null) rows.push({ label: 'Pass Yds', value: stats.passYds.toLocaleString() });
-    if (stats.passTd != null) rows.push({ label: 'Pass TD', value: stats.passTd });
+    if (stats.compPct != null) rows.push({ label: 'Comp%', value: `${stats.compPct}%` });
+    if (stats.passYds != null) rows.push({ label: 'Yards', value: stats.passYds.toLocaleString() });
+    if (stats.passTd != null) rows.push({ label: 'TD', value: stats.passTd });
     if (stats.passInt != null) rows.push({ label: 'INT', value: stats.passInt });
-    if (stats.compPct != null) rows.push({ label: 'Comp %', value: `${stats.compPct}%` });
     if (stats.passerRating != null) rows.push({ label: 'Rating', value: stats.passerRating.toFixed(1) });
     if (stats.rushYds != null && stats.rushYds > 0) {
-      rows.push({ label: 'Rush Yds', value: stats.rushYds });
+      rows.push({ label: 'Rush Yds', value: stats.rushYds.toLocaleString() });
       if (stats.rushTd != null) rows.push({ label: 'Rush TD', value: stats.rushTd });
     }
   }
 
   if (isRB) {
     if (stats.rushAtt != null) rows.push({ label: 'Carries', value: stats.rushAtt });
-    if (stats.rushYds != null) rows.push({ label: 'Rush Yds', value: stats.rushYds.toLocaleString() });
+    if (stats.rushYds != null) rows.push({ label: 'Yards', value: stats.rushYds.toLocaleString() });
     if (stats.rushAvg != null) rows.push({ label: 'YPC', value: stats.rushAvg.toFixed(1) });
-    if (stats.rushTd != null) rows.push({ label: 'Rush TD', value: stats.rushTd });
+    if (stats.rushTd != null) rows.push({ label: 'TD', value: stats.rushTd });
     if (stats.receptions != null && stats.receptions > 0) {
-      rows.push({ label: 'Receptions', value: stats.receptions });
-      if (stats.recYds != null) rows.push({ label: 'Rec Yds', value: stats.recYds });
+      rows.push({ label: 'Rec', value: stats.receptions });
+      if (stats.recYds != null) rows.push({ label: 'Rec Yds', value: stats.recYds.toLocaleString() });
       if (stats.recTd != null) rows.push({ label: 'Rec TD', value: stats.recTd });
     }
   }
 
   if (isWR) {
-    if (stats.receptions != null) rows.push({ label: 'Receptions', value: stats.receptions });
-    if (stats.recYds != null) rows.push({ label: 'Rec Yds', value: stats.recYds.toLocaleString() });
-    if (stats.recAvg != null) rows.push({ label: 'YPC', value: stats.recAvg.toFixed(1) });
-    if (stats.recTd != null) rows.push({ label: 'Rec TD', value: stats.recTd });
+    if (stats.receptions != null) rows.push({ label: 'Rec', value: stats.receptions });
+    if (stats.recYds != null) rows.push({ label: 'Yards', value: stats.recYds.toLocaleString() });
+    if (stats.recAvg != null) rows.push({ label: 'Avg', value: stats.recAvg.toFixed(1) });
+    if (stats.recTd != null) rows.push({ label: 'TD', value: stats.recTd });
     if (stats.rushAtt != null && stats.rushAtt > 0) {
-      rows.push({ label: 'Rush', value: `${stats.rushAtt} att, ${stats.rushYds ?? 0} yds` });
+      rows.push({ label: 'Rush', value: `${stats.rushAtt} att, ${(stats.rushYds ?? 0).toLocaleString()} yds` });
     }
   }
 
@@ -93,9 +90,9 @@ export function SeasonStats({ prospect }: SeasonStatsProps) {
     if (stats.tfl != null) rows.push({ label: 'TFL', value: stats.tfl });
     if (stats.sacks != null) rows.push({ label: 'Sacks', value: stats.sacks });
     if (stats.qbHits != null) rows.push({ label: 'QB Hurries', value: stats.qbHits });
-    if (stats.int != null) rows.push({ label: 'Interceptions', value: stats.int });
-    if (stats.pd != null) rows.push({ label: 'Pass Breakups', value: stats.pd });
-    if (stats.ff != null) rows.push({ label: 'Forced Fumbles', value: stats.ff });
+    if (stats.int != null) rows.push({ label: 'INT', value: stats.int });
+    if (stats.pd != null) rows.push({ label: 'PD', value: stats.pd });
+    if (stats.ff != null) rows.push({ label: 'FF', value: stats.ff });
   }
 
   if (rows.length === 0) {
@@ -104,14 +101,11 @@ export function SeasonStats({ prospect }: SeasonStatsProps) {
 
   return (
     <div>
-      <p className="flex flex-wrap items-center gap-x-1 gap-y-1 text-sm">
-        {rows.map(({ label, value }, i) => (
-          <span key={label}>
-            {i > 0 && <span className="mx-1.5 text-gray-300">•</span>}
-            <StatChip label={label} value={value} />
-          </span>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1.5">
+        {rows.map(({ label, value }) => (
+          <StatCell key={label} label={label} value={value} />
         ))}
-      </p>
+      </div>
       <p className="mt-2 text-xs text-gray-400">
         Source:{' '}
         <a
@@ -121,8 +115,7 @@ export function SeasonStats({ prospect }: SeasonStatsProps) {
           className="text-nfl-blue hover:underline"
         >
           cfbstats.com
-        </a>{' '}
-        2025 season
+        </a>
       </p>
     </div>
   );
