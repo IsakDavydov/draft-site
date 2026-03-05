@@ -59,6 +59,27 @@ This creates the `groups` and `group_members` tables, plus the `join_group_by_co
    - If ON: users must click a confirmation link before signing in
    - If OFF: users can sign in immediately after signup (faster for testing)
 
+## 5b. Forgot Password – Required for reset links to work
+
+If users report that password reset emails don't arrive or links don't work:
+
+1. **Authentication** → **URL Configuration**
+   - **Site URL**: Set to your production URL (e.g. `https://yoursite.com`)
+   - **Redirect URLs**: Add `https://yoursite.com/auth/callback` (and `http://localhost:3000/auth/callback` for local dev)
+
+2. **Authentication** → **Email Templates** → **Reset Password**
+   - The default template uses a flow that can fail with server-side apps. Replace the link with a custom one that sends `token_hash` in the URL:
+
+   ```html
+   <h2>Reset Password</h2>
+   <p>Follow this link to reset the password for your user:</p>
+   <p><a href="{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=recovery&next=/auth/update-password">Reset Password</a></p>
+   ```
+
+   Use your actual Site URL. If your Site URL is `https://yoursite.com`, the link will correctly verify the token and redirect to the update-password page.
+
+3. **Email delivery**: Default Supabase SMTP has rate limits and emails may land in spam. For production, consider **Project Settings** → **Auth** → **SMTP Settings** to configure a custom SMTP provider.
+
 ## 6. Test It
 
 1. Run `npm run dev`

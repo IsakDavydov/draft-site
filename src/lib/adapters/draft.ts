@@ -15,6 +15,7 @@ import postSuperBowlMock2026 from '../../../data/mock-drafts/post-super-bowl-moc
 import preCombineMock2026 from '../../../data/mock-drafts/pre-combine-mock-draft-2026.json';
 import teamNeeds2026 from '../../../data/team-needs-2026.json';
 import bigBoardRankingsJson from '../../../data/big-board-rankings.json';
+import draftOrder2026Json from '../../../data/draft-order-2026.json';
 
 // Big board order: array position = rank (1-based). Reorder in data/big-board-rankings.json to change rankings.
 const bigBoardRankings = bigBoardRankingsJson as string[];
@@ -190,10 +191,10 @@ export async function getMockDrafts(season: number = 2024): Promise<MockDraft[]>
   return mockMockDrafts.filter(draft => draft.season === season);
 }
 
-// Draft order: pick number -> team (for 2026 first round, from pre-combine mock)
+// Draft order: pick number -> team (for 2026 first round). Uses data/draft-order-2026.json for current order including trades.
 export function getDraftOrder2026(): { pick: number; team: string }[] {
-  const picks = (preCombineMock2026 as { picks: { pick: number; team: string }[] }).picks;
-  return picks.map((p) => ({ pick: p.pick, team: p.team }));
+  const data = draftOrder2026Json as { order: { pick: number; team: string }[] };
+  return data.order || [];
 }
 
 // Resolve effective draft order: custom_draft_order overrides default when present
