@@ -1,8 +1,8 @@
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
-import { Trophy, ArrowLeft, Users } from 'lucide-react';
-import { sanitizeDisplayName } from '@/lib/display-name-filter';
+import { ArrowLeft, Users, Trophy } from 'lucide-react';
+import { LeaderboardTable } from '@/components/leaderboard/LeaderboardTable';
 import { calculatePreDraftScore } from '@/lib/adapters';
 
 export const dynamic = 'force-dynamic';
@@ -117,32 +117,41 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
   const showMembersOnly = !hasResults && preDraftLeaderboard.length === 0 && members && members.length > 0;
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-wrap gap-4 mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <Link
             href="/groups"
-            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-nfl-red transition-colors"
+            className="group inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-all duration-200 hover:text-nfl-red"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
             Back to Groups
           </Link>
-          <Link
-            href="/predict"
-            className="inline-flex items-center gap-2 text-sm text-nfl-blue hover:underline"
-          >
-            Predict →
-          </Link>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/leaderboard"
+              className="inline-flex items-center gap-2 text-sm font-medium text-nfl-blue transition-colors hover:text-nfl-blue/80"
+            >
+              <Trophy className="h-4 w-4" />
+              View full leaderboard →
+            </Link>
+            <Link
+              href="/predict"
+              className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
+            >
+              Predict →
+            </Link>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3 mb-8">
-          <div className="h-12 w-12 rounded-full bg-nfl-blue/10 flex items-center justify-center">
-            <Users className="h-6 w-6 text-nfl-blue" />
+        <div className="flex items-center gap-4 mb-8">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-nfl-blue/15 to-nfl-blue/5 ring-1 ring-nfl-blue/20 shadow-card-sm">
+            <Users className="h-7 w-7 text-nfl-blue" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{group.name}</h1>
-            <p className="text-gray-600 mt-1">
-              Invite code: <span className="font-mono font-medium">{group.invite_code}</span>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{group.name}</h1>
+            <p className="mt-1 text-sm text-gray-600">
+              Invite code: <span className="font-mono font-semibold text-gray-700">{group.invite_code}</span>
             </p>
           </div>
         </div>
@@ -157,72 +166,23 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
                   : 'Submit predictions to compete.'}
             </p>
             {showPreDraft ? (
-              <div className="bg-white rounded-xl shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {preDraftLeaderboard.map((row, i) => (
-                      <tr key={row.display_name + i} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span
-                            className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-                              row.rank === 1 ? 'bg-amber-400 text-amber-900' :
-                              row.rank === 2 ? 'bg-gray-300 text-gray-700' :
-                              row.rank === 3 ? 'bg-amber-700 text-amber-100' :
-                              'bg-gray-100 text-gray-700'
-                            }`}
-                          >
-                            {row.rank}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {sanitizeDisplayName(row.display_name)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right font-semibold">
-                          {row.score}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <LeaderboardTable
+                rows={preDraftLeaderboard}
+                showScores
+                scoreSuffix=""
+              />
             ) : showMembersOnly ? (
-              <div className="bg-white rounded-xl shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {members.map((row: { display_name: string; rank: number }, i: number) => (
-                      <tr key={row.display_name + i} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold bg-gray-100 text-gray-700">
-                            {row.rank}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {sanitizeDisplayName(row.display_name)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 text-right">—</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <LeaderboardTable
+                rows={members.map((m: { display_name: string; rank: number }) => ({
+                  display_name: m.display_name,
+                  rank: m.rank,
+                }))}
+                showScores={false}
+              />
             ) : (
-              <div className="bg-white rounded-xl p-8 text-center shadow-sm ring-1 ring-gray-900/5">
+              <div className="rounded-3xl border border-gray-200/80 bg-white p-10 text-center shadow-card-sm">
                 <p className="text-gray-600">No members have submitted predictions yet.</p>
-                <Link href="/predict" className="inline-block mt-4 text-nfl-red font-medium hover:underline">
+                <Link href="/predict" className="mt-4 inline-block font-medium text-nfl-red transition-colors hover:text-nfl-red/90">
                   Submit your predictions →
                 </Link>
               </div>
@@ -237,53 +197,23 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
             )}
           </>
         ) : error ? (
-          <div className="bg-white rounded-xl p-8 text-center shadow-sm ring-1 ring-gray-900/5">
+          <div className="rounded-3xl border border-gray-200/80 bg-white p-10 text-center shadow-card-sm">
             <p className="text-red-600">Unable to load leaderboard. Please try again later.</p>
           </div>
         ) : !leaderboard || leaderboard.length === 0 ? (
-          <div className="bg-white rounded-xl p-8 text-center shadow-sm ring-1 ring-gray-900/5">
+          <div className="rounded-3xl border border-gray-200/80 bg-white p-10 text-center shadow-card-sm">
             <p className="text-gray-600">No scores yet. Scores appear after the 2026 NFL Draft.</p>
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {leaderboard.map((row: { display_name: string; score: number; rank: number }, i: number) => (
-                  <tr key={row.display_name + i} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-                          row.rank === 1 ? 'bg-amber-400 text-amber-900' :
-                          row.rank === 2 ? 'bg-gray-300 text-gray-700' :
-                          row.rank === 3 ? 'bg-amber-700 text-amber-100' :
-                          'bg-gray-100 text-gray-700'
-                        }`}
-                      >
-                        {row.rank}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {sanitizeDisplayName(row.display_name)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right font-semibold">
-                      {row.score} pts
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <LeaderboardTable
+            rows={leaderboard}
+            showScores
+            scoreSuffix="pts"
+          />
         )}
 
         {hasResults && (
-          <p className="mt-6 text-sm text-gray-500">
+          <p className="mt-6 text-[13px] text-gray-500">
             15 pts = correct player at correct pick. 5 pts = player went 1 pick before or after. Max 480 pts.
           </p>
         )}

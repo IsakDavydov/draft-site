@@ -1,4 +1,8 @@
 const config = {
+  // Force inclusion of custom classes that may not be detected by content scan
+  safelist: [
+    "animate-leaderboard-row",
+  ],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -108,13 +112,24 @@ const config = {
         "88": "22rem",
         "128": "32rem",
       },
+      boxShadow: {
+        card: "0 4px 24px -4px rgba(0,0,0,0.08), 0 8px 48px -8px rgba(0,0,0,0.06)",
+        "card-hover": "0 8px 32px -4px rgba(0,0,0,0.1), 0 16px 64px -8px rgba(0,0,0,0.08)",
+        "card-sm": "0 4px 24px -4px rgba(0,0,0,0.08)",
+        accent: "0 2px 12px -4px rgba(251,191,36,0.2)",
+      },
       animation: {
+        "leaderboard-row": "leaderboardRowFadeIn 0.4s ease-out backwards",
         "fade-in": "fadeIn 0.5s ease-in-out",
         "slide-up": "slideUp 0.4s ease-out forwards",
         "slide-down": "slideDown 0.3s ease-out",
         "scale-in": "scaleIn 0.2s ease-out",
       },
       keyframes: {
+        leaderboardRowFadeIn: {
+          "0%": { opacity: "0", transform: "translateY(4px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },

@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { Trophy, ArrowLeft } from 'lucide-react';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
-import { sanitizeDisplayName } from '@/lib/display-name-filter';
+import { LeaderboardTable } from '@/components/leaderboard/LeaderboardTable';
 import { calculatePreDraftScore } from '@/lib/adapters';
 
 export const dynamic = 'force-dynamic';
@@ -67,19 +67,19 @@ export default async function LeaderboardPage() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white bg-gray-50">
+      <div className="leaderboard-inner mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex flex-wrap gap-4 mb-8">
           <Link
             href="/predict"
-            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-nfl-red transition-colors"
+            className="group inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-nfl-red transition-all duration-200"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
             Back to Predictions
           </Link>
           <Link
             href="/groups"
-            className="inline-flex items-center gap-2 text-sm text-nfl-blue hover:underline"
+            className="inline-flex items-center gap-2 text-sm font-medium text-nfl-blue hover:text-nfl-blue/80 transition-colors"
           >
             Compete with friends →
           </Link>
@@ -87,13 +87,15 @@ export default async function LeaderboardPage() {
 
         <div className="flex flex-col gap-4 mb-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Trophy className="h-8 w-8 text-amber-500" />
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400/20 to-amber-600/10 ring-1 ring-amber-200/60 shadow-card-sm">
+                <Trophy className="h-7 w-7 text-amber-600" />
+              </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
                   2026 Draft Leaderboard
                 </h1>
-                <p className="text-gray-600 mt-1">
+                <p className="mt-1 text-sm text-gray-600">
                   {hasResults
                     ? 'Everyone who predicted — ranked by correct first-round picks'
                     : 'Everyone competing'}
@@ -106,84 +108,35 @@ export default async function LeaderboardPage() {
 
         {!hasResults ? (
           <>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="mb-4 text-sm text-gray-600">
               {preDraftLeaderboard.length > 0
                 ? 'Scores will update after the 2026 NFL Draft.'
                 : 'Scores will appear after the 2026 NFL Draft. Submit predictions to see your score.'}
             </p>
             {preDraftLeaderboard.length > 0 ? (
-              <div className="bg-white rounded-xl shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {preDraftLeaderboard.map((row, i) => (
-                      <tr key={row.display_name + i} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span
-                            className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-                              row.rank === 1 ? 'bg-amber-400 text-amber-900' :
-                              row.rank === 2 ? 'bg-gray-300 text-gray-700' :
-                              row.rank === 3 ? 'bg-amber-700 text-amber-100' :
-                              'bg-gray-100 text-gray-700'
-                            }`}
-                          >
-                            {row.rank}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {sanitizeDisplayName(row.display_name)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right font-semibold">
-                          {row.score}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <LeaderboardTable
+                rows={preDraftLeaderboard}
+                showScores
+                scoreSuffix=""
+              />
             ) : (!participants || participants.length === 0) ? (
-              <div className="bg-white rounded-xl p-8 text-center shadow-sm ring-1 ring-gray-900/5">
+              <div className="rounded-3xl border border-gray-200/80 bg-white p-10 text-center shadow-card-sm">
                 <p className="text-gray-600">No predictions yet. Be the first!</p>
                 <Link
                   href="/predict"
-                  className="inline-block mt-4 text-nfl-red font-medium hover:underline"
+                  className="mt-4 inline-block font-medium text-nfl-red transition-colors hover:text-nfl-red/90"
                 >
                   Submit your predictions →
                 </Link>
               </div>
             ) : (
-              <div className="bg-white rounded-xl shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {participants.map((row: { display_name: string; rank: number }, i: number) => (
-                      <tr key={row.display_name + i} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold bg-gray-100 text-gray-700">
-                            {row.rank}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {sanitizeDisplayName(row.display_name)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 text-right">—</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <LeaderboardTable
+                rows={participants.map((p: { display_name: string; rank: number }) => ({
+                  display_name: p.display_name,
+                  rank: p.rank,
+                }))}
+                showScores={false}
+              />
             )}
             {(preDraftLeaderboard.length > 0 || (participants && participants.length > 0)) && (
               <p className="mt-4 text-sm text-gray-500">
@@ -195,59 +148,29 @@ export default async function LeaderboardPage() {
             )}
           </>
         ) : error ? (
-          <div className="bg-white rounded-xl p-8 text-center shadow-sm ring-1 ring-gray-900/5">
+          <div className="rounded-3xl border border-gray-200 bg-white p-10 text-center shadow-card-sm">
             <p className="text-red-600">Unable to load leaderboard. Please try again later.</p>
           </div>
         ) : !leaderboard || leaderboard.length === 0 ? (
-          <div className="bg-white rounded-xl p-8 text-center shadow-sm ring-1 ring-gray-900/5">
+          <div className="rounded-3xl border border-gray-200 bg-white p-10 text-center shadow-card-sm">
             <p className="text-gray-600">No predictions yet. Be the first!</p>
             <Link
               href="/predict"
-              className="inline-block mt-4 text-nfl-red font-medium hover:underline"
+              className="mt-4 inline-block font-medium text-nfl-red transition-colors hover:text-nfl-red/90"
             >
               Submit your predictions →
             </Link>
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {leaderboard.map((row: { display_name: string; score: number; rank: number }, i: number) => (
-                  <tr key={row.display_name + i} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
-                          row.rank === 1 ? 'bg-amber-400 text-amber-900' :
-                          row.rank === 2 ? 'bg-gray-300 text-gray-700' :
-                          row.rank === 3 ? 'bg-amber-700 text-amber-100' :
-                          'bg-gray-100 text-gray-700'
-                        }`}
-                      >
-                        {row.rank}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {sanitizeDisplayName(row.display_name)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right font-semibold">
-                      {row.score} pts
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <LeaderboardTable
+            rows={leaderboard}
+            showScores
+            scoreSuffix="pts"
+          />
         )}
 
         {hasResults && (
-          <p className="mt-6 text-sm text-gray-500">
+          <p className="mt-6 text-[13px] text-gray-500">
             15 pts = correct player at correct pick. 5 pts = player went 1 pick before or after. Max 480 pts.
           </p>
         )}

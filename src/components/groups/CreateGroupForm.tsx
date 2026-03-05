@@ -71,7 +71,7 @@ export function CreateGroupForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="groupName" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="groupName" className="block text-xs font-medium uppercase tracking-wider text-gray-500 mb-2">
           Group name
         </label>
         <input
@@ -82,19 +82,19 @@ export function CreateGroupForm() {
           required
           maxLength={50}
           disabled={loading}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-nfl-blue focus:border-transparent disabled:opacity-50"
+          className="w-full rounded-xl border border-gray-200/80 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 transition-colors focus:border-nfl-green focus:ring-2 focus:ring-nfl-green/20 focus:outline-none disabled:opacity-50"
           placeholder="e.g. Fantasy Crew"
         />
       </div>
       {message && (
-        <p className={`text-sm ${message.type === 'error' ? 'text-red-600' : 'text-green-600'}`}>
+        <p className={`rounded-xl px-4 py-2.5 text-sm ${message.type === 'error' ? 'bg-red-50 text-red-700 ring-1 ring-red-200/60' : 'bg-green-50 text-green-700 ring-1 ring-green-200/60'}`}>
           {message.text}
         </p>
       )}
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-2 px-4 bg-nfl-green text-white font-semibold rounded-lg hover:bg-nfl-green/90 disabled:opacity-50"
+        className="w-full rounded-xl bg-nfl-green py-3 px-4 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-nfl-green/90 hover:shadow-md disabled:opacity-50 disabled:hover:shadow-sm"
       >
         {loading ? 'Creating...' : 'Create Group'}
       </button>

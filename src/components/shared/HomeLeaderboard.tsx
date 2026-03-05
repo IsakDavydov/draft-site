@@ -28,25 +28,25 @@ export function HomeLeaderboard() {
   if (entries.length < 1) return null;
 
   return (
-    <div className="mt-6 rounded-xl bg-black/20 px-4 py-3 backdrop-blur-sm">
+    <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-black/25 px-4 py-4 backdrop-blur-md shadow-[0_4px_24px_-4px_rgba(0,0,0,0.3)]">
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-nfl-gold/90">
+        <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-nfl-gold/95">
           <Trophy className="h-3.5 w-3.5" />
           Top scorers
         </div>
         <Link
           href="/leaderboard"
-          className="text-xs font-medium text-white/80 hover:text-nfl-gold transition-colors"
+          className="text-xs font-medium text-white/85 transition-colors hover:text-nfl-gold"
         >
           View all →
         </Link>
       </div>
-      <div className="mt-2 space-y-1 text-sm text-white">
+      <div className="mt-3 space-y-2 text-sm text-white">
         {entries.map((e) => (
-          <div key={e.display_name + e.rank}>
-            <span className="font-bold text-nfl-gold">#{e.rank}</span>{' '}
-            <span className="font-medium">{sanitizeDisplayName(e.display_name)}</span>
-            <span className="text-white/70"> ({e.score})</span>
+          <div key={e.display_name + e.rank} className="flex items-center justify-between gap-2">
+            <span className="font-bold tabular-nums text-nfl-gold">#{e.rank}</span>
+            <span className="min-w-0 flex-1 truncate font-medium">{sanitizeDisplayName(e.display_name)}</span>
+            <span className="shrink-0 text-white/70">({e.score})</span>
           </div>
         ))}
       </div>

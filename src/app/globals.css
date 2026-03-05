@@ -52,3 +52,19 @@ select option {
   background-color: #ffffff;
   color: #171717;
 }
+
+/* Custom utilities - ensure critical styles load even if Tailwind JIT misses them */
+@layer utilities {
+  .shadow-card {
+    box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.08), 0 8px 48px -8px rgba(0, 0, 0, 0.06);
+  }
+  .shadow-card-hover {
+    box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.1), 0 16px 64px -8px rgba(0, 0, 0, 0.08);
+  }
+  .shadow-card-sm {
+    box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.08);
+  }
+  .shadow-accent {
+    box-shadow: 0 2px 12px -4px rgba(251, 191, 36, 0.2);
+  }
+}
