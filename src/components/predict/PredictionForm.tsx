@@ -8,6 +8,7 @@ import { TeamLogo } from '@/components/shared/TeamLogo';
 import Link from 'next/link';
 import { Zap, Trash2, Plus, Trophy, Share2, TrendingUp, ArrowLeftRight } from 'lucide-react';
 import { ShareDraftModal } from './ShareDraftModal';
+import { ShareFullDraftModal } from './ShareFullDraftModal';
 import { ProspectPicker } from './ProspectPicker';
 import {
   calculatePreDraftScore,
@@ -228,10 +229,12 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   const [changeNameModalOpen, setChangeNameModalOpen] = useState(false);
   const [tradeModalOpen, setTradeModalOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [shareFullModalOpen, setShareFullModalOpen] = useState(false);
   const [submitResult, setSubmitResult] = useState<{ rank: number; score: number } | null>(null);
 
   const selectedDraft = drafts.find((d) => d.id === selectedDraftId);
   const effectiveOrder = getEffectiveDraftOrder(draftOrder, selectedDraft?.custom_draft_order ?? null);
+  const allPicksFilled = effectiveOrder.every(({ pick }) => picks[pick]);
 
   const supabase = createClient();
 
@@ -713,6 +716,16 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                   <Share2 className="h-4 w-4" />
                   Share
                 </button>
+                {allPicksFilled && (
+                  <button
+                    type="button"
+                    onClick={() => setShareFullModalOpen(true)}
+                    className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
+                  >
+                    <Share2 className="h-4 w-4" />
+                    Share full draft
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -828,12 +841,28 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
         </p>
       )}
 
-      {/* Share draft modal */}
+      {/* Share draft modal (top 5) */}
       {shareModalOpen && currentScore !== null && (
         <ShareDraftModal
           onClose={() => setShareModalOpen(false)}
           score={currentScore}
           topPicks={effectiveOrder.slice(0, 5).map(({ pick, team }) => {
+            const prospectId = picks[pick];
+            const prospect = prospects.find((p) => p.id === prospectId);
+            return {
+              pick,
+              team,
+              prospectName: prospect?.name ?? '—',
+            };
+          })}
+        />
+      )}
+
+      {/* Share full draft modal (all 32 picks) */}
+      {shareFullModalOpen && currentScore !== null && (
+        <ShareFullDraftModal
+          onClose={() => setShareFullModalOpen(false)}
+          allPicks={effectiveOrder.map(({ pick, team }) => {
             const prospectId = picks[pick];
             const prospect = prospects.find((p) => p.id === prospectId);
             return {

@@ -1,6 +1,6 @@
 {
   "year": 2026,
-  "source": "Current NFL draft order including trades (Rams traded pick 29 to Chiefs)",
+  "source": "Current NFL draft order including trades (Rams pick 29 to Chiefs; Ravens pick 14 to Raiders)",
   "order": [
     { "pick": 1, "team": "Las Vegas Raiders" },
     { "pick": 2, "team": "New York Jets" },
@@ -15,7 +15,7 @@
     { "pick": 11, "team": "Miami Dolphins" },
     { "pick": 12, "team": "Dallas Cowboys" },
     { "pick": 13, "team": "Los Angeles Rams" },
-    { "pick": 14, "team": "Baltimore Ravens" },
+    { "pick": 14, "team": "Las Vegas Raiders" },
     { "pick": 15, "team": "Tampa Bay Buccaneers" },
     { "pick": 16, "team": "New York Jets" },
     { "pick": 17, "team": "Detroit Lions" },
