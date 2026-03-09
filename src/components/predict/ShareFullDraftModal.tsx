@@ -46,17 +46,11 @@ interface ShareFullDraftModalProps {
   allPicks: ShareFullPick[];
 }
 
-function getTeamShortName(team: string): string {
-  const parts = team.split(' ');
-  return parts.length > 1 ? parts.pop() ?? team : team;
-}
-
 function ShareFullPickRow({ pick, team, prospectName }: ShareFullPick) {
   const teamColor = TEAM_COLORS_BY_NAME[team] || '#64748b';
-  const shortName = getTeamShortName(team);
   return (
     <div
-      className="flex items-center gap-2 py-1 px-2 rounded overflow-hidden"
+      className="flex items-center gap-1.5 py-0.5 px-1.5 rounded overflow-hidden"
       style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
     >
       <span
@@ -66,8 +60,7 @@ function ShareFullPickRow({ pick, team, prospectName }: ShareFullPick) {
         {pick}
       </span>
       <ShareFullTeamLogo team={team} teamColor={teamColor} />
-      <span className="flex-shrink-0 text-[10px] text-slate-500 w-10 truncate">{shortName}</span>
-      <span className="text-xs text-slate-200 truncate min-w-0 flex-1">
+      <span className="text-xs text-slate-200 truncate min-w-0">
         {prospectName}
       </span>
     </div>
@@ -95,13 +88,36 @@ export function ShareFullDraftModal({ onClose, allPicks }: ShareFullDraftModalPr
     );
   }
 
+  function captureCard(): HTMLDivElement {
+    const el = cardRef.current;
+    if (!el) throw new Error('No card ref');
+    // Clone the card and append to body so no parent overflow clips it during capture
+    const clone = el.cloneNode(true) as HTMLDivElement;
+    clone.style.position = 'fixed';
+    clone.style.top = '0';
+    clone.style.left = '0';
+    clone.style.zIndex = '99999';
+    clone.style.visibility = 'hidden';
+    clone.style.pointerEvents = 'none';
+    document.body.appendChild(clone);
+    return clone;
+  }
+
+  function removeClone(clone: HTMLDivElement) {
+    document.body.removeChild(clone);
+  }
+
   async function handleDownload() {
     if (!cardRef.current) return;
+    let clone: HTMLDivElement | null = null;
     try {
       await waitForImages(cardRef.current);
       await new Promise((r) => setTimeout(r, 400));
+      clone = captureCard();
+      await waitForImages(clone);
+      await new Promise((r) => setTimeout(r, 200));
       const { toPng } = await import('html-to-image');
-      const dataUrl = await toPng(cardRef.current, {
+      const dataUrl = await toPng(clone, {
         pixelRatio: 2,
         backgroundColor: '#0f172a',
         cacheBust: true,
@@ -112,16 +128,22 @@ export function ShareFullDraftModal({ onClose, allPicks }: ShareFullDraftModalPr
       link.click();
     } catch (err) {
       console.error('Download failed:', err);
+    } finally {
+      if (clone) removeClone(clone);
     }
   }
 
   async function handleShare() {
     if (navigator.share && cardRef.current) {
+      let clone: HTMLDivElement | null = null;
       try {
         await waitForImages(cardRef.current);
         await new Promise((r) => setTimeout(r, 400));
+        clone = captureCard();
+        await waitForImages(clone);
+        await new Promise((r) => setTimeout(r, 200));
         const { toBlob } = await import('html-to-image');
-        const blob = await toBlob(cardRef.current, {
+        const blob = await toBlob(clone, {
           pixelRatio: 2,
           backgroundColor: '#0f172a',
           cacheBust: true,
@@ -139,6 +161,8 @@ export function ShareFullDraftModal({ onClose, allPicks }: ShareFullDraftModalPr
         if ((err as Error).name !== 'AbortError') {
           handleDownload();
         }
+      } finally {
+        if (clone) removeClone(clone);
       }
     } else {
       handleDownload();
@@ -179,42 +203,42 @@ export function ShareFullDraftModal({ onClose, allPicks }: ShareFullDraftModalPr
         <div className="p-4 bg-gray-100 flex justify-center overflow-auto shrink min-h-0">
           <div
             ref={cardRef}
-            className="w-[720px] rounded-xl shadow-xl shrink-0 overflow-visible"
+            className="w-[480px] rounded-xl shadow-xl shrink-0 overflow-visible"
             style={{ backgroundColor: '#0f172a' }}
           >
-            <div className="p-5 text-white">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-xl overflow-hidden bg-white/10 flex-shrink-0 flex items-center justify-center p-1.5">
+            <div className="p-4 text-white">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-lg overflow-hidden bg-white/10 flex-shrink-0 flex items-center justify-center p-1">
                   <img
                     src="/TransparentLogo.png"
                     alt="SAKFootball"
-                    width={40}
-                    height={40}
+                    width={32}
+                    height={32}
                     fetchPriority="high"
                     className="object-contain w-full h-full"
                   />
                 </div>
                 <div>
-                  <p className="text-xl font-bold">My 2026 Mock Draft</p>
-                  <p className="text-xs text-slate-400">First Round — All 32 Picks</p>
+                  <p className="text-lg font-bold">My 2026 Mock Draft</p>
+                  <p className="text-[10px] text-slate-400">First Round — All 32 Picks</p>
                 </div>
               </div>
 
               {/* Two columns: picks 1-16 down left, picks 17-32 down right */}
-              <div className="flex gap-6">
-                <div className="flex-1 flex flex-col gap-1 min-w-0">
+              <div className="flex gap-4">
+                <div className="flex-1 flex flex-col gap-0.5 min-w-0 max-w-[220px]">
                   {allPicks.slice(0, 16).map(({ pick, team, prospectName }) => (
                     <ShareFullPickRow key={pick} pick={pick} team={team} prospectName={prospectName} />
                   ))}
                 </div>
-                <div className="flex-1 flex flex-col gap-1 min-w-0">
+                <div className="flex-1 flex flex-col gap-0.5 min-w-0 max-w-[220px]">
                   {allPicks.slice(16, 32).map(({ pick, team, prospectName }) => (
                     <ShareFullPickRow key={pick} pick={pick} team={team} prospectName={prospectName} />
                   ))}
                 </div>
               </div>
 
-              <p className="text-center text-slate-500 text-xs mt-4">sakfootball.com</p>
+              <p className="text-center text-slate-500 text-[10px] mt-3">sakfootball.com</p>
             </div>
           </div>
         </div>

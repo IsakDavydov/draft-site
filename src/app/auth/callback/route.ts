@@ -7,7 +7,9 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code');
   const token_hash = requestUrl.searchParams.get('token_hash');
   const type = requestUrl.searchParams.get('type') as EmailOtpType | null;
-  const next = requestUrl.searchParams.get('next') ?? '/predict';
+  const nextParam = requestUrl.searchParams.get('next') ?? '/predict';
+  // Restrict redirect to same-origin paths to avoid open redirect
+  const next = nextParam.startsWith('/') && !nextParam.startsWith('//') ? nextParam : '/predict';
 
   const supabase = await createClient();
 

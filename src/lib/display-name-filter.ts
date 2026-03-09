@@ -70,3 +70,16 @@ export function sanitizeDisplayName(name: string | null | undefined): string {
   if (SUBSTRING_REGEX.test(trimmed)) return '*****';
   return trimmed;
 }
+
+/** Use before saving display_name to DB: rejects blocklisted/inappropriate names. */
+export function validateDisplayNameForSave(name: string | null | undefined): { valid: true } | { valid: false; error: string } {
+  if (!name || typeof name !== 'string') {
+    return { valid: false, error: 'Display name is required.' };
+  }
+  const trimmed = name.trim();
+  if (trimmed.length === 0) return { valid: false, error: 'Display name cannot be empty.' };
+  if (trimmed.length > 50) return { valid: false, error: 'Display name must be 50 characters or less.' };
+  if (WORD_BOUNDARY_REGEX.test(trimmed)) return { valid: false, error: 'That display name is not allowed.' };
+  if (SUBSTRING_REGEX.test(trimmed)) return { valid: false, error: 'That display name is not allowed.' };
+  return { valid: true };
+}

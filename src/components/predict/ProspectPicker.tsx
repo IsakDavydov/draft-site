@@ -12,6 +12,8 @@ interface ProspectPickerProps {
   onChange: (prospectId: string) => void;
   usedIds: Set<string>;
   disabled?: boolean;
+  /** Optional recommended prospects to show when dropdown is open. */
+  recommended?: Prospect[];
 }
 
 export function ProspectPicker({
@@ -20,6 +22,7 @@ export function ProspectPicker({
   onChange,
   usedIds,
   disabled,
+  recommended,
 }: ProspectPickerProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -119,6 +122,26 @@ export function ProspectPicker({
                 />
               </div>
             </div>
+            {recommended && recommended.length > 0 && (
+              <div className="pt-2 border-t border-gray-100 mt-2">
+                <p className="text-xs font-medium text-gray-600 mb-1">Suggested (by need)</p>
+                <div className="flex flex-wrap gap-1">
+                  {recommended
+                    .filter((prospect) => !usedIds.has(prospect.id) || value === prospect.id)
+                    .map((prospect) => (
+                      <button
+                        key={prospect.id}
+                        type="button"
+                        onClick={() => handleSelect(prospect.id)}
+                        className="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 hover:bg-gray-200"
+                      >
+                        {prospect.name}
+                        <span className="ml-1 text-gray-500">({prospect.position})</span>
+                      </button>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
           <ul className="max-h-[220px] overflow-y-auto py-1">
             {filtered.length === 0 ? (

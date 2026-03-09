@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { calculatePreDraftScore } from '@/lib/adapters';
+import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic';
+const CACHE_SECONDS = 60;
 
 export async function GET() {
   try {
@@ -13,8 +14,18 @@ export async function GET() {
       .eq('draft_year', 2026)
       .eq('is_leaderboard_entry', true);
 
-    if (predError || !predictions?.length) {
-      return Response.json([]);
+    if (predError) {
+      console.error('Pre-draft leaderboard:', predError);
+      return NextResponse.json(
+        { error: 'Leaderboard temporarily unavailable' },
+        { status: 500 }
+      );
+    }
+
+    if (!predictions?.length) {
+      const res = NextResponse.json([]);
+      res.headers.set('Cache-Control', `public, s-maxage=${CACHE_SECONDS}, stale-while-revalidate=${CACHE_SECONDS}`);
+      return res;
     }
 
     const { data: picks } = await supabase
@@ -43,8 +54,14 @@ export async function GET() {
     withScores.sort((a, b) => b.score - a.score);
     const leaderboard = withScores.map((row, i) => ({ ...row, rank: i + 1 }));
 
-    return Response.json(leaderboard);
-  } catch {
-    return Response.json([]);
+    const res = NextResponse.json(leaderboard);
+    res.headers.set('Cache-Control', `public, s-maxage=${CACHE_SECONDS}, stale-while-revalidate=${CACHE_SECONDS}`);
+    return res;
+  } catch (err) {
+    console.error('Pre-draft leaderboard:', err);
+    return NextResponse.json(
+      { error: 'Leaderboard temporarily unavailable' },
+      { status: 500 }
+    );
   }
 }

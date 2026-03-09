@@ -35,6 +35,15 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 
 This creates the `profiles`, `draft_predictions`, `prediction_picks`, and `draft_results` tables with Row Level Security (RLS).
 
+## 4a. Run migrations (multiple drafts + indexes)
+
+The app supports multiple drafts per user and leaderboard/custom order. Run these in the **SQL Editor** in order:
+
+1. **New query** → paste contents of `supabase/migrations/20260212000000_multiple_drafts.sql` → **Run**
+2. **New query** → paste contents of `supabase/migrations/20260212000001_custom_draft_order.sql` → **Run**
+
+This adds `name`, `is_leaderboard_entry`, `custom_draft_order` and performance indexes.
+
 ## 4b. Run the Leaderboard Setup (Optional but recommended)
 
 1. In **SQL Editor**, click **New query**

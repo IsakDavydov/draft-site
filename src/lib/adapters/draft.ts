@@ -281,6 +281,31 @@ const NEEDS_BY_TEAM: Record<string, string[]> = Object.fromEntries(
   DEFAULT_ORDER_2026.map(({ pick, team }) => [team, (NEEDS_BY_PICK?.[String(pick)] ?? [])])
 );
 
+/** Team needs for a given team (works with default order and trades). */
+export function getNeedsForTeam(team: string): string[] {
+  return NEEDS_BY_TEAM[team] ?? [];
+}
+
+/**
+ * Prospects recommended for a slot: match team needs, exclude already used, sorted by big board.
+ * If no needs data, returns top available by big board rank.
+ */
+export function getRecommendedProspects(
+  prospects: Prospect[],
+  needs: string[],
+  usedIds: Set<string>,
+  limit: number
+): Prospect[] {
+  const available = prospects.filter((p) => !usedIds.has(p.id));
+  if (needs.length === 0) {
+    return [...available].sort((a, b) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99)).slice(0, limit);
+  }
+  const matching = available.filter((p) => prospectFillsTeamNeed(p, needs));
+  return [...matching]
+    .sort((a, b) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99))
+    .slice(0, limit);
+}
+
 /**
  * Calculate pre-draft score (0-100) for a mock draft.
  * Uses team from each pick for need-matching (works with default order and trades).

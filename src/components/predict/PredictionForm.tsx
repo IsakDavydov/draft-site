@@ -16,7 +16,10 @@ import {
   applyPickSwap,
   applyTeamToPick,
   serializeDraftOrder,
+  getNeedsForTeam,
+  getRecommendedProspects,
 } from '@/lib/adapters';
+import { validateDisplayNameForSave } from '@/lib/display-name-filter';
 import type { MockDraftFromFile } from '@/types';
 
 const DRAFT_YEAR = 2026;
@@ -295,7 +298,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
     } else if (error) {
       setMessage({
         type: 'error',
-        text: `Couldn't load drafts. Run these migrations in Supabase SQL Editor (in order): 1) supabase/migrations/20260212_multiple_drafts.sql 2) supabase/migrations/20260212_custom_draft_order.sql`,
+        text: `Couldn't load drafts. Run migrations in Supabase SQL Editor (in order): supabase/migrations/20260212000000_multiple_drafts.sql then 20260212000001_custom_draft_order.sql`,
       });
     }
   }
@@ -331,7 +334,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       const msg =
         err instanceof Error ? err.message : (err as { message?: string })?.message ?? String(err);
       const hint = /null value|violates not-null|duplicate key|violates unique/.test(msg)
-        ? ' Run migrations: 20260212_multiple_drafts.sql then 20260212_custom_draft_order.sql in Supabase SQL Editor.'
+        ? ' Run migrations: 20260212000000_multiple_drafts.sql then 20260212000001_custom_draft_order.sql in Supabase SQL Editor.'
         : '';
       setMessage({ type: 'error', text: msg + hint });
     } finally {
@@ -388,8 +391,9 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
 
   async function handleSubmitToLeaderboard() {
     const name = displayName.trim();
-    if (!name) {
-      setMessage({ type: 'error', text: 'Please enter a display name for the leaderboard.' });
+    const validation = validateDisplayNameForSave(name);
+    if (!validation.valid) {
+      setMessage({ type: 'error', text: validation.error });
       return;
     }
     if (!selectedDraftId) return;
@@ -516,7 +520,12 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
 
   async function handleUpdateDisplayName() {
     const name = displayName.trim();
-    if (!name || !selectedDraftId) return;
+    const validation = validateDisplayNameForSave(name);
+    if (!validation.valid) {
+      setMessage({ type: 'error', text: validation.error });
+      return;
+    }
+    if (!selectedDraftId) return;
     const draft = drafts.find((d) => d.id === selectedDraftId);
     if (!draft?.is_leaderboard_entry) return;
 
@@ -582,8 +591,45 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
     setPicks((prev) => ({ ...prev, ...next }));
   }
 
+  /** Fill only empty slots with best available by big board (no overwrite). */
+  function fillRemaining() {
+    const sorted = [...prospects].sort((a, b) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99));
+    const used = new Set(Object.values(picks).filter(Boolean));
+    const next: Record<number, string> = { ...picks };
+    for (const { pick } of effectiveOrder) {
+      if (next[pick]) continue;
+      const prospect = sorted.find((p) => !used.has(p.id));
+      if (!prospect) break;
+      next[pick] = prospect.id;
+      used.add(prospect.id);
+    }
+    setPicks(next);
+  }
+
   function clearAll() {
     setPicks({});
+  }
+
+  async function handleDeleteDraft(draftId: string) {
+    if (!confirm('Delete this draft permanently? This cannot be undone.')) return;
+    setLoading(true);
+    setMessage(null);
+    try {
+      const { error } = await supabase.from('draft_predictions').delete().eq('id', draftId);
+      if (error) throw error;
+      const remaining = drafts.filter((d) => d.id !== draftId);
+      setSelectedDraftId(remaining[0]?.id ?? null);
+      setPicks({});
+      setDraftName('');
+      setDisplayName('');
+      setSaved(false);
+      await loadDrafts();
+      setMessage({ type: 'success', text: 'Draft deleted.' });
+    } catch (err) {
+      setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to delete draft.' });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -600,24 +646,34 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               : null;
             const isSelected = draft.id === selectedDraftId;
             return (
-              <button
-                key={draft.id}
-                type="button"
-                onClick={() => setSelectedDraftId(draft.id)}
-                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                  isSelected
-                    ? 'bg-nfl-red text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                <span>{draft.name || `Draft ${drafts.indexOf(draft) + 1}`}</span>
-                {score !== null && (
-                  <span className="text-xs opacity-90">({score})</span>
-                )}
-                {draft.is_leaderboard_entry && (
-                  <Trophy className="h-3.5 w-3.5" />
-                )}
-              </button>
+              <div key={draft.id} className="flex items-center gap-0.5 rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
+                <button
+                  type="button"
+                  onClick={() => setSelectedDraftId(draft.id)}
+                  className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors ${
+                    isSelected
+                      ? 'bg-nfl-red text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <span>{draft.name || `Draft ${drafts.indexOf(draft) + 1}`}</span>
+                  {score !== null && (
+                    <span className="text-xs opacity-90">({score})</span>
+                  )}
+                  {draft.is_leaderboard_entry && (
+                    <Trophy className="h-3.5 w-3.5" />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); handleDeleteDraft(draft.id); }}
+                  disabled={loading}
+                  aria-label={`Delete ${draft.name || 'draft'}`}
+                  className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 disabled:opacity-50"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
             );
           })}
         </div>
@@ -765,6 +821,15 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                   <Zap className="h-4 w-4" />
                   Fill from Big Board
                 </button>
+                <button
+                  type="button"
+                  onClick={fillRemaining}
+                  disabled={effectiveOrder.every(({ pick }) => picks[pick])}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Zap className="h-4 w-4" />
+                  Fill remaining
+                </button>
                 {mockDraftTemplate && (
                   <button
                     type="button"
@@ -789,6 +854,8 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               {effectiveOrder.map(({ pick, team }) => {
                 const teamColor = TEAM_COLORS_BY_NAME[team] || '#1d4ed8';
                 const needs = teamNeeds[pick] ?? [];
+                const needsForTeam = getNeedsForTeam(team);
+                const recommended = getRecommendedProspects(prospects, needsForTeam, usedIds, 5);
                 return (
                   <div
                     key={pick}
@@ -817,6 +884,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                         onChange={(id) => setPicks((prev) => ({ ...prev, [pick]: id }))}
                         usedIds={usedIds}
                         disabled={loading}
+                        recommended={recommended}
                       />
                     </div>
                   </div>
