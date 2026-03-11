@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Trophy, ArrowLeft } from 'lucide-react';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
 import { LeaderboardTable } from '@/components/leaderboard/LeaderboardTable';
+import { LeaderboardLiveRefresh } from '@/components/leaderboard/LeaderboardLiveRefresh';
 import { calculatePreDraftScore } from '@/lib/adapters';
 
 export const dynamic = 'force-dynamic';
@@ -170,9 +171,12 @@ export default async function LeaderboardPage() {
         )}
 
         {hasResults && (
-          <p className="mt-6 text-[13px] text-gray-500">
-            15 pts = correct player at correct pick. 5 pts = player went 1 pick before or after. Max 480 pts.
-          </p>
+          <>
+            <p className="mt-6 text-[13px] text-gray-500">
+              15 pts = correct player at correct pick. 5 pts = player went 1 pick before or after. Max 480 pts.
+            </p>
+            <LeaderboardLiveRefresh enabled={hasResults} />
+          </>
         )}
       </div>
     </div>

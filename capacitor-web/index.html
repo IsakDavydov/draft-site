@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>SAK Football</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #0d47a1;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+    }
+    p { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div>
+    <p>Loading SAK Football…</p>
+    <p><small>If this doesn’t redirect, open the app with internet connected.</small></p>
+  </div>
+  <script>
+    // When not using server.url, redirect to live site
+    if (!window.Capacitor || !window.Capacitor.isNativePlatform()) {
+      window.location.href = 'https://sakfootball.com';
+    }
+  </script>
+</body>
+</html>

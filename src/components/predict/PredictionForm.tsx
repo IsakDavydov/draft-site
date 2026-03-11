@@ -557,6 +557,12 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   }
 
   const usedIds = new Set(Object.values(picks).filter(Boolean));
+  const filledCount = effectiveOrder.filter(({ pick }) => Boolean(picks[pick])).length;
+  const totalPicks = effectiveOrder.length;
+  const selectedIdsForStatus = Object.values(picks).filter(Boolean);
+  const hasDuplicates =
+    selectedIdsForStatus.length > 0 &&
+    selectedIdsForStatus.length !== new Set(selectedIdsForStatus).size;
   const currentPicksForScore = effectiveOrder.map(({ pick, team }) => ({
     pick_number: pick,
     prospect_id: picks[pick] ?? '',
@@ -591,17 +597,43 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
     setPicks((prev) => ({ ...prev, ...next }));
   }
 
-  /** Fill only empty slots with best available by big board (no overwrite). */
+  /** Fill only empty slots with mostly need-based, slightly randomized picks (no overwrite). */
   function fillRemaining() {
-    const sorted = [...prospects].sort((a, b) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99));
     const used = new Set(Object.values(picks).filter(Boolean));
     const next: Record<number, string> = { ...picks };
-    for (const { pick } of effectiveOrder) {
+    for (const { pick, team } of effectiveOrder) {
       if (next[pick]) continue;
-      const prospect = sorted.find((p) => !used.has(p.id));
-      if (!prospect) break;
-      next[pick] = prospect.id;
-      used.add(prospect.id);
+      const needsForTeam = getNeedsForTeam(team);
+
+      // 20% chance to ignore needs and go "best available" by big board.
+      const useBestAvailable = Math.random() < 0.2;
+
+      let candidate: Prospect | undefined;
+
+      if (!useBestAvailable && needsForTeam.length > 0) {
+        // Need-based: take a random player from top 4 need fits by big board.
+        const needMatches = getRecommendedProspects(prospects, needsForTeam, used, 8);
+        const topNeedMatches = needMatches.filter((p) => !used.has(p.id)).slice(0, 4);
+        if (topNeedMatches.length > 0) {
+          const randomIndex = Math.floor(Math.random() * topNeedMatches.length);
+          candidate = topNeedMatches[randomIndex];
+        }
+      }
+
+      if (!candidate) {
+        // Fallback / best-available path: random from top 4 by big board among all remaining.
+        const available = prospects
+          .filter((p) => !used.has(p.id))
+          .sort((a, b) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99))
+          .slice(0, 4);
+        if (available.length === 0) continue;
+        const randomIndex = Math.floor(Math.random() * available.length);
+        candidate = available[randomIndex];
+      }
+
+      if (!candidate) continue;
+      next[pick] = candidate.id;
+      used.add(candidate.id);
     }
     setPicks(next);
   }
@@ -635,57 +667,74 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   return (
     <div className="space-y-6">
       {/* Draft selector */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex flex-wrap gap-2">
-          {drafts.map((draft) => {
-            const score = draft.picks.length === 32
-              ? computeScore(
-                  draft.picks.map((p) => ({ pick_number: p.pick_number, prospect_id: p.prospect_id, team: p.team })),
-                  effectiveOrder
-                )
-              : null;
-            const isSelected = draft.id === selectedDraftId;
-            return (
-              <div key={draft.id} className="flex items-center gap-0.5 rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
-                <button
-                  type="button"
-                  onClick={() => setSelectedDraftId(draft.id)}
-                  className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors ${
-                    isSelected
-                      ? 'bg-nfl-red text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  <span>{draft.name || `Draft ${drafts.indexOf(draft) + 1}`}</span>
-                  {score !== null && (
-                    <span className="text-xs opacity-90">({score})</span>
-                  )}
-                  {draft.is_leaderboard_entry && (
-                    <Trophy className="h-3.5 w-3.5" />
-                  )}
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); handleDeleteDraft(draft.id); }}
-                  disabled={loading}
-                  aria-label={`Delete ${draft.name || 'draft'}`}
-                  className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 disabled:opacity-50"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            );
-          })}
+      <div className="rounded-xl border border-gray-200 bg-white/80 px-4 py-3 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Your drafts
+            </p>
+            <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
+              {drafts.map((draft) => {
+                const score = draft.picks.length === 32
+                  ? computeScore(
+                      draft.picks.map((p) => ({ pick_number: p.pick_number, prospect_id: p.prospect_id, team: p.team })),
+                      effectiveOrder
+                    )
+                  : null;
+                const isSelected = draft.id === selectedDraftId;
+                return (
+                  <div
+                    key={draft.id}
+                    className="flex flex-shrink-0 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setSelectedDraftId(draft.id)}
+                      className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium transition-colors ${
+                        isSelected
+                          ? 'bg-nfl-red text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      <span className="truncate max-w-[120px]">
+                        {draft.name || `Draft ${drafts.indexOf(draft) + 1}`}
+                      </span>
+                      {score !== null && (
+                        <span className="text-[11px] opacity-90">({score})</span>
+                      )}
+                      {draft.is_leaderboard_entry && (
+                        <Trophy className="h-3 w-3 flex-shrink-0" />
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteDraft(draft.id);
+                      }}
+                      disabled={loading}
+                      aria-label={`Delete ${draft.name || 'draft'}`}
+                      className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 disabled:opacity-50"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={handleCreateNewDraft}
+            disabled={loading || drafts.length >= MAX_DRAFTS}
+            className="inline-flex flex-shrink-0 items-center gap-2 rounded-lg border border-dashed border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-600 hover:border-nfl-red hover:text-nfl-red disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span className="whitespace-nowrap">
+              New draft {drafts.length > 0 && `(${drafts.length}/${MAX_DRAFTS})`}
+            </span>
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={handleCreateNewDraft}
-          disabled={loading || drafts.length >= MAX_DRAFTS}
-          className="inline-flex items-center gap-2 rounded-lg border border-dashed border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:border-nfl-red hover:text-nfl-red disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Plus className="h-4 w-4" />
-          New draft {drafts.length > 0 && `(${drafts.length}/${MAX_DRAFTS})`}
-        </button>
       </div>
 
       {message && (
@@ -694,20 +743,24 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
         </p>
       )}
       {submitResult && message?.type === 'success' && (
-        <div className="rounded-xl border border-green-200 bg-green-50 p-4">
-          <p className="font-semibold text-green-800">
-            You&apos;re ranked <span className="text-green-900">#{submitResult.rank}</span> with {submitResult.score} points!
-          </p>
-          <p className="mt-1 text-sm text-green-700">
-            Beat your score and climb the leaderboard. Refine your picks and resubmit to improve your rank.
-          </p>
-          <Link
-            href="/leaderboard"
-            className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-green-800 hover:text-green-900 hover:underline"
-          >
-            <TrendingUp className="h-4 w-4" />
-            View full leaderboard →
-          </Link>
+        <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="font-semibold text-green-800">
+                You&apos;re ranked <span className="text-green-900">#{submitResult.rank}</span> with {submitResult.score} points!
+              </p>
+              <p className="mt-0.5 text-xs sm:text-sm text-green-700">
+                Refine your picks and resubmit this draft to try to climb the leaderboard.
+              </p>
+            </div>
+            <Link
+              href="/leaderboard"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-green-800 hover:text-green-900 hover:underline"
+            >
+              <TrendingUp className="h-4 w-4" />
+              View full leaderboard
+            </Link>
+          </div>
         </div>
       )}
 
@@ -719,162 +772,176 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
           }}
           className="space-y-6"
         >
-          <div className="flex flex-wrap items-end gap-4">
-            <div>
-              <label htmlFor="draftName" className="block text-sm font-medium text-gray-700 mb-1">
-                Draft name (for your reference)
-              </label>
-              <input
-                id="draftName"
-                type="text"
-                value={draftName}
-                onChange={(e) => setDraftName(e.target.value)}
-                maxLength={40}
-                className="w-48 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
-                placeholder="e.g. Big Board"
-              />
-            </div>
-            {selectedDraft?.is_leaderboard_entry ? (
-              <div className="flex items-center gap-2 text-sm text-amber-700 bg-amber-50 px-3 py-2 rounded-lg">
-                <Trophy className="h-4 w-4" />
-                On leaderboard as {selectedDraft.display_name}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setDisplayName(selectedDraft?.display_name || '');
-                    setChangeNameModalOpen(true);
-                  }}
-                  className="ml-1 text-amber-800 font-medium hover:underline"
-                >
-                  Change
-                </button>
+          <div className="rounded-xl border border-gray-200 bg-white/80 px-4 py-3">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="max-w-md">
+                <label htmlFor="draftName" className="block text-xs font-semibold uppercase tracking-wide text-gray-500">
+                  Draft name
+                </label>
+                <input
+                  id="draftName"
+                  type="text"
+                  value={draftName}
+                  onChange={(e) => setDraftName(e.target.value)}
+                  maxLength={40}
+                  className="mt-1 w-full max-w-xs px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
+                  placeholder="e.g. Big Board, Trades-heavy"
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  Only you see this name. It helps you tell your drafts apart.
+                </p>
               </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setSubmitToLeaderboardModal(true)}
-                className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600"
-              >
-                <Trophy className="h-4 w-4" />
-                Submit to leaderboard
-              </button>
-            )}
-            {currentScore !== null && (
-              <>
-                <span className="text-sm text-gray-600 font-medium">
-                  Pre-draft score: <strong>{currentScore}</strong>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setShareModalOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
-                >
-                  <Share2 className="h-4 w-4" />
-                  Share
-                </button>
-                {allPicksFilled && (
+              <div className="flex flex-col items-start gap-2 md:items-end">
+                {selectedDraft?.is_leaderboard_entry ? (
+                  <div className="inline-flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-1.5 text-xs sm:text-sm text-amber-800">
+                    <Trophy className="h-4 w-4" />
+                    <span>
+                      On leaderboard as <span className="font-semibold">{selectedDraft.display_name}</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDisplayName(selectedDraft?.display_name || '');
+                        setChangeNameModalOpen(true);
+                      }}
+                      className="text-amber-900 font-semibold hover:underline"
+                    >
+                      Change
+                    </button>
+                  </div>
+                ) : (
                   <button
                     type="button"
-                    onClick={() => setShareFullModalOpen(true)}
-                    className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
+                    onClick={() => setSubmitToLeaderboardModal(true)}
+                    className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white hover:bg-amber-600"
                   >
-                    <Share2 className="h-4 w-4" />
-                    Share full draft
+                    <Trophy className="h-4 w-4" />
+                    Submit this draft to leaderboard
                   </button>
                 )}
-              </>
-            )}
+                {currentScore !== null && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs sm:text-sm text-gray-700 font-medium">
+                      Pre-draft score: <strong>{currentScore}</strong>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShareModalOpen(true)}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-200"
+                    >
+                      <Share2 className="h-4 w-4" />
+                      Share top 5
+                    </button>
+                    {allPicksFilled && (
+                      <button
+                        type="button"
+                        onClick={() => setShareFullModalOpen(true)}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-200"
+                      >
+                        <Share2 className="h-4 w-4" />
+                        Share full draft
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
+            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="max-w-xl">
                 <h2 className="text-lg font-semibold text-gray-900">Your First Round Picks</h2>
                 <p className="text-sm text-gray-600 mt-0.5">
                   Select one prospect for each pick. Each prospect can only be used once.
                 </p>
+                <div className="mt-2 flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+                  <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 font-medium text-gray-700">
+                    {filledCount}/{totalPicks} picks filled
+                  </span>
+                  {hasDuplicates && (
+                    <span className="inline-flex items-center rounded-full bg-red-50 px-2.5 py-1 font-medium text-red-700">
+                      Remove duplicate players before saving
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => setTradeModalOpen(true)}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
-                >
-                  <ArrowLeftRight className="h-4 w-4" />
-                  Add trade
-                </button>
-                {selectedDraft?.custom_draft_order && (
+              <div className="flex flex-col gap-2 sm:items-end">
+                <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
-                    onClick={handleClearTrades}
-                    disabled={loading}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg text-amber-700 hover:bg-amber-50"
-                  >
-                    Reset trades
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={fillFromBigBoard}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
-                >
-                  <Zap className="h-4 w-4" />
-                  Fill from Big Board
-                </button>
-                <button
-                  type="button"
-                  onClick={fillRemaining}
-                  disabled={effectiveOrder.every(({ pick }) => picks[pick])}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Zap className="h-4 w-4" />
-                  Fill remaining
-                </button>
-                {mockDraftTemplate && (
-                  <button
-                    type="button"
-                    onClick={fillFromMockDraft}
+                    onClick={fillFromBigBoard}
                     className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
                   >
                     <Zap className="h-4 w-4" />
-                    Use mock draft
+                    Use Big Board
                   </button>
-                )}
-                <button
-                  type="button"
-                  onClick={clearAll}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg text-red-600 hover:bg-red-50"
-                >
-                  <Trash2 className="h-4 w-4" />
-                  Clear all
-                </button>
+                  <button
+                    type="button"
+                    onClick={fillRemaining}
+                    disabled={effectiveOrder.every(({ pick }) => picks[pick])}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Zap className="h-4 w-4" />
+                    Fill remaining
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setTradeModalOpen(true)}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-50 text-gray-700 hover:bg-gray-100"
+                  >
+                    <ArrowLeftRight className="h-4 w-4" />
+                    Add trade
+                  </button>
+                  {selectedDraft?.custom_draft_order && (
+                    <button
+                      type="button"
+                      onClick={handleClearTrades}
+                      disabled={loading}
+                      className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg text-amber-700 hover:bg-amber-50"
+                    >
+                      Reset trades
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={clearAll}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg text-red-600 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Clear all
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {effectiveOrder.map(({ pick, team }) => {
                 const teamColor = TEAM_COLORS_BY_NAME[team] || '#1d4ed8';
                 const needs = teamNeeds[pick] ?? [];
                 const needsForTeam = getNeedsForTeam(team);
                 const recommended = getRecommendedProspects(prospects, needsForTeam, usedIds, 5);
+                const teamNickname = team.split(' ').slice(-1)[0] ?? team;
                 return (
                   <div
                     key={pick}
-                    className="flex flex-col min-h-[200px] rounded-lg border border-gray-200 bg-white p-4"
+                    className="flex flex-col rounded-xl border border-gray-200/80 bg-white/90 p-3 sm:p-3.5 shadow-sm"
                     style={{ borderLeftWidth: '4px', borderLeftColor: teamColor }}
                   >
-                    <div className="mb-2 flex-shrink-0 flex items-center gap-2">
+                    <div className="mb-1.5 flex-shrink-0 flex items-center gap-2">
                       <span
                         className="inline-flex h-7 min-w-[1.75rem] items-center justify-center rounded-md px-1.5 text-xs font-bold text-white"
                         style={{ backgroundColor: teamColor }}
                       >
                         {pick}
                       </span>
-                      <TeamLogo teamName={team} size={28} />
-                      <span className="text-sm font-medium text-gray-900">{team}</span>
+                      <TeamLogo teamName={team} size={24} />
+                      <span className="text-sm font-semibold text-gray-900 truncate">{teamNickname}</span>
                     </div>
                     {needs.length > 0 && (
-                      <p className="text-xs text-gray-500 mb-1 flex-shrink-0 line-clamp-2">
-                        Needs: {needs.join(', ')}
+                      <p className="text-[11px] text-gray-500 mb-2 flex-shrink-0">
+                        <span className="font-medium text-gray-600">Needs:</span> {needs.join(', ')}
                       </p>
                     )}
                     <div className="mt-auto flex-shrink-0">
