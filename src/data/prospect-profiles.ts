@@ -18,63 +18,63 @@ export const prospectProfiles: Record<string, ProspectProfile> = {
     riskLevel: 2,
     playStyleTags: ['Polished', 'Pocket passer', 'Arm talent', 'Decision maker'],
     analysis:
-      'Mendoza is the most pro-ready quarterback in this class with excellent footwork and anticipation. He reads defenses quickly and delivers with accuracy from the pocket. His ceiling is that of a franchise cornerstone if he continues to develop his deep-ball consistency.',
+      'Mendoza is the top QB in the class and has earned that title. He brought the Indiana Hoosiers to an undefeated season and won the heisman while doing so. He has all the physical tools to be a great pro and has a pro level work ethic. Will be a franchise QB if given the right tools around him to succeed.',
   },
   '2': { // Jeremiyah Love
-    immediateImpact: 8,
+    immediateImpact: 9,
     potential: 10,
     riskLevel: 2,
     playStyleTags: ['Explosive', 'Receiving back', 'Elusive', 'Big play'],
     analysis:
-      'Love brings elite burst and home-run ability every time he touches the ball. He can contribute immediately as a change-of-pace back and pass catcher. With refinement in pass protection, he has three-down workhorse potential.',
+      'Love is the best player in the class. He brings elite versatility with the ability to play as a slot receiver and be an all pro running back. He has elite footwork, prolific burst and can take any play to the crib. He has the potential to be a top five back by his second/third season.',
   },
   '3': { // Rueben Bain Jr.
     immediateImpact: 8,
-    potential: 9,
-    riskLevel: 5,
+    potential: 10,
+    riskLevel: 4,
     playStyleTags: ['Versatile', 'High motor', 'Pass rush', 'Run stopper'],
     analysis:
-      'Bain has inside-outside versatility and disrupts every down with his relentless pursuit. He wins with burst and technique, and his motor never stops. He projects as an impact defender from day one with Pro Bowl upside.',
+      'I am not as concerned about Bain\'s arm length as some other seem to be. He dominated with his "short" arms consistently and shined throughout the CFP. He is a strong power rusher with inside-outside versatility. Think he will be a stud.',
   },
   '4': { // Caleb Downs
     immediateImpact: 9,
-    potential: 9,
+    potential: 10,
     riskLevel: 3,
     playStyleTags: ['Box safety', 'Leader', 'Tackler', 'Versatile'],
     analysis:
-      'Downs has been elite since his freshman year and brings rare intangibles to a defensive backfield. He excels in the box and can matchup in coverage. His leadership and football IQ make him a culture-setter for any franchise.',
+      'Downs has been one of the top defenders in college football since he was a freshman at Alabama for Nick Saban. He has been the best player on three different defensive schemes and is a natural leader who defensive coordinators can rely on. He will thrive as a box safety and will instantly help a defense. Led his team to a National Championship and is a winner.',
   },
   '5': { // Sonny Styles
-    immediateImpact: 7,
-    potential: 9,
-    riskLevel: 4,
+    immediateImpact: 8,
+    potential: 10,
+    riskLevel: 3,
     playStyleTags: ['Former safety', 'Tackler', 'Coverage', 'Physical'],
     analysis:
-      'Styles converted from safety and became one of the best tacklers in college football with almost no misses. He flows to the ball naturally and brings an enforcer mentality. His coverage will only improve with more reps.',
+      'No player upped their stock more than Sonny Styles. He lit up the combine with the fastest 40-yard dash for linebackers, running a 4.46 at 6\'5\", 244 lbs. He is a converted safety who only missed one tackle all season last year. He fills gaps and makes reads in the run game extremely well. Very smart and can be the leader of a defense at the next level.',
   },
   '6': { // Jordyn Tyson
-    immediateImpact: 6,
+    immediateImpact: 8,
     potential: 10,
     riskLevel: 6,
     playStyleTags: ['Electric', 'YAC', 'Contested catches', 'Big play'],
     analysis:
-      'Tyson has the highest ceiling in the receiver class with rare ball skills and after-catch ability. He needs development in route polish but his ceiling is elite. He can be a game-changer in the right scheme.',
+      'Tyson is WR1 for me in this class because he offers the most upside. He is super dynamic with the ball in his hands and very strong at the catch point. Anytime Arizona State needed a big play, they went to Tyson and he typically delivered. The major concern is his extensive injury history, but none of the injuries are correlated, which suggests he has mostly been unlucky. If he can stay healthy at the next level, he has true game-breaking potential.',
   },
   '7': { // David Bailey
-    immediateImpact: 6,
+    immediateImpact: 7,
     potential: 9,
-    riskLevel: 6,
+    riskLevel: 4,
     playStyleTags: ['Burst', 'Pass rush', 'Production', 'Upside'],
     analysis:
-      'Bailey led the nation in sacks and wins with explosive get-off. His size raises questions about run defense, but his pass-rush traits are undeniable. A team drafting him is betting on his high ceiling.',
+      'Bailey is an excellent pass rusher and was a key piece of an elite Texas Tech defense last year. As a pure pass rusher, he may be the best in the class, leading the country with 14.5 sacks this season. He wins with burst and leverage off the edge, consistently stressing tackles in space. He is slightly on the lighter side for edge defenders, so there is some concern about how he will hold up in the run game, but the pass-rush impact is real.',
   },
   '8': { // Arvell Reese Jr.
-    immediateImpact: 5,
+    immediateImpact: 7,
     potential: 9,
-    riskLevel: 7,
+    riskLevel: 5,
     playStyleTags: ['Athletic', 'Pass rush', 'Raw', 'Upside'],
     analysis:
-      'Reese has elite athleticism and started the season strong before fading. His first season as a full-time edge means his best football is ahead. He is a high-risk, high-reward development prospect.',
+      'Reese Jr. is a tough prospect to evaluate. Many project him as a full-time edge in the league, but he logged just 104 pass-rush snaps this season (per PFF) and did not record a sack in the final six games. The flashes are there both as a pass rusher and as an off-ball linebacker, and his versatility jumps off the tape. He can be an excellent chess piece for a defensive coordinator if a staff is patient and clear about his long-term role.',
   },
   '9': { // Makai Lemon
     immediateImpact: 7,
@@ -82,7 +82,7 @@ export const prospectProfiles: Record<string, ProspectProfile> = {
     riskLevel: 4,
     playStyleTags: ['Route runner', 'Contested catch', 'Separation', 'Versatile'],
     analysis:
-      'Lemon has the highest floor among receivers with clean routes and reliable hands. He can win at all levels and contributes on day one. His ceiling may be capped but he is a safe, productive pick.',
+      'Lemon is excellent at finding a defender\'s blind spot and using it to create space. He is a fluid route runner who can really win at the catch point, especially for his size. Because of his frame, he will most likely be a full-time slot, but we have seen how slot receivers can dominate in today\'s NFL.',
   },
   '10': { // Francis Mauigoa
     immediateImpact: 8,
@@ -90,23 +90,23 @@ export const prospectProfiles: Record<string, ProspectProfile> = {
     riskLevel: 3,
     playStyleTags: ['Mauler', 'Pass pro', 'Run blocker', 'OT1'],
     analysis:
-      'Mauigoa is the top tackle in the class with rare power in the run game. He rarely allows pressures and has the feet to stay at tackle. He is a day-one starter with All-Pro potential.',
+      'Francis is my OT1 in this class. He clearly has the size and strength to stick at tackle and should be an impact starter right away. He is a mauler in the run game and protected Carson Beck all season, allowing just two sacks all year (per PFF). In my opinion, he is one of the safest picks in this draft.',
   },
   '11': { // Jermod McCoy
-    immediateImpact: 5,
+    immediateImpact: 7,
     potential: 9,
     riskLevel: 7,
     playStyleTags: ['Man coverage', 'Ball skills', 'Athletic', 'Injury concern'],
     analysis:
-      'McCoy missed the season with injury but his 2024 tape was exceptional. He has shutdown potential with fluid movement and ball skills. The medical evaluation will dictate his draft slot.',
+      'Jermod would be a lot higher on my board had he played football this year. He tore his ACL at the end of last season after putting together a phenomenal year of tape. It is hard to know whether a player can come back from that injury and adjust to the NFL at the same time, but if McCoy returns as the same player, he has the upside to be a true lockdown corner.',
   },
   '12': { // Carnell Tate
-    immediateImpact: 7,
+    immediateImpact: 8,
     potential: 9,
-    riskLevel: 4,
+    riskLevel: 2,
     playStyleTags: ['Route runner', 'Contested catch', 'Complete', 'Pro ready'],
     analysis:
-      'Tate runs every route at a high level and wins contested situations. He has the size and polish to contribute immediately. His ceiling is that of a true WR1 in the right offense.',
+      'Tate has a super high floor. He can run any route and has strong, reliable hands. He does not have true breakaway speed and is not particularly special after the catch, but he is consistently where he needs to be and has WR1 potential. He is set to become the sixth Ohio State receiver taken in the first round in the last five years.',
   },
   '13': { // Olaivavega Ioane
     immediateImpact: 8,
@@ -118,7 +118,7 @@ export const prospectProfiles: Record<string, ProspectProfile> = {
   },
   '14': { // Mansoor Delane
     immediateImpact: 7,
-    potential: 8,
+    potential: 9,
     riskLevel: 4,
     playStyleTags: ['Man corner', 'Technique', 'Physical', 'Coverage'],
     analysis:
@@ -127,7 +127,7 @@ export const prospectProfiles: Record<string, ProspectProfile> = {
   '15': { // Spencer Fano
     immediateImpact: 7,
     potential: 8,
-    riskLevel: 4,
+    riskLevel: 3,
     playStyleTags: ['Versatile', 'Run blocker', 'Pass pro', 'Guard-tackle'],
     analysis:
       'Fano offers position flexibility and can play tackle or kick inside. He is a mauler in the run game with improving pass protection. He provides immediate depth with starter upside.',
@@ -141,8 +141,8 @@ export const prospectProfiles: Record<string, ProspectProfile> = {
       'McDonald dominated the Senior Bowl and has rare size for his position. He offers both pass and run value. He is still developing but has huge upside based on his frame.',
   },
   '17': { // Peter Woods
-    immediateImpact: 6,
-    potential: 8,
+    immediateImpact: 7,
+    potential: 9,
     riskLevel: 5,
     playStyleTags: ['Versatile', 'Pass rush', 'Run defense', 'Upside'],
     analysis:

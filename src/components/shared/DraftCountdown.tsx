@@ -63,13 +63,23 @@ export function DraftCountdown({ variant = 'full', className = '' }: DraftCountd
       );
     }
     return (
-      <div className={`inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm ${className}`}>
-        <Clock className="h-4 w-4 shrink-0 text-gray-400 animate-pulse" />
-        <div className="flex gap-3 text-sm font-semibold text-gray-400">
-          <span>--d</span>
-          <span>--h</span>
-          <span>--m</span>
-          <span>--s</span>
+      <div
+        className={`inline-flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm ${className}`}
+      >
+        <Clock className="h-4 w-4 shrink-0 text-nfl-red animate-pulse" />
+        <div className="flex gap-2 text-xs font-mono font-semibold text-gray-900">
+          <span className="inline-flex min-w-[3ch] items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-1 py-0.5">
+            --d
+          </span>
+          <span className="inline-flex min-w-[3ch] items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-1 py-0.5">
+            --h
+          </span>
+          <span className="inline-flex min-w-[3ch] items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-1 py-0.5">
+            --m
+          </span>
+          <span className="inline-flex min-w-[3ch] items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-1 py-0.5">
+            --s
+          </span>
         </div>
       </div>
     );
@@ -97,13 +107,43 @@ export function DraftCountdown({ variant = 'full', className = '' }: DraftCountd
 
   if (variant === 'compact') {
     return (
-      <div className={`inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm ${className}`}>
+      <div
+        className={`inline-flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-sm ${className}`}
+      >
         <Clock className="h-4 w-4 shrink-0 text-nfl-red" />
-        <div className="flex gap-3 text-sm font-semibold text-gray-900">
-          <span><span className="text-nfl-red">{String(timeLeft.days).padStart(2, '0')}</span>d</span>
-          <span><span className="text-nfl-red">{String(timeLeft.hours).padStart(2, '0')}</span>h</span>
-          <span><span className="text-nfl-red">{String(timeLeft.minutes).padStart(2, '0')}</span>m</span>
-          <span><span className="text-nfl-red">{String(timeLeft.seconds).padStart(2, '0')}</span>s</span>
+        <div className="flex gap-2 text-xs sm:text-sm font-mono font-semibold text-gray-900">
+          <span className="inline-flex min-w-[3ch] flex-col items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-1.5 py-1">
+            <span className="text-base leading-none sm:text-lg">
+              {String(timeLeft.days).padStart(2, '0')}
+            </span>
+            <span className="mt-0.5 text-[9px] uppercase tracking-[0.12em] text-gray-500">
+              D
+            </span>
+          </span>
+          <span className="inline-flex min-w-[3ch] flex-col items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-1.5 py-1">
+            <span className="text-base leading-none sm:text-lg">
+              {String(timeLeft.hours).padStart(2, '0')}
+            </span>
+            <span className="mt-0.5 text-[9px] uppercase tracking-[0.12em] text-gray-500">
+              H
+            </span>
+          </span>
+          <span className="inline-flex min-w-[3ch] flex-col items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-1.5 py-1">
+            <span className="text-base leading-none sm:text-lg">
+              {String(timeLeft.minutes).padStart(2, '0')}
+            </span>
+            <span className="mt-0.5 text-[9px] uppercase tracking-[0.12em] text-gray-500">
+              M
+            </span>
+          </span>
+          <span className="inline-flex min-w-[3ch] flex-col items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-1.5 py-1">
+            <span className="text-base leading-none sm:text-lg">
+              {String(timeLeft.seconds).padStart(2, '0')}
+            </span>
+            <span className="mt-0.5 text-[9px] uppercase tracking-[0.12em] text-gray-500">
+              S
+            </span>
+          </span>
         </div>
       </div>
     );

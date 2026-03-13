@@ -10,6 +10,7 @@ Use this before marketing and scaling to hundreds/thousands of mock drafts. Item
   The app expects columns that aren’t in `schema.sql`. In Supabase **SQL Editor**, run in order:
   1. `supabase/migrations/20260212000000_multiple_drafts.sql`  
   2. `supabase/migrations/20260212000001_custom_draft_order.sql`  
+  3. `supabase/migrations/20260212000002_leaderboard_public_read.sql` (lets everyone see all leaderboard entries; without it, each user only sees their own)  
   (If you use Supabase CLI: `supabase db push` or run these files manually.)
 
 - [x] **🟡 Document migration order in SUPABASE_SETUP.md**  
@@ -111,6 +112,27 @@ Use this before marketing and scaling to hundreds/thousands of mock drafts. Item
 ---
 
 When the critical and recommended items are done, you’re in good shape to market and handle hundreds to thousands of mock drafts. Revisit scalability and monitoring as traffic grows.
+
+---
+
+## Troubleshooting
+
+### Leaderboard: "Someone submitted but I don't see them"
+
+**Cause:** Row Level Security (RLS) only allows "Users can view own predictions", so when you load the leaderboard you only see your own row. Other users' submissions exist in the DB but are hidden.
+
+**Fix:** Run the migration that allows public read for 2026 leaderboard rows:
+- In Supabase **SQL Editor**, run `supabase/migrations/20260212000002_leaderboard_public_read.sql` (or run `supabase db push` so all migrations apply). After that, the leaderboard will show everyone with `is_leaderboard_entry = true`.
+
+**Verify a specific user's submission:** In Supabase SQL Editor (as a user with table access), run:
+```sql
+select id, display_name, user_id, is_leaderboard_entry,
+       (select count(*) from prediction_picks pp where pp.prediction_id = dp.id) as pick_count
+from draft_predictions dp
+where draft_year = 2026 and is_leaderboard_entry = true
+order by display_name;
+```
+If your buddy's `display_name` appears with `pick_count = 32`, they submitted correctly; the missing RLS policy was preventing you from seeing it.
 
 ---
 

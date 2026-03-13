@@ -347,7 +347,22 @@ export function calculatePreDraftScore(
     top10Matches >= 5 ? 10 :
     top10Matches >= 3 ? 9 : 8;
 
-  const totalScore = valueScore + fitScore + top10Bonus;
+  // Additional bonus based on how many picks fill team needs (first round fit count).
+  // 28+ fits = +5, 24+ = +4, 20+ = +3, 16+ = +2, 12+ = +1, else 0.
+  let needsBonus = 0;
+  if (fitCount >= 28) {
+    needsBonus = 5;
+  } else if (fitCount >= 24) {
+    needsBonus = 4;
+  } else if (fitCount >= 20) {
+    needsBonus = 3;
+  } else if (fitCount >= 16) {
+    needsBonus = 2;
+  } else if (fitCount >= 12) {
+    needsBonus = 1;
+  }
+
+  const totalScore = valueScore + fitScore + top10Bonus + needsBonus;
 
   return Math.round(Math.max(0, Math.min(100, totalScore)));
 }
