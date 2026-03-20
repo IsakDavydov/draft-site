@@ -127,7 +127,7 @@ The 2025 season is in the books, and with the Super Bowl behind us, the NFL worl
 
 **5'11" | 180 lbs**
 
-## 30. Denver Broncos — Kenyon Sadiq, TE, Oregon
+## 30. Miami Dolphins — Kenyon Sadiq, TE, Oregon
 
 **6'3" | 245 lbs**
 

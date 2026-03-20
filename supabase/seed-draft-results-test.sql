@@ -34,6 +34,6 @@ insert into public.draft_results (draft_year, pick_number, prospect_id, prospect
 (2026, 27, '33', 'Emmanuel Pregnon', 'San Francisco 49ers'),
 (2026, 28, '24', 'Kadyn Proctor', 'Houston Texans'),
 (2026, 29, '18', 'Avieon Terrell', 'Los Angeles Rams'),
-(2026, 30, '27', 'Kenyon Sadiq', 'Denver Broncos'),
+(2026, 30, '27', 'Kenyon Sadiq', 'Miami Dolphins'),
 (2026, 31, '29', 'Caleb Lomu', 'New England Patriots'),
 (2026, 32, '21', 'Lee Hunter', 'Seattle Seahawks');

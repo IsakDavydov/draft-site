@@ -30,7 +30,7 @@
     "27": ["WR", "OL", "Edge", "S", "CB"],
     "28": ["OL", "DL", "RB", "S", "Edge"],
     "29": ["CB", "OL", "S", "WR", "QB"],
-    "30": ["LB", "TE", "DL", "RB", "OL"],
+    "30": ["QB", "WR", "CB", "Edge", "OL"],
     "31": ["Edge", "OL", "DL", "TE", "S"],
     "32": ["CB", "OL", "RB", "WR", "Edge"]
   }

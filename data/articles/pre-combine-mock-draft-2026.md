@@ -185,7 +185,7 @@ The Texans need help on the offensive line and Lomu is the best guy on the board
 
 Cisse is expected to put up stud numbers at the combine. He is super fluid and can run with anybody. Big upgrade for the Rams.
 
-## 30. Denver Broncos — CJ Allen, LB, Georgia
+## 30. Miami Dolphins — CJ Allen, LB, Georgia
 
 **6'1" | 235 lbs**
 
