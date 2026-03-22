@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { getBrowserSiteUrl } from '@/lib/site-url';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -15,12 +16,17 @@ export default function ForgotPasswordPage() {
     setMessage(null);
     const supabase = createClient();
 
+    const siteUrl = getBrowserSiteUrl();
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback?next=/auth/update-password`,
+      redirectTo: `${siteUrl}/auth/callback?next=/auth/update-password`,
     });
 
     if (error) {
-      setMessage({ type: 'error', text: error.message });
+      const hint =
+        /redirect/i.test(error.message) || /url/i.test(error.message)
+          ? ' If this persists, confirm Supabase Auth → URL Configuration includes this site and /auth/callback (see SUPABASE_SETUP.md).'
+          : '';
+      setMessage({ type: 'error', text: `${error.message}${hint}` });
       setLoading(false);
       return;
     }

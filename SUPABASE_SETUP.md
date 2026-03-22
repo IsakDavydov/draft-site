@@ -24,7 +24,10 @@ Create a `.env.local` file in the project root (or add to your existing `.env`):
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+NEXT_PUBLIC_SITE_URL=https://yoursite.com
 ```
+
+Set **`NEXT_PUBLIC_SITE_URL`** to your **canonical** production URL (no trailing slash), matching **Authentication → URL Configuration → Site URL** in Supabase. The app uses this for password-reset and signup `redirectTo` URLs so `www` vs apex mismatches don’t break auth emails.
 
 ## 4. Run the Database Schema
 
@@ -68,26 +71,44 @@ This creates the `groups` and `group_members` tables, plus the `join_group_by_co
    - If ON: users must click a confirmation link before signing in
    - If OFF: users can sign in immediately after signup (faster for testing)
 
-## 5b. Forgot Password – Required for reset links to work
+## 5b. Forgot Password – URL config, templates, and email delivery
 
-If users report that password reset emails don't arrive or links don't work:
+Password reset is handled by **Supabase Auth** (`resetPasswordForEmail`). The Next.js app does **not** call Resend or any mail API directly—Supabase sends the email. If **Resend** shows no sends, that usually means either auth mail is still using Supabase’s default mailer, or SMTP isn’t wired correctly (see below).
+
+### 1. URL configuration (common failure: no email or “invalid redirect”)
 
 1. **Authentication** → **URL Configuration**
-   - **Site URL**: Set to your production URL (e.g. `https://yoursite.com`)
-   - **Redirect URLs**: Add `https://yoursite.com/auth/callback` (and `http://localhost:3000/auth/callback` for local dev)
+   - **Site URL**: Your canonical site (e.g. `https://yoursite.com`)—same host you use in **`NEXT_PUBLIC_SITE_URL`** on Vercel.
+   - **Redirect URLs**: Include at least:
+     - `https://yoursite.com/auth/callback` (or use a wildcard such as `https://yoursite.com/**` to cover query strings)
+     - `http://localhost:3000/**` for local dev
 
-2. **Authentication** → **Email Templates** → **Reset Password**
-   - The default template uses a flow that can fail with server-side apps. Replace the link with a custom one that sends `token_hash` in the URL:
+If **`redirectTo`** from the app isn’t allowlisted, Supabase can **reject the request** (user may see an error on the forgot-password page). Mismatches like **`www`** vs **non-www** (e.g. Site URL is `https://yoursite.com` but users open `https://www.yoursite.com`) are a frequent cause—add both hosts to Redirect URLs or standardize on one and set `NEXT_PUBLIC_SITE_URL` to match.
 
-   ```html
-   <h2>Reset Password</h2>
-   <p>Follow this link to reset the password for your user:</p>
-   <p><a href="{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=recovery&next=/auth/update-password">Reset Password</a></p>
-   ```
+### 2. Reset Password email template
 
-   Use your actual Site URL. If your Site URL is `https://yoursite.com`, the link will correctly verify the token and redirect to the update-password page.
+The default template can be awkward for server-side Next.js. Use a link that hits your `/auth/callback` route with `token_hash` and `type=recovery`:
 
-3. **Email delivery**: Default Supabase SMTP has rate limits and emails may land in spam. For production, consider **Project Settings** → **Auth** → **SMTP Settings** to configure a custom SMTP provider.
+```html
+<h2>Reset Password</h2>
+<p>Follow this link to reset the password for your user:</p>
+<p><a href="{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=recovery&next=/auth/update-password">Reset Password</a></p>
+```
+
+Optional: if you rely on the `redirectTo` passed from the app, Supabase also exposes **`{{ .RedirectTo }}`** in templates—see [Email Templates](https://supabase.com/docs/guides/auth/auth-email-templates). Either way, **Site URL** must match the domain users use.
+
+### 3. Resend and “no emails in Resend”
+
+- **Resend’s dashboard only shows sends if Supabase is configured to send mail through Resend.**  
+  Go to **Project Settings** → **Auth** → **SMTP Settings** and enable custom SMTP using [Resend’s SMTP instructions](https://resend.com/docs/send-with-smtp) (host `smtp.resend.com`, verify your domain in Resend, use your API key as the password where documented).
+- Until SMTP is set, Supabase uses its **built-in** mail path—**Resend will show nothing**, which is expected.
+- After SMTP is configured, check **Project** → **Logs** → **Auth** (or **Edge Logs**) in Supabase for delivery errors.
+
+### 4. Other checks
+
+- **Authentication** → **Providers** → **Email** enabled.
+- **Rate limits** on the free tier; wait and retry if many tests were sent.
+- Spam/junk folder; default “from” address may look unfamiliar until custom SMTP/domain is set.
 
 ## 6. Test It
 
@@ -102,7 +123,8 @@ If users report that password reset emails don't arrive or links don't work:
 - **"Invalid API key"**: Double-check your `.env.local` and that the keys are correct
 - **"relation does not exist"**: Run the schema SQL again
 - **RLS errors**: Make sure you ran the full `schema.sql` including the policies
-- **Email not sending**: Check **Authentication** → **Email Templates**; Supabase has rate limits on the free tier
+- **Password reset / confirmation email not sending**: See **§5b** (URL allowlist, `NEXT_PUBLIC_SITE_URL`, SMTP/Resend). Check **Logs** → **Auth** in Supabase. Remember: **Resend only logs sends if Supabase Auth SMTP uses Resend.**
+- **Email not sending (general)**: **Authentication** → **Email Templates**; Supabase has rate limits on the free tier
 
 ## Newsletter Export
 

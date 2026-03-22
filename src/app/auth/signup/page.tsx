@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { getBrowserSiteUrl } from '@/lib/site-url';
 import { useRouter } from 'next/navigation';
 
 export default function SignUpPage() {
@@ -22,7 +23,7 @@ export default function SignUpPage() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/predict`,
+        emailRedirectTo: `${getBrowserSiteUrl()}/auth/callback?next=/predict`,
       },
     });
 
