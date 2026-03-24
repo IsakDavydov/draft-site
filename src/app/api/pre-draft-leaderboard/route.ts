@@ -43,15 +43,19 @@ export async function GET() {
       picksByPrediction.set(pick.prediction_id, list);
     }
 
-    const withScores = predictions.map((pred: { id: string; display_name: string | null; name: string | null }) => {
-      const predPicks = picksByPrediction.get(pred.id) ?? [];
-      const label = resolveDraftDisplayLabel(pred.display_name, pred.name);
-      return {
-        display_name: label ?? '',
-        score: calculatePreDraftScore(predPicks),
-        prediction_id: pred.id,
-      };
-    });
+    const withScores = predictions
+      .map((pred: { id: string; display_name: string | null; name: string | null }) => {
+        const predPicks = picksByPrediction.get(pred.id) ?? [];
+        const label = resolveDraftDisplayLabel(pred.display_name, pred.name);
+        return {
+          display_name: label ?? '',
+          score: calculatePreDraftScore(predPicks),
+          prediction_id: pred.id,
+          pickCount: predPicks.length,
+        };
+      })
+      .filter((row) => row.pickCount > 0)
+      .map(({ pickCount: _c, ...row }) => row);
 
     withScores.sort((a, b) => b.score - a.score);
     const leaderboard = withScores.map((row, i) => ({ ...row, rank: i + 1 }));

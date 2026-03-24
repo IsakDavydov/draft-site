@@ -51,16 +51,20 @@ export default async function LeaderboardPage() {
       picksByPrediction.set(pick.prediction_id, list);
     }
 
-    const withScores = predictions.map((pred: { id: string; display_name: string | null; name: string | null }) => {
-      const predPicks = picksByPrediction.get(pred.id) ?? [];
-      const label = resolveDraftDisplayLabel(pred.display_name, pred.name);
-      // Include leaderboard rows even when picks failed to load or are still saving (score 0).
-      return {
-        display_name: label ?? '',
-        score: calculatePreDraftScore(predPicks),
-        prediction_id: pred.id,
-      };
-    });
+    const withScores = predictions
+      .map((pred: { id: string; display_name: string | null; name: string | null }) => {
+        const predPicks = picksByPrediction.get(pred.id) ?? [];
+        const label = resolveDraftDisplayLabel(pred.display_name, pred.name);
+        return {
+          display_name: label ?? '',
+          score: calculatePreDraftScore(predPicks),
+          prediction_id: pred.id,
+          pickCount: predPicks.length,
+        };
+      })
+      // Omit stale rows: leaderboard submit requires 32 picks; ghosts keep is_leaderboard_entry with 0 picks.
+      .filter((row) => row.pickCount > 0)
+      .map(({ pickCount: _c, ...row }) => row);
 
     withScores.sort((a, b) => b.score - a.score);
     preDraftLeaderboard = withScores.map((row, i) => ({
