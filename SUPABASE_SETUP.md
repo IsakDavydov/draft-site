@@ -44,8 +44,10 @@ The app supports multiple drafts per user and leaderboard/custom order. Run thes
 
 1. **New query** → paste contents of `supabase/migrations/20260212000000_multiple_drafts.sql` → **Run**
 2. **New query** → paste contents of `supabase/migrations/20260212000001_custom_draft_order.sql` → **Run**
+3. **New query** → paste contents of `supabase/migrations/20260212000002_leaderboard_public_read.sql` → **Run** (if not already)
+4. **New query** → paste contents of `supabase/migrations/20260213000000_leaderboard_add_prediction_id.sql` → **Run**
 
-This adds `name`, `is_leaderboard_entry`, `custom_draft_order` and performance indexes.
+This adds `name`, `is_leaderboard_entry`, `custom_draft_order`, leaderboard RLS, and `prediction_id` on leaderboard RPCs (for “view top 10 picks” links).
 
 ## 4b. Run the Leaderboard Setup (Optional but recommended)
 
@@ -109,6 +111,23 @@ Optional: if you rely on the `redirectTo` passed from the app, Supabase also exp
 - **Authentication** → **Providers** → **Email** enabled.
 - **Rate limits** on the free tier; wait and retry if many tests were sent.
 - Spam/junk folder; default “from” address may look unfamiliar until custom SMTP/domain is set.
+
+### 5. Gmail / Outlook “This message seems dangerous” or phishing warnings
+
+Mail clients flag **password-reset** and **unfamiliar senders** aggressively. Common causes:
+
+- **Sender domain**: Supabase’s default mail (`@mail.app.supabase.io` or similar) is not your brand domain, so filters are stricter.
+- **Link vs domain**: A mismatch between the **from** domain and the **link** domain (e.g. reset link goes to your site but mail is from Supabase) can trigger warnings.
+- **No SPF/DKIM on your domain** if you use custom SMTP without full DNS setup.
+
+**What helps**
+
+- Configure **custom SMTP** (e.g. Resend) with a **verified sending domain** so “From” matches your site.
+- Add **SPF**, **DKIM**, and **DMARC** for that domain (Resend provides records).
+- Use clear **subject** and body copy (“Reset your SAK Football password”) so users recognize the mail.
+- After fixing **callback cookies** (see app `auth/callback` route), the reset **link should work in one click**; repeated opens or broken sessions can look like “suspicious” behavior to users (reporting as phishing).
+
+The app’s `/auth/callback` route is implemented so **session cookies are attached to the redirect response**—without that, users could briefly see the reset page then get sent back to sign-in (no session).
 
 ## 6. Test It
 

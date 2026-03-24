@@ -31,7 +31,7 @@ export default async function LeaderboardPage() {
   const hasResults = (resultsCount ?? 0) > 0;
 
   // Pre-draft scores when no results yet (works with base schema - no is_leaderboard_entry or custom_draft_order)
-  let preDraftLeaderboard: { display_name: string; score: number; rank: number }[] = [];
+  let preDraftLeaderboard: { display_name: string; score: number; rank: number; prediction_id: string }[] = [];
   if (!hasResults && predictions && predictions.length > 0) {
     const { data: picks } = await supabase
       .from('prediction_picks')
@@ -56,9 +56,10 @@ export default async function LeaderboardPage() {
         return {
           display_name: pred.display_name,
           score: calculatePreDraftScore(predPicks),
+          prediction_id: pred.id,
         };
       })
-      .filter((x): x is { display_name: string; score: number } => x !== null);
+      .filter((x): x is { display_name: string; score: number; prediction_id: string } => x !== null);
 
     withScores.sort((a, b) => b.score - a.score);
     preDraftLeaderboard = withScores.map((row, i) => ({
@@ -115,11 +116,16 @@ export default async function LeaderboardPage() {
                 : 'Scores will appear after the 2026 NFL Draft. Submit predictions to see your score.'}
             </p>
             {preDraftLeaderboard.length > 0 ? (
-              <LeaderboardTable
-                rows={preDraftLeaderboard}
-                showScores
-                scoreSuffix=""
-              />
+              <>
+                <LeaderboardTable
+                  rows={preDraftLeaderboard}
+                  showScores
+                  scoreSuffix=""
+                />
+                <p className="mt-3 text-xs text-gray-500">
+                  Click a name to see their first-round picks 1–10.
+                </p>
+              </>
             ) : (!participants || participants.length === 0) ? (
               <div className="rounded-3xl border border-gray-200/80 bg-white p-10 text-center shadow-card-sm">
                 <p className="text-gray-600">No predictions yet. Be the first!</p>
@@ -131,13 +137,21 @@ export default async function LeaderboardPage() {
                 </Link>
               </div>
             ) : (
-              <LeaderboardTable
-                rows={participants.map((p: { display_name: string; rank: number }) => ({
-                  display_name: p.display_name,
-                  rank: p.rank,
-                }))}
-                showScores={false}
-              />
+              <>
+                <LeaderboardTable
+                  rows={participants.map(
+                    (p: { prediction_id?: string; display_name: string; rank: number }) => ({
+                      prediction_id: p.prediction_id,
+                      display_name: p.display_name,
+                      rank: Number(p.rank),
+                    })
+                  )}
+                  showScores={false}
+                />
+                <p className="mt-3 text-xs text-gray-500">
+                  Click a name to see their first-round picks 1–10.
+                </p>
+              </>
             )}
             {(preDraftLeaderboard.length > 0 || (participants && participants.length > 0)) && (
               <p className="mt-4 text-sm text-gray-500">
@@ -163,11 +177,28 @@ export default async function LeaderboardPage() {
             </Link>
           </div>
         ) : (
-          <LeaderboardTable
-            rows={leaderboard}
-            showScores
-            scoreSuffix="pts"
-          />
+          <>
+            <LeaderboardTable
+              rows={leaderboard.map(
+                (r: {
+                  prediction_id?: string;
+                  display_name: string;
+                  score: number | bigint;
+                  rank: number | bigint;
+                }) => ({
+                  prediction_id: r.prediction_id,
+                  display_name: r.display_name,
+                  score: Number(r.score),
+                  rank: Number(r.rank),
+                })
+              )}
+              showScores
+              scoreSuffix="pts"
+            />
+            <p className="mt-3 text-xs text-gray-500">
+              Click a name to see their first-round picks 1–10.
+            </p>
+          </>
         )}
 
         {hasResults && (

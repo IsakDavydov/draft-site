@@ -68,7 +68,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
   const hasResults = (resultsCount ?? 0) > 0;
 
   // Pre-draft scores when no results yet (works with base schema - no is_leaderboard_entry or custom_draft_order)
-  let preDraftLeaderboard: { display_name: string; score: number; rank: number }[] = [];
+  let preDraftLeaderboard: { display_name: string; score: number; rank: number; prediction_id: string }[] = [];
   if (!hasResults) {
     const { data: memberRows } = await supabase
       .from('group_members')
@@ -104,9 +104,10 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
             return {
               display_name: pred.display_name || 'Player',
               score: calculatePreDraftScore(predPicks),
+              prediction_id: pred.id,
             };
           })
-          .filter((x): x is { display_name: string; score: number } => x !== null);
+          .filter((x): x is { display_name: string; score: number; prediction_id: string } => x !== null);
 
         withScores.sort((a, b) => b.score - a.score);
         preDraftLeaderboard = withScores.map((row, i) => ({ ...row, rank: i + 1 }));
@@ -167,11 +168,16 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
                   : 'Submit predictions to compete.'}
             </p>
             {showPreDraft ? (
-              <LeaderboardTable
-                rows={preDraftLeaderboard}
-                showScores
-                scoreSuffix=""
-              />
+              <>
+                <LeaderboardTable
+                  rows={preDraftLeaderboard}
+                  showScores
+                  scoreSuffix=""
+                />
+                <p className="mt-3 text-xs text-gray-500">
+                  Click a name to see their first-round picks 1–10.
+                </p>
+              </>
             ) : showMembersOnly ? (
               <LeaderboardTable
                 rows={members.map((m: { display_name: string; rank: number }) => ({
@@ -206,11 +212,28 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
             <p className="text-gray-600">No scores yet. Scores appear after the 2026 NFL Draft.</p>
           </div>
         ) : (
-          <LeaderboardTable
-            rows={leaderboard}
-            showScores
-            scoreSuffix="pts"
-          />
+          <>
+            <LeaderboardTable
+              rows={leaderboard.map(
+                (r: {
+                  prediction_id?: string;
+                  display_name: string;
+                  score: number | bigint;
+                  rank: number | bigint;
+                }) => ({
+                  prediction_id: r.prediction_id,
+                  display_name: r.display_name,
+                  score: Number(r.score),
+                  rank: Number(r.rank),
+                })
+              )}
+              showScores
+              scoreSuffix="pts"
+            />
+            <p className="mt-3 text-xs text-gray-500">
+              Click a name to see their first-round picks 1–10.
+            </p>
+          </>
         )}
 
         {hasResults && (

@@ -14,12 +14,58 @@ export default function UpdatePasswordPage() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setCheckingAuth(false);
-      if (!user) {
+    let cancelled = false;
+
+    async function hasUser(): Promise<boolean> {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user) return true;
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      return !!user;
+    }
+
+    async function resolveAuth() {
+      // After email link → /auth/callback → redirect, cookies can take a beat to be visible to the browser client.
+      if (await hasUser()) {
+        if (!cancelled) setCheckingAuth(false);
+        return;
+      }
+
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((event, session) => {
+        if (cancelled) return;
+        if (session?.user && (event === 'INITIAL_SESSION' || event === 'SIGNED_IN')) {
+          setCheckingAuth(false);
+          subscription.unsubscribe();
+        }
+      });
+
+      for (let i = 0; i < 12; i++) {
+        await new Promise((r) => setTimeout(r, 150));
+        if (cancelled) break;
+        if (await hasUser()) {
+          if (!cancelled) setCheckingAuth(false);
+          subscription.unsubscribe();
+          return;
+        }
+      }
+
+      subscription.unsubscribe();
+      if (!cancelled) {
+        // Stay on loading until navigation; avoid flashing the form before redirect.
         router.replace('/auth/signin?next=/auth/update-password');
       }
-    });
+    }
+
+    void resolveAuth();
+
+    return () => {
+      cancelled = true;
+    };
   }, [router]);
 
   async function handleSubmit(e: React.FormEvent) {

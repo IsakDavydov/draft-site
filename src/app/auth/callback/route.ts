@@ -1,8 +1,16 @@
 import type { EmailOtpType } from '@supabase/supabase-js';
-import { createClient } from '@/lib/supabase/server';
-import { NextResponse } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
 
-export async function GET(request: Request) {
+/**
+ * Auth callback for OAuth PKCE (`code`), email confirm, and password recovery (`token_hash` + `type`).
+ *
+ * IMPORTANT: Session cookies must be written onto the **same** `NextResponse` we return.
+ * Using `cookies()` from `next/headers` with `NextResponse.redirect()` often does not attach
+ * Set-Cookie to the redirect, so recovery users land on `/auth/update-password` with no session
+ * and get bounced to sign-in. See @supabase/ssr cookie docs.
+ */
+export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
   const token_hash = requestUrl.searchParams.get('token_hash');
@@ -11,7 +19,32 @@ export async function GET(request: Request) {
   // Restrict redirect to same-origin paths to avoid open redirect
   const next = nextParam.startsWith('/') && !nextParam.startsWith('//') ? nextParam : '/predict';
 
-  const supabase = await createClient();
+  const redirectUrl = new URL(next, requestUrl.origin);
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return NextResponse.redirect(
+      new URL(`/auth/error?message=${encodeURIComponent('Server configuration error.')}`, requestUrl.origin)
+    );
+  }
+
+  // Build redirect response first; Supabase will attach Set-Cookie to this object via setAll.
+  let response = NextResponse.redirect(redirectUrl);
+
+  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value, options }) => {
+          response.cookies.set(name, value, options);
+        });
+      },
+    },
+  });
 
   // PKCE flow: OAuth or magic link with code
   if (code) {
@@ -20,10 +53,13 @@ export async function GET(request: Request) {
     } catch (error) {
       console.error('Auth callback error:', error);
       return NextResponse.redirect(
-        new URL(`/auth/error?message=${encodeURIComponent('Email confirmation failed. Please try signing up again.')}`, requestUrl.origin)
+        new URL(
+          `/auth/error?message=${encodeURIComponent('Email confirmation failed. Please try signing up again.')}`,
+          requestUrl.origin
+        )
       );
     }
-    return NextResponse.redirect(new URL(next, requestUrl.origin));
+    return response;
   }
 
   // Password reset flow: token_hash + type=recovery (requires custom email template in Supabase)
@@ -32,11 +68,14 @@ export async function GET(request: Request) {
     if (error) {
       console.error('Password reset verification error:', error);
       return NextResponse.redirect(
-        new URL(`/auth/error?message=${encodeURIComponent('Password reset link invalid or expired. Please request a new one.')}`, requestUrl.origin)
+        new URL(
+          `/auth/error?message=${encodeURIComponent('Password reset link invalid or expired. Please request a new one.')}`,
+          requestUrl.origin
+        )
       );
     }
-    return NextResponse.redirect(new URL(next, requestUrl.origin));
+    return response;
   }
 
-  return NextResponse.redirect(new URL(next, requestUrl.origin));
+  return response;
 }

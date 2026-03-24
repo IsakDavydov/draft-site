@@ -47,9 +47,10 @@ export async function GET() {
         return {
           display_name: pred.display_name,
           score: calculatePreDraftScore(predPicks),
+          prediction_id: pred.id,
         };
       })
-      .filter((x): x is { display_name: string; score: number } => x !== null);
+      .filter((x): x is { display_name: string; score: number; prediction_id: string } => x !== null);
 
     withScores.sort((a, b) => b.score - a.score);
     const leaderboard = withScores.map((row, i) => ({ ...row, rank: i + 1 }));

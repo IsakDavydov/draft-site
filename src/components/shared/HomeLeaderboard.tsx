@@ -9,6 +9,7 @@ interface LeaderboardEntry {
   display_name: string;
   score: number;
   rank: number;
+  prediction_id?: string;
 }
 
 export function HomeLeaderboard() {
@@ -17,9 +18,9 @@ export function HomeLeaderboard() {
   useEffect(() => {
     fetch('/api/pre-draft-leaderboard')
       .then((res) => res.json())
-      .then((data: LeaderboardEntry[]) => {
+      .then((data: unknown) => {
         if (Array.isArray(data)) {
-          setEntries(data.slice(0, 5));
+          setEntries((data as LeaderboardEntry[]).slice(0, 5));
         }
       })
       .catch(() => {});
@@ -43,9 +44,19 @@ export function HomeLeaderboard() {
       </div>
       <div className="mt-3 space-y-2 text-sm text-white">
         {entries.map((e) => (
-          <div key={e.display_name + e.rank} className="flex items-center justify-between gap-2">
+          <div key={(e.prediction_id ?? '') + e.display_name + e.rank} className="flex items-center justify-between gap-2">
             <span className="font-bold tabular-nums text-nfl-gold">#{e.rank}</span>
-            <span className="min-w-0 flex-1 truncate font-medium">{sanitizeDisplayName(e.display_name)}</span>
+            {e.prediction_id ? (
+              <Link
+                href={`/predictions/${e.prediction_id}?ref=leaderboard`}
+                className="min-w-0 flex-1 truncate font-medium transition-colors underline-offset-2 hover:text-nfl-gold hover:underline decoration-nfl-gold/50 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nfl-gold/45 focus-visible:ring-offset-2 focus-visible:ring-offset-black/20"
+                title="View picks 1–10"
+              >
+                {sanitizeDisplayName(e.display_name)}
+              </Link>
+            ) : (
+              <span className="min-w-0 flex-1 truncate font-medium">{sanitizeDisplayName(e.display_name)}</span>
+            )}
             <span className="shrink-0 text-white/70">({e.score})</span>
           </div>
         ))}

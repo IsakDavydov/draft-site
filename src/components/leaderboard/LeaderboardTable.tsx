@@ -1,11 +1,14 @@
 'use client';
 
+import Link from 'next/link';
 import { sanitizeDisplayName } from '@/lib/display-name-filter';
 
 export interface LeaderboardRow {
   display_name: string;
   score?: number;
   rank: number;
+  /** When set, name links to a read-only top-10 picks preview */
+  prediction_id?: string | null;
 }
 
 interface LeaderboardTableProps {
@@ -74,7 +77,7 @@ export function LeaderboardTable({
           <tbody className="divide-y divide-gray-100">
             {rows.map((row, i) => (
               <tr
-                key={row.display_name + row.rank + i}
+                key={(row.prediction_id ?? '') + row.display_name + row.rank + i}
                 className={`group transition-colors duration-150 hover:bg-gray-50/80 ${animate ? 'animate-leaderboard-row' : ''}`}
                 style={animate ? { animationDelay: `${Math.min(i * 40, 400)}ms` } : undefined}
               >
@@ -82,9 +85,19 @@ export function LeaderboardTable({
                   <RankBadge rank={row.rank} />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="font-medium text-gray-900 group-hover:text-gray-800">
-                    {sanitizeDisplayName(row.display_name)}
-                  </span>
+                  {row.prediction_id ? (
+                    <Link
+                      href={`/predictions/${row.prediction_id}?ref=leaderboard`}
+                      className="font-medium text-gray-900 no-underline visited:text-gray-900 transition-colors underline-offset-2 group-hover:text-gray-800 hover:text-red-700 hover:underline decoration-red-600/40 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600/35 focus-visible:ring-offset-2"
+                      title="View picks 1–10"
+                    >
+                      {sanitizeDisplayName(row.display_name)}
+                    </Link>
+                  ) : (
+                    <span className="font-medium text-gray-900 group-hover:text-gray-800">
+                      {sanitizeDisplayName(row.display_name)}
+                    </span>
+                  )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
                   {showScores && row.score != null ? (
