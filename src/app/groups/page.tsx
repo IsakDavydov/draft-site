@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
-import { Users, Plus, LogIn, ArrowLeft, Globe, Trophy } from 'lucide-react';
+import { Users, Plus, LogIn, ArrowLeft, Globe, Trophy, Zap } from 'lucide-react';
 import { GroupsList } from '@/components/groups/GroupsList';
 import { CreateGroupForm } from '@/components/groups/CreateGroupForm';
 import { JoinGroupForm } from '@/components/groups/JoinGroupForm';
@@ -35,88 +35,110 @@ export default async function GroupsPage() {
     .map((m) => ({ id: m.groups.id, name: m.groups.name, inviteCode: m.groups.invite_code, role: m.role }));
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-          <Link
-            href="/predict"
-            className="group inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-nfl-red"
-          >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-            Back to Predictions
-          </Link>
-          <Link
-            href="/leaderboard"
-            className="inline-flex items-center gap-2 text-sm font-medium text-nfl-blue transition-colors hover:text-nfl-blue/80"
-          >
-            <Trophy className="h-4 w-4" />
-            View leaderboard →
-          </Link>
-        </div>
+    <div className="min-h-screen bg-gray-50">
 
-        <div className="flex items-center gap-4 mb-8">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-nfl-blue/15 to-nfl-blue/5 ring-1 ring-nfl-blue/20 shadow-card-sm">
-            <Users className="h-7 w-7 text-nfl-blue" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-              Compete with Friends
-            </h1>
-            <p className="mt-1 text-sm text-gray-600">
-              Create or join a group to see a private leaderboard with your buddies
-            </p>
+      {/* ─── Hero Header ─────────────────────────────────────────────────── */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-nfl-red via-[#012252] to-[#001530]">
+        <div className="absolute inset-0 hero-lines pointer-events-none" />
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-8 sm:py-12">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div>
+              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white ring-1 ring-inset ring-white/20">
+                <Users className="h-3 w-3" />
+                Private Leagues
+              </div>
+              <h1 className="font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                Compete with Friends
+              </h1>
+              <p className="mt-2 text-base leading-relaxed text-gray-300/90">
+                Create a private group, share the invite code, and see who really knows the draft.
+              </p>
+              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5">
+                <Link
+                  href="/predict"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-white hover:text-white/80 transition-colors"
+                >
+                  <Zap className="h-3.5 w-3.5" />
+                  Submit your picks first
+                </Link>
+                <Link
+                  href="/leaderboard"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 hover:text-white transition-colors"
+                >
+                  <Trophy className="h-3.5 w-3.5" />
+                  Global leaderboard
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* ─── Content ─────────────────────────────────────────────────────── */}
+      <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-8">
+
+        <Link
+          href="/predict"
+          className="group mb-6 inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors"
+        >
+          <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
+          Back to Predictions
+        </Link>
 
         <div className="space-y-6">
           <div className="grid gap-5 sm:grid-cols-2">
-            <div className="group relative overflow-hidden rounded-3xl border border-gray-200/80 bg-white p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:border-gray-300/80">
-              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-nfl-green/40 via-nfl-green/20 to-transparent" />
+            <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:shadow-md hover:border-gray-300">
+              <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-nfl-blue/0 via-nfl-blue to-nfl-blue/0" />
               <div className="flex items-center gap-3 mb-5">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-nfl-green/10 ring-1 ring-nfl-green/20">
-                  <Plus className="h-5 w-5 text-nfl-green" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-nfl-blue/10">
+                  <Plus className="h-5 w-5 text-nfl-blue" />
                 </div>
-                <h2 className="text-lg font-semibold text-gray-900">Create Group</h2>
+                <h2 className="font-display text-lg font-bold text-gray-900">Create Group</h2>
               </div>
               <CreateGroupForm />
             </div>
-            <div className="group relative overflow-hidden rounded-3xl border border-gray-200/80 bg-white p-6 shadow-card transition-all duration-300 hover:shadow-card-hover hover:border-gray-300/80">
-              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-nfl-blue/40 via-nfl-blue/20 to-transparent" />
+            <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:shadow-md hover:border-gray-300">
+              <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-nfl-red/0 via-nfl-red to-nfl-red/0" />
               <div className="flex items-center gap-3 mb-5">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-nfl-blue/10 ring-1 ring-nfl-blue/20">
-                  <LogIn className="h-5 w-5 text-nfl-blue" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-nfl-red/10">
+                  <LogIn className="h-5 w-5 text-nfl-red" />
                 </div>
-                <h2 className="text-lg font-semibold text-gray-900">Join Group</h2>
+                <h2 className="font-display text-lg font-bold text-gray-900">Join Group</h2>
               </div>
               <JoinGroupForm />
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-3xl border border-gray-200/80 bg-white shadow-card transition-shadow duration-300 hover:shadow-card-hover">
-            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-200/60 via-nfl-blue/30 to-amber-200/60" />
+          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <div className="px-6 py-5 border-b border-gray-100 flex items-center gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
+                <Trophy className="h-4 w-4 text-amber-600" />
+              </div>
+              <div>
+                <h2 className="font-display text-lg font-bold text-gray-900">Leaderboards</h2>
+                <p className="text-xs text-gray-500">See how you stack up against everyone or your groups.</p>
+              </div>
+            </div>
             <div className="p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-1">Leaderboards</h2>
-              <p className="text-sm text-gray-600 mb-5">See how you stack up against everyone or your groups.</p>
-
               <Link
                 href="/leaderboard"
-                className="group/link flex items-center justify-between rounded-2xl border border-gray-200/60 bg-gradient-to-br from-amber-50/50 to-white py-4 px-4 transition-all duration-200 hover:border-amber-200/80 hover:shadow-accent mb-5"
+                className="group/link flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 py-4 px-4 transition-all duration-200 hover:border-nfl-blue/30 hover:bg-white hover:shadow-sm mb-5"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/15 ring-1 ring-amber-200/60">
-                    <Globe className="h-6 w-6 text-amber-600" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-nfl-red/10">
+                    <Globe className="h-5 w-5 text-nfl-red" />
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 group-hover/link:text-amber-800 transition-colors">Everyone</p>
-                    <p className="text-xs text-gray-600 mt-0.5">
-                      Global leaderboard — best mock drafts across the entire site
+                    <p className="font-semibold text-gray-900 group-hover/link:text-nfl-blue transition-colors">Global Leaderboard</p>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Best mock drafts across the entire site
                     </p>
                   </div>
                 </div>
-                <span className="shrink-0 text-gray-400 group-hover/link:text-amber-600 transition-colors">→</span>
+                <span className="shrink-0 text-gray-400 group-hover/link:text-nfl-blue transition-colors text-sm font-semibold">→</span>
               </Link>
 
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-500 mb-3">My Groups</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-3">My Groups</p>
               <GroupsList groups={groups} />
             </div>
           </div>

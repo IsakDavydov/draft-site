@@ -82,7 +82,7 @@ export function CreateGroupForm() {
           required
           maxLength={50}
           disabled={loading}
-          className="w-full rounded-xl border border-gray-200/80 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 transition-colors focus:border-nfl-green focus:ring-2 focus:ring-nfl-green/20 focus:outline-none disabled:opacity-50"
+          className="w-full rounded-xl border border-gray-200/80 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 transition-colors focus:border-nfl-blue focus:ring-2 focus:ring-nfl-blue/20 focus:outline-none disabled:opacity-50"
           placeholder="e.g. Fantasy Crew"
         />
       </div>
@@ -94,7 +94,7 @@ export function CreateGroupForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-nfl-green py-3 px-4 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-nfl-green/90 hover:shadow-md disabled:opacity-50 disabled:hover:shadow-sm"
+        className="w-full rounded-xl bg-nfl-blue py-3 px-4 font-bold text-white shadow-sm transition-all duration-200 hover:bg-nfl-blue/90 hover:shadow-md hover:scale-[1.01] disabled:opacity-50 disabled:hover:shadow-sm disabled:hover:scale-100"
       >
         {loading ? 'Creating...' : 'Create Group'}
       </button>

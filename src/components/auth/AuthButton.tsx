@@ -5,8 +5,17 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { User, LogOut } from 'lucide-react';
 
-export function AuthButton() {
+interface AuthButtonProps {
+  /** Set to true when rendered on a dark background (e.g. the site header) */
+  dark?: boolean;
+}
+
+export function AuthButton({ dark = false }: AuthButtonProps) {
   const [user, setUser] = useState<{ email: string } | null>(null);
+
+  const baseText = dark
+    ? 'text-gray-300 hover:text-white transition-colors'
+    : 'text-gray-900 hover:text-nfl-red transition-colors';
 
   useEffect(() => {
     let sub: { unsubscribe: () => void } | undefined;
@@ -18,7 +27,9 @@ export function AuthButton() {
           setUser(user ? { email: user.email || '' } : null);
         })
         .catch(() => setUser(null));
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_event, session) => {
         setUser(session?.user ? { email: session.user.email || '' } : null);
       });
       sub = subscription;
@@ -30,17 +41,17 @@ export function AuthButton() {
 
   if (user) {
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <Link
           href="/predict"
-          className="text-sm font-semibold leading-6 text-gray-900 hover:text-nfl-red transition-colors"
+          className={`text-sm font-semibold leading-6 ${baseText}`}
         >
           My Picks
         </Link>
         <form action="/auth/signout" method="post" className="inline">
           <button
             type="submit"
-            className="text-sm font-semibold leading-6 text-gray-900 hover:text-nfl-red transition-colors flex items-center gap-1"
+            className={`text-sm font-semibold leading-6 flex items-center gap-1 ${baseText}`}
           >
             <LogOut className="h-4 w-4" />
             Sign out
@@ -53,7 +64,7 @@ export function AuthButton() {
   return (
     <Link
       href="/auth/signin"
-      className="text-sm font-semibold leading-6 text-gray-900 hover:text-nfl-red transition-colors flex items-center gap-1"
+      className={`text-sm font-semibold leading-6 flex items-center gap-1 ${baseText}`}
     >
       <User className="h-5 w-5" />
       Sign in

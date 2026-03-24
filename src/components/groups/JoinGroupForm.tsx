@@ -64,7 +64,7 @@ export function JoinGroupForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-nfl-blue py-3 px-4 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-nfl-blue/90 hover:shadow-md disabled:opacity-50 disabled:hover:shadow-sm"
+        className="w-full rounded-xl bg-nfl-blue py-3 px-4 font-bold text-white shadow-sm transition-all duration-200 hover:bg-nfl-blue/90 hover:shadow-md hover:scale-[1.01] disabled:opacity-50 disabled:hover:shadow-sm disabled:hover:scale-100"
       >
         {loading ? 'Joining...' : 'Join Group'}
       </button>

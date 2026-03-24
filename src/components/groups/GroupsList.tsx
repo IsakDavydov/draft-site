@@ -17,7 +17,7 @@ interface GroupsListProps {
 export function GroupsList({ groups }: GroupsListProps) {
   if (groups.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-gray-200/80 bg-gray-50/50 px-5 py-8 text-center">
+      <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-5 py-8 text-center">
         <Users className="mx-auto h-10 w-10 text-gray-300" />
         <p className="mt-3 text-sm text-gray-500">
           You haven&apos;t joined any groups yet.
@@ -35,7 +35,7 @@ export function GroupsList({ groups }: GroupsListProps) {
         <li key={group.id}>
           <Link
             href={`/groups/${group.id}`}
-            className="group flex items-center justify-between rounded-xl border border-gray-200/80 bg-white py-3.5 px-4 transition-all duration-200 hover:border-nfl-blue/30 hover:shadow-md hover:-translate-y-0.5"
+            className="group flex items-center justify-between rounded-xl border border-gray-200 bg-white py-3.5 px-4 transition-all duration-200 hover:border-nfl-blue/40 hover:shadow-sm hover:bg-gray-50/50"
           >
             <div className="flex min-w-0 items-center gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-nfl-blue/10 ring-1 ring-nfl-blue/20">

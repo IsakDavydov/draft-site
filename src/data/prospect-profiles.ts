@@ -87,7 +87,7 @@ export const prospectProfiles: Record<string, ProspectProfile> = {
   '10': { // Francis Mauigoa
     immediateImpact: 8,
     potential: 9,
-    riskLevel: 3,
+    riskLevel: 2,
     playStyleTags: ['Mauler', 'Pass pro', 'Run blocker', 'OT1'],
     analysis:
       'Francis is my OT1 in this class. He clearly has the size and strength to stick at tackle and should be an impact starter right away. He is a mauler in the run game and protected Carson Beck all season, allowing just two sacks all year (per PFF). In my opinion, he is one of the safest picks in this draft.',
@@ -95,7 +95,7 @@ export const prospectProfiles: Record<string, ProspectProfile> = {
   '11': { // Jermod McCoy
     immediateImpact: 7,
     potential: 9,
-    riskLevel: 7,
+    riskLevel: 6,
     playStyleTags: ['Man coverage', 'Ball skills', 'Athletic', 'Injury concern'],
     analysis:
       'Jermod would be a lot higher on my board had he played football this year. He tore his ACL at the end of last season after putting together a phenomenal year of tape. It is hard to know whether a player can come back from that injury and adjust to the NFL at the same time, but if McCoy returns as the same player, he has the upside to be a true lockdown corner.',
