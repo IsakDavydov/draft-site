@@ -1,10 +1,24 @@
 'use client';
 
-import { useState, useRef, useEffect, useMemo } from 'react';
+import {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useLayoutEffect,
+  useCallback,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import { Prospect } from '@/types';
 import { Search } from 'lucide-react';
 
 const POSITIONS = ['All', 'QB', 'RB', 'WR', 'TE', 'OT', 'IOL', 'DT', 'EDGE', 'LB', 'CB', 'S'];
+
+export type ProspectPickerHandle = {
+  /** Opens the dropdown (e.g. after selecting the previous pick). */
+  open: () => void;
+};
 
 interface ProspectPickerProps {
   prospects: Prospect[];
@@ -16,19 +30,26 @@ interface ProspectPickerProps {
   recommended?: Prospect[];
 }
 
-export function ProspectPicker({
-  prospects,
-  value,
-  onChange,
-  usedIds,
-  disabled,
-  recommended,
-}: ProspectPickerProps) {
+export const ProspectPicker = forwardRef<ProspectPickerHandle, ProspectPickerProps>(function ProspectPicker(
+  { prospects, value, onChange, usedIds, disabled, recommended },
+  ref
+) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [positionFilter, setPositionFilter] = useState<string>('All');
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const firstAvailableRef = useRef<HTMLLIElement | null>(null);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      open: () => {
+        if (!disabled) setOpen(true);
+      },
+    }),
+    [disabled]
+  );
 
   const selectedProspect = prospects.find((p) => p.id === value);
 
@@ -46,16 +67,41 @@ export function ProspectPicker({
           p.position.toLowerCase().includes(q)
       );
     }
-    return [...result].sort((a, b) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99));
-  }, [prospects, search, positionFilter]);
+    const rank = (a: Prospect, b: Prospect) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99);
+    const available = result.filter((p) => !usedIds.has(p.id) || p.id === value).sort(rank);
+    const usedElsewhere = result.filter((p) => usedIds.has(p.id) && p.id !== value).sort(rank);
+    return [...available, ...usedElsewhere];
+  }, [prospects, search, positionFilter, usedIds, value]);
 
-  useEffect(() => {
+  const firstAvailableIndex = useMemo(() => {
+    return filtered.findIndex((p) => !usedIds.has(p.id) || p.id === value);
+  }, [filtered, usedIds, value]);
+
+  const scrollFirstAvailableIntoView = useCallback(() => {
+    queueMicrotask(() => {
+      requestAnimationFrame(() => {
+        firstAvailableRef.current?.scrollIntoView({ block: 'nearest' });
+      });
+    });
+  }, []);
+
+  useLayoutEffect(() => {
     if (open) {
       setSearch('');
       setPositionFilter('All');
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (open) {
       setTimeout(() => inputRef.current?.focus(), 0);
     }
   }, [open]);
+
+  useLayoutEffect(() => {
+    if (!open || firstAvailableIndex < 0) return;
+    scrollFirstAvailableIntoView();
+  }, [open, positionFilter, firstAvailableIndex, scrollFirstAvailableIntoView]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -117,6 +163,7 @@ export function ProspectPicker({
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
+                  onFocus={scrollFirstAvailableIntoView}
                   placeholder="Search by name or school..."
                   className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md bg-gray-50 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-nfl-blue focus:border-transparent focus:bg-white"
                 />
@@ -147,10 +194,10 @@ export function ProspectPicker({
             {filtered.length === 0 ? (
               <li className="px-3 py-4 text-sm text-gray-500 text-center">No matches</li>
             ) : (
-              filtered.map((prospect) => {
+              filtered.map((prospect, i) => {
                 const isUsed = usedIds.has(prospect.id) && value !== prospect.id;
                 return (
-                  <li key={prospect.id}>
+                  <li key={prospect.id} ref={i === firstAvailableIndex ? firstAvailableRef : undefined}>
                     <button
                       type="button"
                       onClick={() => !isUsed && handleSelect(prospect.id)}
@@ -173,4 +220,6 @@ export function ProspectPicker({
       )}
     </div>
   );
-}
+});
+
+ProspectPicker.displayName = 'ProspectPicker';

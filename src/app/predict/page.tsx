@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
-import { getBigBoard, getDraftOrder2026, getMockDraftFromFile, getTeamNeeds2026 } from '@/lib/adapters';
+import { getBigBoard, getDraftOrder2026, getMockDraftFromFile } from '@/lib/adapters';
 import { PredictionForm } from '@/components/predict/PredictionForm';
 
 export const metadata = {
@@ -26,8 +26,6 @@ export default async function PredictPage() {
   let prospects: Awaited<ReturnType<typeof getBigBoard>>;
   let draftOrder: ReturnType<typeof getDraftOrder2026>;
   let mockDraftTemplate: Awaited<ReturnType<typeof getMockDraftFromFile>> = null;
-  const teamNeeds = getTeamNeeds2026();
-
   try {
     const supabase = await createClient();
     const { data } = await supabase.auth.getUser();
@@ -89,7 +87,6 @@ export default async function PredictPage() {
           draftOrder={draftOrder}
           userId={user.id}
           mockDraftTemplate={mockDraftTemplate}
-          teamNeeds={teamNeeds}
         />
       </div>
     </div>

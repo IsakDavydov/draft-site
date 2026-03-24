@@ -1,6 +1,12 @@
 import { Prospect, MockDraft, MockDraftFromFile } from '@/types';
 import { getProspectProfile } from '@/data/prospect-profiles';
 import { getProspectStats } from '@/data/prospect-stats';
+import postSuperBowlMock2026 from '../../../data/mock-drafts/post-super-bowl-mock-draft-2026.json';
+import preCombineMock2026 from '../../../data/mock-drafts/pre-combine-mock-draft-2026.json';
+import postCombineFreeAgencyMock2026 from '../../../data/mock-drafts/post-combine-free-agency-mock-draft-2026.json';
+import teamNeeds2026 from '../../../data/team-needs-2026.json';
+import bigBoardRankingsJson from '../../../data/big-board-rankings.json';
+import draftOrder2026Json from '../../../data/draft-order-2026.json';
 
 const DRAFT_YEAR = 2026;
 
@@ -11,11 +17,11 @@ export function getProspectAge(prospect: Prospect): number | null {
 }
 
 // File-based mock draft (loaded from data/mock-drafts/)
-import postSuperBowlMock2026 from '../../../data/mock-drafts/post-super-bowl-mock-draft-2026.json';
-import preCombineMock2026 from '../../../data/mock-drafts/pre-combine-mock-draft-2026.json';
-import teamNeeds2026 from '../../../data/team-needs-2026.json';
-import bigBoardRankingsJson from '../../../data/big-board-rankings.json';
-import draftOrder2026Json from '../../../data/draft-order-2026.json';
+const MOCK_DRAFT_FILES: Record<string, MockDraftFromFile> = {
+  'post-super-bowl-mock-draft-2026.json': postSuperBowlMock2026 as MockDraftFromFile,
+  'pre-combine-mock-draft-2026.json': preCombineMock2026 as MockDraftFromFile,
+  'post-combine-free-agency-mock-draft-2026.json': postCombineFreeAgencyMock2026 as MockDraftFromFile,
+};
 
 // Big board order: array position = rank (1-based). Reorder in data/big-board-rankings.json to change rankings.
 const bigBoardRankings = bigBoardRankingsJson as string[];
@@ -255,12 +261,11 @@ export function getTeamNeeds2026(): Record<number, string[]> {
   return TEAM_NEEDS_2026;
 }
 
-// Prospect position -> team need mapping (OT/IOL = OL needs; DT/EDGE = DL/Edge needs)
+// Prospect position -> team need mapping (OT/IOL = OL needs; DT/EDGE = DL needs)
 function prospectPositionMatchesNeed(prospectPos: string, need: string): boolean {
   if (prospectPos === need) return true;
   if ((prospectPos === 'OT' || prospectPos === 'IOL') && need === 'OL') return true;
   if ((prospectPos === 'DT' || prospectPos === 'EDGE') && need === 'DL') return true;
-  if (prospectPos === 'EDGE' && need === 'Edge') return true;
   return false;
 }
 
@@ -392,12 +397,5 @@ function enrichProspectWithMock(prospect: Prospect): Prospect {
 // Load mock draft from JSON file (data/mock-drafts/)
 export async function getMockDraftFromFile(filename: string): Promise<MockDraftFromFile | null> {
   await new Promise(resolve => setTimeout(resolve, 100));
-
-  if (filename === 'post-super-bowl-mock-draft-2026.json') {
-    return postSuperBowlMock2026 as MockDraftFromFile;
-  }
-  if (filename === 'pre-combine-mock-draft-2026.json') {
-    return preCombineMock2026 as MockDraftFromFile;
-  }
-  return null;
+  return MOCK_DRAFT_FILES[filename] ?? null;
 }

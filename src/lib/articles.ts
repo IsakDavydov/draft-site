@@ -10,6 +10,8 @@ export interface Article {
   author: string;
   category: string;
   format?: string;
+  /** When false, article is hidden from listings, sitemap, and returns 404 in production (still viewable in `next dev`). */
+  published: boolean;
   content: string;
 }
 
@@ -38,9 +40,11 @@ export function getAllArticles(): Article[] {
           author: data.author || 'SAKFootball',
           category: data.category || 'General',
           format: data.format || undefined,
+          published: data.published !== false,
           content,
         };
-      });
+      })
+      .filter((a) => a.published);
 
     return allArticlesData.sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -59,7 +63,7 @@ export function getArticleBySlug(slug: string): Article | null {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
 
-    return {
+    const article: Article = {
       slug,
       title: data.title || 'Untitled',
       date: data.date || new Date().toISOString(),
@@ -67,8 +71,15 @@ export function getArticleBySlug(slug: string): Article | null {
       author: data.author || 'SAKFootball',
       category: data.category || 'General',
       format: data.format || undefined,
+      published: data.published !== false,
       content,
     };
+
+    if (!article.published && process.env.NODE_ENV === 'production') {
+      return null;
+    }
+
+    return article;
   } catch (error) {
     return null;
   }

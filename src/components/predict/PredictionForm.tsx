@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Prospect } from '@/types';
 import { TEAM_COLORS_BY_NAME, NFL_TEAM_NAMES } from '@/lib/adapters/teams';
@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { Zap, Trash2, Plus, Trophy, Share2, TrendingUp, ArrowLeftRight } from 'lucide-react';
 import { ShareDraftModal } from './ShareDraftModal';
 import { ShareFullDraftModal } from './ShareFullDraftModal';
-import { ProspectPicker } from './ProspectPicker';
+import { ProspectPicker, type ProspectPickerHandle } from './ProspectPicker';
 import {
   calculatePreDraftScore,
   getEffectiveDraftOrder,
@@ -205,7 +205,6 @@ interface PredictionFormProps {
   draftOrder: DraftOrderItem[];
   userId: string;
   mockDraftTemplate?: MockDraftFromFile | null;
-  teamNeeds?: Record<number, string[]>;
 }
 
 function computeScore(
@@ -219,17 +218,15 @@ function computeScore(
   return calculatePreDraftScore(picksWithTeam);
 }
 
-export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplate, teamNeeds = {} }: PredictionFormProps) {
+export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplate }: PredictionFormProps) {
   const [drafts, setDrafts] = useState<DraftSummary[]>([]);
   const [selectedDraftId, setSelectedDraftId] = useState<string | null>(null);
   const [picks, setPicks] = useState<Record<number, string>>({});
   const [draftName, setDraftName] = useState('');
-  const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [submitToLeaderboardModal, setSubmitToLeaderboardModal] = useState(false);
-  const [changeNameModalOpen, setChangeNameModalOpen] = useState(false);
   const [tradeModalOpen, setTradeModalOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareFullModalOpen, setShareFullModalOpen] = useState(false);
@@ -240,29 +237,39 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   const allPicksFilled = effectiveOrder.every(({ pick }) => picks[pick]);
 
   const supabase = createClient();
-
+  /** Only load picks from the server when switching drafts — not on every `drafts` refresh (e.g. after a trade), so in-progress picks are not wiped. */
+  const hydratedDraftIdRef = useRef<string | null>(null);
+  const prospectPickerRefs = useRef<Record<number, ProspectPickerHandle | null>>({});
+  const pickCardRefs = useRef<Record<number, HTMLDivElement | null>>({});
   useEffect(() => {
     loadDrafts();
   }, []);
 
   useEffect(() => {
-    if (selectedDraftId) {
-      const draft = drafts.find((d) => d.id === selectedDraftId);
-      if (draft) {
-        const picksMap: Record<number, string> = {};
-        draft.picks.forEach((p) => {
-          picksMap[p.pick_number] = p.prospect_id;
-        });
-        setPicks(picksMap);
-        setDraftName(draft.name || '');
-        setDisplayName(draft.display_name || '');
-        setSaved(true);
-      }
-    } else {
+    if (!selectedDraftId) {
       setPicks({});
       setDraftName('');
-      setDisplayName('');
       setSaved(false);
+      hydratedDraftIdRef.current = null;
+      return;
+    }
+
+    const draft = drafts.find((d) => d.id === selectedDraftId);
+    if (!draft) return;
+
+    setDraftName(draft.name || draft.display_name || '');
+    setSaved(true);
+
+    const shouldHydratePicksFromServer =
+      hydratedDraftIdRef.current === null || hydratedDraftIdRef.current !== selectedDraftId;
+
+    if (shouldHydratePicksFromServer) {
+      const picksMap: Record<number, string> = {};
+      draft.picks.forEach((p) => {
+        picksMap[p.pick_number] = p.prospect_id;
+      });
+      setPicks(picksMap);
+      hydratedDraftIdRef.current = selectedDraftId;
     }
   }, [selectedDraftId, drafts]);
 
@@ -327,7 +334,6 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       setSelectedDraftId(data.id);
       setPicks({});
       setDraftName(`Draft ${drafts.length + 1}`);
-      setDisplayName('');
       setSaved(false);
       setMessage({ type: 'success', text: 'New draft created. Add your picks.' });
     } catch (err: unknown) {
@@ -342,8 +348,14 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
     }
   }
 
-  async function savePicksToDb(predictionId: string) {
-    await supabase.from('draft_predictions').update({ name: draftName.trim() || null }).eq('id', predictionId);
+  async function savePicksToDb(predictionId: string, options?: { syncDisplayName?: boolean }) {
+    const trimmed = draftName.trim() || null;
+    const draftRow = drafts.find((d) => d.id === predictionId);
+    const payload: { name: string | null; display_name?: string | null } = { name: trimmed };
+    if (draftRow?.is_leaderboard_entry || options?.syncDisplayName) {
+      payload.display_name = trimmed;
+    }
+    await supabase.from('draft_predictions').update(payload).eq('id', predictionId);
     await supabase.from('prediction_picks').delete().eq('prediction_id', predictionId);
     const prospectMap = Object.fromEntries(prospects.map((p) => [p.id, p]));
     const picksToInsert = effectiveOrder.map(({ pick, team }) => {
@@ -375,6 +387,14 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
 
     if (!selectedDraftId) return;
 
+    if (selectedDraft?.is_leaderboard_entry) {
+      const nameValidation = validateDisplayNameForSave(draftName.trim());
+      if (!nameValidation.valid) {
+        setMessage({ type: 'error', text: nameValidation.error });
+        return;
+      }
+    }
+
     setLoading(true);
     setMessage(null);
     try {
@@ -390,7 +410,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   }
 
   async function handleSubmitToLeaderboard() {
-    const name = displayName.trim();
+    const name = draftName.trim();
     const validation = validateDisplayNameForSave(name);
     if (!validation.valid) {
       setMessage({ type: 'error', text: validation.error });
@@ -417,10 +437,10 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
 
       await supabase
         .from('draft_predictions')
-        .update({ is_leaderboard_entry: true, display_name: name })
+        .update({ is_leaderboard_entry: true, display_name: name, name: name })
         .eq('id', selectedDraftId);
 
-      await savePicksToDb(selectedDraftId);
+      await savePicksToDb(selectedDraftId, { syncDisplayName: true });
       await loadDrafts();
 
       const res = await fetch('/api/pre-draft-leaderboard');
@@ -437,7 +457,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       setMessage({
         type: 'error',
         text: isDuplicate
-          ? 'That display name is already taken. Choose another.'
+          ? 'That name is already taken on the leaderboard. Choose another draft name.'
           : err instanceof Error ? err.message : 'Failed to submit.',
       });
     } finally {
@@ -518,44 +538,6 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
     }
   }
 
-  async function handleUpdateDisplayName() {
-    const name = displayName.trim();
-    const validation = validateDisplayNameForSave(name);
-    if (!validation.valid) {
-      setMessage({ type: 'error', text: validation.error });
-      return;
-    }
-    if (!selectedDraftId) return;
-    const draft = drafts.find((d) => d.id === selectedDraftId);
-    if (!draft?.is_leaderboard_entry) return;
-
-    setLoading(true);
-    setMessage(null);
-    setChangeNameModalOpen(false);
-
-    try {
-      const { error } = await supabase
-        .from('draft_predictions')
-        .update({ display_name: name })
-        .eq('id', selectedDraftId);
-
-      if (error) throw error;
-      await loadDrafts();
-      setMessage({ type: 'success', text: 'Display name updated on the leaderboard.' });
-    } catch (err: unknown) {
-      const isDuplicate =
-        err && typeof err === 'object' && 'code' in err && (err as { code: string }).code === '23505';
-      setMessage({
-        type: 'error',
-        text: isDuplicate
-          ? 'That display name is already taken. Choose another.'
-          : err instanceof Error ? err.message : 'Failed to update.',
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
-
   const usedIds = new Set(Object.values(picks).filter(Boolean));
   const filledCount = effectiveOrder.filter(({ pick }) => Boolean(picks[pick])).length;
   const totalPicks = effectiveOrder.length;
@@ -575,6 +557,28 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
           effectiveOrder
         )
       : null;
+
+  const advanceToNextEmptyPick = useCallback(
+    (filledPick: number, nextPicks: Record<number, string>) => {
+      if (loading) return;
+      const idx = effectiveOrder.findIndex((o) => o.pick === filledPick);
+      if (idx < 0) return;
+      let nextEmptyPick: number | null = null;
+      for (let i = idx + 1; i < effectiveOrder.length; i++) {
+        const p = effectiveOrder[i].pick;
+        if (!nextPicks[p]) {
+          nextEmptyPick = p;
+          break;
+        }
+      }
+      if (nextEmptyPick === null) return;
+      requestAnimationFrame(() => {
+        pickCardRefs.current[nextEmptyPick!]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        prospectPickerRefs.current[nextEmptyPick!]?.open();
+      });
+    },
+    [effectiveOrder, loading]
+  );
 
   function fillFromBigBoard() {
     const sorted = [...prospects].sort((a, b) => (a.bigBoardRank ?? 99) - (b.bigBoardRank ?? 99));
@@ -653,7 +657,6 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       setSelectedDraftId(remaining[0]?.id ?? null);
       setPicks({});
       setDraftName('');
-      setDisplayName('');
       setSaved(false);
       await loadDrafts();
       setMessage({ type: 'success', text: 'Draft deleted.' });
@@ -670,9 +673,17 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       <div className="rounded-xl border border-gray-200 bg-white/80 px-4 py-3 shadow-sm">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Your drafts
-            </p>
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Your drafts</p>
+              {drafts.some((d) => d.is_leaderboard_entry) && (
+                <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                  <span className="inline-flex h-2 w-2 rounded-full bg-amber-400 ring-2 ring-amber-200" aria-hidden />
+                  <span>
+                    <span className="font-medium text-amber-800">Amber ring</span> = on leaderboard
+                  </span>
+                </p>
+              )}
+            </div>
             <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
               {drafts.map((draft) => {
                 const score = draft.picks.length === 32
@@ -682,28 +693,40 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                     )
                   : null;
                 const isSelected = draft.id === selectedDraftId;
+                const onLeaderboard = draft.is_leaderboard_entry;
                 return (
                   <div
                     key={draft.id}
-                    className="flex flex-shrink-0 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50"
+                    className={`flex flex-shrink-0 items-center gap-0.5 rounded-lg ${
+                      onLeaderboard
+                        ? 'ring-2 ring-amber-400 bg-amber-50/90 shadow-sm'
+                        : 'border border-gray-200 bg-gray-50'
+                    }`}
                   >
                     <button
                       type="button"
                       onClick={() => setSelectedDraftId(draft.id)}
-                      className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium transition-colors ${
+                      aria-pressed={isSelected}
+                      title={onLeaderboard ? 'Leaderboard entry' : undefined}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors rounded-l-md ${
                         isSelected
-                          ? 'bg-nfl-red text-white'
+                          ? onLeaderboard
+                            ? 'bg-nfl-red text-white ring-1 ring-amber-300 ring-inset'
+                            : 'bg-nfl-red text-white'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
+                      {onLeaderboard && (
+                        <Trophy
+                          className={`h-3.5 w-3.5 flex-shrink-0 ${isSelected ? 'text-amber-200' : 'text-amber-600'}`}
+                          aria-hidden
+                        />
+                      )}
                       <span className="truncate max-w-[120px]">
-                        {draft.name || `Draft ${drafts.indexOf(draft) + 1}`}
+                        {draft.name || draft.display_name || `Draft ${drafts.indexOf(draft) + 1}`}
                       </span>
                       {score !== null && (
                         <span className="text-[11px] opacity-90">({score})</span>
-                      )}
-                      {draft.is_leaderboard_entry && (
-                        <Trophy className="h-3 w-3 flex-shrink-0" />
                       )}
                     </button>
                     <button
@@ -713,7 +736,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                         handleDeleteDraft(draft.id);
                       }}
                       disabled={loading}
-                      aria-label={`Delete ${draft.name || 'draft'}`}
+                      aria-label={`Delete ${draft.name || draft.display_name || 'draft'}`}
                       className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 disabled:opacity-50"
                     >
                       <Trash2 className="h-3 w-3" />
@@ -722,6 +745,18 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                 );
               })}
             </div>
+            {selectedDraft?.is_leaderboard_entry && (
+              <p className="mt-2 inline-flex max-w-full flex-wrap items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950">
+                <Trophy className="h-4 w-4 shrink-0 text-amber-600" aria-hidden />
+                <span>
+                  <span className="font-semibold">Leaderboard draft</span>
+                  <span className="text-amber-900/90">
+                    {' '}
+                    — you&apos;re editing the entry shown on the public leaderboard (save to apply changes).
+                  </span>
+                </span>
+              </p>
+            )}
           </div>
           <button
             type="button"
@@ -783,31 +818,29 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                   type="text"
                   value={draftName}
                   onChange={(e) => setDraftName(e.target.value)}
-                  maxLength={40}
+                  maxLength={50}
                   className="mt-1 w-full max-w-xs px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
-                  placeholder="e.g. Big Board, Trades-heavy"
+                  placeholder="e.g. DraftKing"
                 />
                 <p className="mt-1 text-xs text-gray-500">
-                  Only you see this name. It helps you tell your drafts apart.
+                  Shown in your draft list. If you submit to the leaderboard, this same name appears publicly.
                 </p>
               </div>
               <div className="flex flex-col items-start gap-2 md:items-end">
                 {selectedDraft?.is_leaderboard_entry ? (
-                  <div className="inline-flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-1.5 text-xs sm:text-sm text-amber-800">
-                    <Trophy className="h-4 w-4" />
-                    <span>
-                      On leaderboard as <span className="font-semibold">{selectedDraft.display_name}</span>
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDisplayName(selectedDraft?.display_name || '');
-                        setChangeNameModalOpen(true);
-                      }}
-                      className="text-amber-900 font-semibold hover:underline"
-                    >
-                      Change
-                    </button>
+                  <div className="inline-flex flex-col items-start gap-1 sm:items-end sm:text-right">
+                    <div className="inline-flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-1.5 text-xs sm:text-sm text-amber-800">
+                      <Trophy className="h-4 w-4 shrink-0" />
+                      <span>
+                        On leaderboard as{' '}
+                        <span className="font-semibold">
+                          {selectedDraft.display_name || selectedDraft.name || '—'}
+                        </span>
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-amber-900/80 max-w-xs">
+                      Edit the draft name above and save to update the leaderboard.
+                    </p>
                   </div>
                 ) : (
                   <button
@@ -919,13 +952,16 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
             <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {effectiveOrder.map(({ pick, team }) => {
                 const teamColor = TEAM_COLORS_BY_NAME[team] || '#1d4ed8';
-                const needs = teamNeeds[pick] ?? [];
                 const needsForTeam = getNeedsForTeam(team);
                 const recommended = getRecommendedProspects(prospects, needsForTeam, usedIds, 5);
                 const teamNickname = team.split(' ').slice(-1)[0] ?? team;
                 return (
                   <div
                     key={pick}
+                    ref={(el) => {
+                      if (el) pickCardRefs.current[pick] = el;
+                      else delete pickCardRefs.current[pick];
+                    }}
                     className="flex flex-col rounded-xl border border-gray-200/80 bg-white/90 p-3 sm:p-3.5 shadow-sm"
                     style={{ borderLeftWidth: '4px', borderLeftColor: teamColor }}
                   >
@@ -939,16 +975,26 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                       <TeamLogo teamName={team} size={24} />
                       <span className="text-sm font-semibold text-gray-900 truncate">{teamNickname}</span>
                     </div>
-                    {needs.length > 0 && (
+                    {needsForTeam.length > 0 && (
                       <p className="text-[11px] text-gray-500 mb-2 flex-shrink-0">
-                        <span className="font-medium text-gray-600">Needs:</span> {needs.join(', ')}
+                        <span className="font-medium text-gray-600">Needs:</span> {needsForTeam.join(', ')}
                       </p>
                     )}
                     <div className="mt-auto flex-shrink-0">
                       <ProspectPicker
+                        ref={(el) => {
+                          if (el) prospectPickerRefs.current[pick] = el;
+                          else delete prospectPickerRefs.current[pick];
+                        }}
                         prospects={prospects}
                         value={picks[pick] || ''}
-                        onChange={(id) => setPicks((prev) => ({ ...prev, [pick]: id }))}
+                        onChange={(id) => {
+                          setPicks((prev) => {
+                            const next = { ...prev, [pick]: id };
+                            queueMicrotask(() => advanceToNextEmptyPick(pick, next));
+                            return next;
+                          });
+                        }}
                         usedIds={usedIds}
                         disabled={loading}
                         recommended={recommended}
@@ -1020,59 +1066,23 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
         />
       )}
 
-      {/* Change display name modal (for drafts already on leaderboard) */}
-      {changeNameModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Change Leaderboard Name</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Update the name shown on the public leaderboard.
-            </p>
-            <input
-              type="text"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              placeholder="e.g. DraftKing"
-              maxLength={30}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
-            />
-            <div className="flex gap-2 justify-end">
-              <button
-                type="button"
-                onClick={() => setChangeNameModalOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleUpdateDisplayName}
-                disabled={loading || !displayName.trim()}
-                className="px-4 py-2 text-sm font-semibold bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:opacity-50"
-              >
-                Update
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Submit to leaderboard modal */}
       {submitToLeaderboardModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Submit to Leaderboard</h3>
             <p className="text-sm text-gray-600 mb-4">
-              Enter a display name. This draft will replace any other draft you&apos;ve submitted.
+              Your entry will appear as{' '}
+              <span className="font-semibold text-gray-900">
+                {draftName.trim() || '—'}
+              </span>{' '}
+              (your draft name). This replaces any other draft you&apos;ve submitted.
             </p>
-            <input
-              type="text"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              placeholder="e.g. DraftKing"
-              maxLength={30}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
-            />
+            {!draftName.trim() && (
+              <p className="text-sm text-amber-800 bg-amber-50 rounded-lg px-3 py-2 mb-4">
+                Add a draft name in the field above first.
+              </p>
+            )}
             <div className="flex gap-2 justify-end">
               <button
                 type="button"
@@ -1084,7 +1094,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               <button
                 type="button"
                 onClick={handleSubmitToLeaderboard}
-                disabled={loading || !displayName.trim()}
+                disabled={loading || !draftName.trim()}
                 className="px-4 py-2 text-sm font-semibold bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:opacity-50"
               >
                 Submit
