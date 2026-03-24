@@ -1,16 +1,19 @@
 import { createClient } from '@/lib/supabase/server';
+import { createServiceRoleClient } from '@/lib/supabase/admin';
 import { calculatePreDraftScore } from '@/lib/adapters';
+import { resolveDraftDisplayLabel } from '@/lib/display-name-filter';
 import { NextResponse } from 'next/server';
 
-const CACHE_SECONDS = 60;
+/** Short cache so new leaderboard submissions show up quickly on the home page. */
+const CACHE_SECONDS = 10;
 
 export async function GET() {
   try {
-    const supabase = await createClient();
+    const supabase = createServiceRoleClient() ?? (await createClient());
 
     const { data: predictions, error: predError } = await supabase
       .from('draft_predictions')
-      .select('id, display_name')
+      .select('id, display_name, name')
       .eq('draft_year', 2026)
       .eq('is_leaderboard_entry', true);
 
@@ -40,17 +43,15 @@ export async function GET() {
       picksByPrediction.set(pick.prediction_id, list);
     }
 
-    const withScores = predictions
-      .map((pred) => {
-        const predPicks = picksByPrediction.get(pred.id) ?? [];
-        if (predPicks.length === 0) return null;
-        return {
-          display_name: pred.display_name,
-          score: calculatePreDraftScore(predPicks),
-          prediction_id: pred.id,
-        };
-      })
-      .filter((x): x is { display_name: string; score: number; prediction_id: string } => x !== null);
+    const withScores = predictions.map((pred: { id: string; display_name: string | null; name: string | null }) => {
+      const predPicks = picksByPrediction.get(pred.id) ?? [];
+      const label = resolveDraftDisplayLabel(pred.display_name, pred.name);
+      return {
+        display_name: label ?? '',
+        score: calculatePreDraftScore(predPicks),
+        prediction_id: pred.id,
+      };
+    });
 
     withScores.sort((a, b) => b.score - a.score);
     const leaderboard = withScores.map((row, i) => ({ ...row, rank: i + 1 }));

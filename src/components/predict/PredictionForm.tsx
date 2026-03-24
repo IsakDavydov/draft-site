@@ -673,17 +673,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       <div className="rounded-xl border border-gray-200 bg-white/80 px-4 py-3 shadow-sm">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Your drafts</p>
-              {drafts.some((d) => d.is_leaderboard_entry) && (
-                <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
-                  <span className="inline-flex h-2 w-2 rounded-full bg-amber-400 ring-2 ring-amber-200" aria-hidden />
-                  <span>
-                    <span className="font-medium text-amber-800">Amber ring</span> = on leaderboard
-                  </span>
-                </p>
-              )}
-            </div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Your drafts</p>
             <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
               {drafts.map((draft) => {
                 const score = draft.picks.length === 32
@@ -697,11 +687,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                 return (
                   <div
                     key={draft.id}
-                    className={`flex flex-shrink-0 items-center gap-0.5 rounded-lg ${
-                      onLeaderboard
-                        ? 'ring-2 ring-amber-400 bg-amber-50/90 shadow-sm'
-                        : 'border border-gray-200 bg-gray-50'
-                    }`}
+                    className="flex flex-shrink-0 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50"
                   >
                     <button
                       type="button"
@@ -710,9 +696,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                       title={onLeaderboard ? 'Leaderboard entry' : undefined}
                       className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors rounded-l-md ${
                         isSelected
-                          ? onLeaderboard
-                            ? 'bg-nfl-red text-white ring-1 ring-amber-300 ring-inset'
-                            : 'bg-nfl-red text-white'
+                          ? 'bg-nfl-red text-white'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >

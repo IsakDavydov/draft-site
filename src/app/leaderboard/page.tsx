@@ -1,10 +1,12 @@
 import { createClient } from '@/lib/supabase/server';
+import { createServiceRoleClient } from '@/lib/supabase/admin';
 import Link from 'next/link';
 import { Trophy, ArrowLeft } from 'lucide-react';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
 import { LeaderboardTable } from '@/components/leaderboard/LeaderboardTable';
 import { LeaderboardLiveRefresh } from '@/components/leaderboard/LeaderboardLiveRefresh';
 import { calculatePreDraftScore } from '@/lib/adapters';
+import { resolveDraftDisplayLabel } from '@/lib/display-name-filter';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,7 +16,7 @@ export const metadata = {
 };
 
 export default async function LeaderboardPage() {
-  const supabase = await createClient();
+  const supabase = createServiceRoleClient() ?? (await createClient());
 
   const [
     { data: leaderboard, error },
@@ -25,7 +27,7 @@ export default async function LeaderboardPage() {
     supabase.rpc('get_leaderboard', { p_year: 2026 }),
     supabase.rpc('get_leaderboard_participants', { p_year: 2026 }),
     supabase.from('draft_results').select('*', { count: 'exact', head: true }).eq('draft_year', 2026),
-    supabase.from('draft_predictions').select('id, display_name').eq('draft_year', 2026).eq('is_leaderboard_entry', true),
+    supabase.from('draft_predictions').select('id, display_name, name').eq('draft_year', 2026).eq('is_leaderboard_entry', true),
   ]);
 
   const hasResults = (resultsCount ?? 0) > 0;
@@ -49,17 +51,16 @@ export default async function LeaderboardPage() {
       picksByPrediction.set(pick.prediction_id, list);
     }
 
-    const withScores = predictions
-      .map((pred) => {
-        const predPicks = picksByPrediction.get(pred.id) ?? [];
-        if (predPicks.length === 0) return null;
-        return {
-          display_name: pred.display_name,
-          score: calculatePreDraftScore(predPicks),
-          prediction_id: pred.id,
-        };
-      })
-      .filter((x): x is { display_name: string; score: number; prediction_id: string } => x !== null);
+    const withScores = predictions.map((pred: { id: string; display_name: string | null; name: string | null }) => {
+      const predPicks = picksByPrediction.get(pred.id) ?? [];
+      const label = resolveDraftDisplayLabel(pred.display_name, pred.name);
+      // Include leaderboard rows even when picks failed to load or are still saving (score 0).
+      return {
+        display_name: label ?? '',
+        score: calculatePreDraftScore(predPicks),
+        prediction_id: pred.id,
+      };
+    });
 
     withScores.sort((a, b) => b.score - a.score);
     preDraftLeaderboard = withScores.map((row, i) => ({

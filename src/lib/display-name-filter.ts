@@ -10,7 +10,7 @@ const BLOCKLIST = [
   'bullshit',
   'crap',
   'damn',
-  'dick',
+  // not "dick" — many legitimate first names (false positives on leaderboard)
   'fuck',
   'shit',
   'slut',
@@ -62,10 +62,22 @@ function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/** Prefer `display_name` then fall back to draft `name` (same column family on draft_predictions). */
+export function resolveDraftDisplayLabel(
+  displayName: string | null | undefined,
+  name: string | null | undefined
+): string | null {
+  const a = displayName?.trim();
+  const b = name?.trim();
+  if (a) return a;
+  if (b) return b;
+  return null;
+}
+
 export function sanitizeDisplayName(name: string | null | undefined): string {
-  if (!name || typeof name !== 'string') return '*****';
+  if (!name || typeof name !== 'string') return 'Anonymous';
   const trimmed = name.trim();
-  if (trimmed.length === 0) return '*****';
+  if (trimmed.length === 0) return 'Anonymous';
   if (WORD_BOUNDARY_REGEX.test(trimmed)) return '*****';
   if (SUBSTRING_REGEX.test(trimmed)) return '*****';
   return trimmed;
