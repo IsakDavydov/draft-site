@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { createServiceRoleClient } from '@/lib/supabase/admin';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'SAKFootball <noreply@sakfootball.com>';
 const ADMIN_SECRET = process.env.ADMIN_SECRET;
 const BATCH_DELAY_MS = 200; // avoid rate limits
@@ -117,6 +116,11 @@ export async function POST(req: NextRequest) {
   if (!ADMIN_SECRET || body.adminSecret !== ADMIN_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  if (!process.env.RESEND_API_KEY) {
+    return NextResponse.json({ error: 'RESEND_API_KEY not configured' }, { status: 500 });
+  }
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const db = createServiceRoleClient();
   if (!db) {
