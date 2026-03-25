@@ -17,26 +17,28 @@ interface LeaderboardTableProps {
   scoreSuffix?: string;
   /** Optional index for stagger animation delay */
   animate?: boolean;
+  /** When true, shows a "gap to leader" column next to score */
+  showGap?: boolean;
 }
 
 function RankBadge({ rank }: { rank: number }) {
   if (rank === 1) {
     return (
-      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 text-amber-950 text-sm font-bold shadow-[0_2px_8px_-2px_rgba(251,191,36,0.5)] ring-1 ring-amber-300/50">
+      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-nfl-blue to-nfl-blue/80 text-white text-sm font-black shadow-[0_2px_8px_-2px_rgba(213,10,10,0.45)] ring-1 ring-nfl-blue/30">
         {rank}
       </span>
     );
   }
   if (rank === 2) {
     return (
-      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-slate-300 via-slate-400 to-slate-500 text-slate-900 text-sm font-bold shadow-[0_2px_8px_-2px_rgba(148,163,184,0.4)] ring-1 ring-slate-300/60">
+      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-nfl-red to-nfl-red/80 text-white text-sm font-black shadow-[0_2px_8px_-2px_rgba(1,51,105,0.4)] ring-1 ring-nfl-red/30">
         {rank}
       </span>
     );
   }
   if (rank === 3) {
     return (
-      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-600 via-amber-700 to-amber-800 text-amber-50 text-sm font-bold shadow-[0_2px_8px_-2px_rgba(180,83,9,0.4)] ring-1 ring-amber-600/40">
+      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-slate-600 to-slate-700 text-white text-sm font-black shadow-[0_2px_8px_-2px_rgba(71,85,105,0.4)] ring-1 ring-slate-500/40">
         {rank}
       </span>
     );
@@ -49,16 +51,16 @@ function RankBadge({ rank }: { rank: number }) {
 }
 
 function rowBg(rank: number) {
-  if (rank === 1) return 'bg-amber-50/70 hover:bg-amber-50';
-  if (rank === 2) return 'bg-slate-50/60 hover:bg-slate-50';
-  if (rank === 3) return 'bg-orange-50/40 hover:bg-orange-50/70';
+  if (rank === 1) return 'bg-red-50/50 hover:bg-red-50/80';
+  if (rank === 2) return 'bg-blue-50/30 hover:bg-blue-50/60';
+  if (rank === 3) return 'bg-slate-50/50 hover:bg-slate-50/80';
   return 'hover:bg-gray-50/80';
 }
 
 function rankAccent(rank: number) {
-  if (rank === 1) return 'border-l-[3px] border-l-amber-400';
-  if (rank === 2) return 'border-l-[3px] border-l-slate-400';
-  if (rank === 3) return 'border-l-[3px] border-l-amber-700/70';
+  if (rank === 1) return 'border-l-[3px] border-l-nfl-blue';
+  if (rank === 2) return 'border-l-[3px] border-l-nfl-red';
+  if (rank === 3) return 'border-l-[3px] border-l-slate-500';
   return '';
 }
 
@@ -67,7 +69,9 @@ export function LeaderboardTable({
   showScores = true,
   scoreSuffix = 'pts',
   animate = true,
+  showGap = false,
 }: LeaderboardTableProps) {
+  const leaderScore = showGap && rows.length > 0 ? (rows[0].score ?? 0) : 0;
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
       {/* Top accent stripe */}
@@ -86,6 +90,11 @@ export function LeaderboardTable({
               {showScores && (
                 <th className="px-6 py-3.5 text-right text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
                   Score
+                </th>
+              )}
+              {showScores && showGap && (
+                <th className="px-4 py-3.5 text-right text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 hidden sm:table-cell">
+                  Gap
                 </th>
               )}
             </tr>
@@ -119,9 +128,9 @@ export function LeaderboardTable({
                   <td className="px-6 py-4 whitespace-nowrap text-right">
                     {row.score != null ? (
                       <span className={`font-bold tabular-nums ${
-                        row.rank === 1 ? 'text-amber-700' :
-                        row.rank === 2 ? 'text-slate-600' :
-                        row.rank === 3 ? 'text-amber-800' :
+                        row.rank === 1 ? 'text-nfl-blue' :
+                        row.rank === 2 ? 'text-nfl-red' :
+                        row.rank === 3 ? 'text-slate-600' :
                         'text-gray-700'
                       }`}>
                         {row.score}{scoreSuffix ? ` ${scoreSuffix}` : ''}
@@ -129,6 +138,17 @@ export function LeaderboardTable({
                     ) : (
                       <span className="text-gray-400">—</span>
                     )}
+                  </td>
+                )}
+                {showScores && showGap && (
+                  <td className="px-4 py-4 whitespace-nowrap text-right hidden sm:table-cell">
+                    {row.rank === 1 ? (
+                      <span className="text-xs font-bold text-nfl-blue">Leader</span>
+                    ) : row.score != null ? (
+                      <span className="text-xs font-semibold text-gray-400 tabular-nums">
+                        −{leaderScore - row.score}
+                      </span>
+                    ) : null}
                   </td>
                 )}
               </tr>

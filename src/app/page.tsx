@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
 import { LeaderboardPreviewSection } from '@/components/shared/LeaderboardPreviewSection';
+import { PrizeBanner } from '@/components/shared/PrizeBanner';
 
 export default function HomePage() {
   return (
@@ -26,7 +27,7 @@ export default function HomePage() {
 
           {/* Left: headline, countdown, CTAs */}
           <div className="mx-auto max-w-2xl flex-shrink-0 xl:mx-0 xl:max-w-xl">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white ring-1 ring-inset ring-white/20">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white ring-1 ring-inset ring-white/20">
               <Zap className="h-3 w-3" />
               2026 Draft Prediction Challenge
             </div>
@@ -62,6 +63,10 @@ export default function HomePage() {
                 Leaderboard
               </Link>
             </div>
+
+            <div className="mt-5">
+              <PrizeBanner variant="hero" />
+            </div>
           </div>
 
           {/* Right: How It Works card */}
@@ -95,10 +100,10 @@ export default function HomePage() {
                     2
                   </span>
                   <div>
-                    <p className="font-semibold text-white">Scores revealed on draft night</p>
+                    <p className="font-semibold text-white">Live scoring on draft night</p>
                     <p className="mt-1.5 text-sm leading-relaxed text-white/60">
-                      Exact pick = 15 pts. Off by one slot = 5 pts. The closer you are
-                      to the real draft order, the better your score. Maximum 480 pts.
+                      Scores update with every pick. Exact pick = 15 pts, off by one slot = 5 pts.
+                      Watch the leaderboard shift in real time. Maximum 480 pts — a perfect score wins $10,000.
                     </p>
                   </div>
                 </div>
@@ -138,6 +143,13 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* ─── Prize Banner ──────────────────────────────────────────────────── */}
+      <div className="bg-gray-950">
+        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+          <PrizeBanner variant="card" />
+        </div>
+      </div>
+
       {/* ─── Leaderboard Preview ───────────────────────────────────────────── */}
       <div className="bg-white">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
@@ -150,8 +162,8 @@ export default function HomePage() {
                 See who&apos;s leading the challenge
               </h2>
               <p className="mt-3 max-w-2xl text-base text-gray-500">
-                Scores update daily based on how well your picks match expert rankings
-                and team needs. Final standings lock in the moment the real draft starts.
+                Pre-draft scores update daily based on pick quality and team fit. On draft night,
+                real scores go live with the very first pick and update after every selection.
               </p>
             </div>
             <Link
@@ -321,7 +333,7 @@ export default function HomePage() {
             </div>
             <p className="text-sm leading-6 text-gray-500 flex-1">
               See where you stand globally or head-to-head in a private group.
-              Scores update live before the draft, then lock in on draft night.
+              Scores update live — pre-draft based on pick quality, then pick-by-pick on draft night.
             </p>
             <span className="mt-5 text-sm font-semibold text-nfl-red group-hover:text-nfl-blue transition-colors">
               View standings →

@@ -167,7 +167,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
           <>
             <p className="text-sm text-gray-600 mb-4">
               {showPreDraft
-                ? 'Scores will update after the 2026 NFL Draft.'
+                ? 'Scores go live pick-by-pick on draft night.'
                 : showMembersOnly
                   ? 'Submit predictions to see the leaderboard.'
                   : 'Submit predictions to compete.'}
@@ -234,6 +234,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
               )}
               showScores
               scoreSuffix="pts"
+              showGap
             />
             <p className="mt-3 text-xs text-gray-500">
               Click a name to see their first-round picks 1–10.

@@ -10,10 +10,10 @@ import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Articles', href: '/articles' },
-  { name: 'Season', href: '/season' },
   { name: 'Draft', href: '/draft' },
+  { name: 'Leaderboard', href: '/leaderboard' },
   { name: 'Groups', href: '/groups' },
-  { name: 'Picks', href: '/picks' },
+  { name: 'Season', href: '/season' },
   { name: 'Fantasy', href: '/fantasy' },
 ];
 
@@ -22,9 +22,7 @@ export function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 bg-gray-950">
-      {/* Red accent stripe */}
-      <div className="h-[3px] bg-gradient-to-r from-nfl-blue/0 via-nfl-blue to-nfl-blue/0" />
+    <header className="sticky top-0 z-50 bg-gray-950 border-b border-nfl-blue/30">
 
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-8"

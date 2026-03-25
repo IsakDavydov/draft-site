@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
 import { getBigBoard, getDraftOrder2026, getMockDraftFromFile } from '@/lib/adapters';
 import { PredictionForm } from '@/components/predict/PredictionForm';
+import { PrizeBanner } from '@/components/shared/PrizeBanner';
 
 export const metadata = {
   title: 'Draft Predictions',
@@ -65,6 +66,9 @@ export default async function PredictPage() {
               <p className="mt-2 text-base leading-relaxed text-gray-300/90">
                 Pick all 32 first-round selections. Lock in before draft night and compete on the leaderboard.
               </p>
+              <div className="mt-4">
+                <PrizeBanner variant="hero" />
+              </div>
               <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5">
                 <Link
                   href="/leaderboard"

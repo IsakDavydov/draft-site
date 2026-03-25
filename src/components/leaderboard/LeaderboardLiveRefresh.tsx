@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-const POLL_INTERVAL_MS = 20_000; // 20 seconds during the draft
+const POLL_INTERVAL_MS = 10_000; // 10 seconds during the draft
 
 interface LeaderboardLiveRefreshProps {
   /** When true, the page will refresh periodically so scores update as draft_results change. */
@@ -24,8 +24,11 @@ export function LeaderboardLiveRefresh({ enabled }: LeaderboardLiveRefreshProps)
   if (!enabled) return null;
 
   return (
-    <p className="mt-2 text-xs text-gray-500">
-      Live • scores update every {POLL_INTERVAL_MS / 1000}s
-    </p>
+    <div className="mt-2 inline-flex items-center gap-1.5">
+      <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+      <p className="text-xs font-semibold text-green-600">
+        Live scoring — updates every {POLL_INTERVAL_MS / 1000}s as picks are announced
+      </p>
+    </div>
   );
 }

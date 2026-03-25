@@ -31,12 +31,23 @@ export async function generateStaticParams() {
 }
 
 function getDraftProjection(rank: number): string {
-  if (rank <= 5) return 'Top 5';
-  if (rank <= 10) return 'Top 10';
-  if (rank <= 20) return 'Middle First Round';
+  if (rank <= 5) return 'Top 5 Pick';
+  if (rank <= 10) return 'Top 10 Pick';
+  if (rank <= 20) return 'Mid First Round';
   if (rank <= 32) return 'Late First Round';
   if (rank <= 64) return 'Second Round';
   return 'Third Round';
+}
+
+function positionColor(position: string): string {
+  switch (position) {
+    case 'QB': return '#D50A0A';
+    case 'WR': case 'TE': case 'RB': return '#013369';
+    case 'OT': case 'IOL': return '#475569';
+    case 'EDGE': case 'DT': case 'LB': return '#047857';
+    case 'CB': case 'S': return '#7e22ce';
+    default: return '#6b7280';
+  }
 }
 
 export default async function ProspectPage({ params }: ProspectPageProps) {
@@ -50,171 +61,186 @@ export default async function ProspectPage({ params }: ProspectPageProps) {
   const mockDraftNotes = getMockDraftNotesForProspect(prospect.name);
   const profile = prospect.profile;
   const schoolColor = getSchoolPrimaryColor(prospect.school);
+  const posColor = positionColor(prospect.position);
+
+  const hasRightContent = true; // always show stats, analysis, or meters
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gray-50">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8">
         <Link
           href="/draft"
-          className="group inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 mb-8 transition-all duration-200"
+          className="group inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 mb-8 transition-all duration-200"
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
           Back to Draft
         </Link>
 
-        <div
-          className="relative bg-white rounded-3xl border-2 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08),0_8px_48px_-8px_rgba(0,0,0,0.06)] overflow-hidden transition-shadow duration-300 hover:shadow-[0_8px_32px_-4px_rgba(0,0,0,0.1),0_16px_64px_-8px_rgba(0,0,0,0.08)]"
-          style={{ borderColor: schoolColor }}
-        >
-          {/* Header - Hero section with full gradient */}
-          <div
-            className="relative px-6 py-10 sm:px-10 sm:py-12"
-            style={{
-              background: `linear-gradient(135deg, ${schoolColor}18 0%, ${schoolColor}0a 40%, rgba(255,255,255,0.98) 100%)`,
-            }}
-          >
-            <div className="relative flex flex-wrap items-start gap-6">
+        <div className="lg:flex lg:gap-8 lg:items-start">
+
+          {/* ── Left Column: Identity Card (sticky on desktop) ── */}
+          <div className="lg:w-[320px] xl:w-[360px] flex-shrink-0 lg:sticky lg:top-24">
+            <div
+              className="relative rounded-2xl border-2 overflow-hidden shadow-[0_4px_24px_-4px_rgba(0,0,0,0.1),0_8px_48px_-8px_rgba(0,0,0,0.08)]"
+              style={{ borderColor: schoolColor }}
+            >
+              {/* Hero gradient */}
               <div
-                className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shadow-md flex items-center justify-center backdrop-blur-md border border-white/60"
-                style={{ backgroundColor: `${schoolColor}12`, boxShadow: `0 4px 14px -2px ${schoolColor}25` }}
+                className="relative px-6 pt-8 pb-6"
+                style={{
+                  background: `linear-gradient(160deg, ${schoolColor}25 0%, ${schoolColor}0d 50%, rgba(255,255,255,0.98) 100%)`,
+                }}
               >
-                <CollegeLogo school={prospect.school} size={48} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-2 mb-2">
+                {/* College logo */}
+                <div className="flex justify-center mb-5">
+                  <div
+                    className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg border border-white/60"
+                    style={{ backgroundColor: `${schoolColor}15`, boxShadow: `0 6px 20px -4px ${schoolColor}30` }}
+                  >
+                    <CollegeLogo school={prospect.school} size={54} />
+                  </div>
+                </div>
+
+                {/* Rank + position badges */}
+                <div className="flex items-center justify-center gap-2 mb-3">
                   {prospect.bigBoardRank && (
-                    <span className="inline-flex h-8 items-center justify-center rounded-xl px-3 text-xs font-bold text-white bg-gray-900 shadow-sm">
+                    <span className="inline-flex h-7 items-center justify-center rounded-lg px-2.5 text-xs font-black text-white" style={{ backgroundColor: '#D50A0A' }}>
                       #{prospect.bigBoardRank}
                     </span>
                   )}
-                  <span className="inline-flex items-center rounded-xl bg-gray-100/90 px-3 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-200/60">
+                  <span
+                    className="inline-flex items-center rounded-lg px-2.5 py-0.5 text-xs font-bold text-white"
+                    style={{ backgroundColor: posColor }}
+                  >
                     {prospect.position}
                   </span>
                 </div>
-                <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl tracking-tight">
+
+                {/* Name */}
+                <h1 className="text-center text-2xl font-black tracking-tight text-gray-900 xl:text-3xl">
                   {prospect.name}
                 </h1>
-                <p className="text-base text-gray-600 mt-1">
+                <p className="text-center text-sm text-gray-500 mt-1">
                   {prospect.school} · {prospect.class}
                 </p>
-                <div className="mt-5 flex flex-wrap gap-4">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xs uppercase tracking-wider text-gray-400">Ht</span>
-                    <span className="font-semibold text-gray-900">{prospect.height}</span>
-                  </div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xs uppercase tracking-wider text-gray-400">Wt</span>
-                    <span className="font-semibold text-gray-900">{prospect.weight} lbs</span>
-                  </div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-xs uppercase tracking-wider text-gray-400">Age</span>
-                    <span className="font-semibold text-gray-900">
-                      {getProspectAge(prospect) != null ? `${getProspectAge(prospect)} yrs (draft day)` : '—'}
+
+                {/* Draft projection */}
+                {prospect.bigBoardRank != null && (
+                  <div className="mt-4 text-center">
+                    <span className="inline-block rounded-full bg-gray-900/5 px-3 py-1 text-xs font-semibold text-gray-700 ring-1 ring-gray-900/10">
+                      Projected: {getDraftProjection(prospect.bigBoardRank)}
                     </span>
                   </div>
-                </div>
-                {prospect.bigBoardRank != null && (
-                  <p className="mt-3 text-sm font-medium text-gray-600">
-                    Projected Pick: {getDraftProjection(prospect.bigBoardRank)}
-                  </p>
                 )}
               </div>
-            </div>
-          </div>
 
-          {/* Impact Meters */}
-          {profile && (
-            <div className="border-t border-gray-100/80 px-6 py-8 sm:px-10 animate-slide-up opacity-0" style={{ animationDelay: '0.1s' }}>
-              <h2 className="text-[11px] font-semibold text-gray-400 uppercase tracking-[0.2em] mb-5">
-                Impact & Projection
-              </h2>
-              <div className="space-y-5">
-                <ImpactMeter
-                  label="Immediate Impact"
-                  value={profile.immediateImpact}
-                  variant="impact"
-                />
-                <ImpactMeter
-                  label="Potential"
-                  value={profile.potential}
-                  variant="potential"
-                />
-                <ImpactMeter
-                  label="Risk Level"
-                  value={profile.riskLevel}
-                  variant="risk"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Play Style Tags */}
-          {profile?.playStyleTags && profile.playStyleTags.length > 0 && (
-            <div className="border-t border-gray-100/80 px-6 py-8 sm:px-10 animate-slide-up opacity-0" style={{ animationDelay: '0.2s' }}>
-              <h2 className="text-[11px] font-semibold text-gray-400 uppercase tracking-[0.2em] mb-4">
-                Play Style
-              </h2>
-              <PlayStyleTags tags={profile.playStyleTags} />
-            </div>
-          )}
-
-          {/* Analysis */}
-          {(profile?.analysis || mockDraftNotes) && (
-            <div className="border-t border-gray-100/80 px-6 py-8 sm:px-10 bg-gray-50/40 animate-slide-up opacity-0" style={{ animationDelay: '0.3s' }}>
-              <h2 className="text-[11px] font-semibold text-gray-400 uppercase tracking-[0.2em] mb-4">
-                Analysis
-              </h2>
-              <p className="text-gray-700 leading-relaxed text-[15px] tracking-tight">
-                {profile?.analysis ?? mockDraftNotes}
-              </p>
-            </div>
-          )}
-
-          {/* Last Season Stats */}
-          <div className="border-t border-gray-100/80 px-6 py-8 sm:px-10 animate-slide-up opacity-0" style={{ animationDelay: '0.4s' }}>
-            <h2 className="text-[11px] font-semibold text-gray-400 uppercase tracking-[0.2em] mb-5">
-              2025 Season Stats
-            </h2>
-            <SeasonStats prospect={prospect} />
-          </div>
-
-          {/* Measurables */}
-          {prospect.measurables &&
-            (prospect.measurables.fortyYardDash ||
-              prospect.measurables.verticalJump ||
-              prospect.measurables.benchPress) && (
-              <div className="border-t border-gray-100/80 px-6 py-8 sm:px-10 bg-gray-50/40 animate-slide-up opacity-0" style={{ animationDelay: '0.5s' }}>
-                <h2 className="text-[11px] font-semibold text-gray-400 uppercase tracking-[0.2em] mb-5">
-                  Measurables
-                </h2>
-                <div className="grid grid-cols-3 gap-4">
-                  {prospect.measurables.fortyYardDash && (
-                    <div className="rounded-2xl bg-white/80 p-4 ring-1 ring-gray-200/60 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
-                      <p className="text-[11px] uppercase tracking-wider text-gray-400 font-medium">40-yard</p>
-                      <p className="text-lg font-bold text-gray-900 mt-1">
-                        {prospect.measurables.fortyYardDash}s
-                      </p>
-                    </div>
-                  )}
-                  {prospect.measurables.verticalJump && (
-                    <div className="rounded-2xl bg-white/80 p-4 ring-1 ring-gray-200/60 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
-                      <p className="text-[11px] uppercase tracking-wider text-gray-400 font-medium">Vertical</p>
-                      <p className="text-lg font-bold text-gray-900 mt-1">
-                        {prospect.measurables.verticalJump}&quot;
-                      </p>
-                    </div>
-                  )}
-                  {prospect.measurables.benchPress && (
-                    <div className="rounded-2xl bg-white/80 p-4 ring-1 ring-gray-200/60 shadow-sm backdrop-blur-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
-                      <p className="text-[11px] uppercase tracking-wider text-gray-400 font-medium">Bench</p>
-                      <p className="text-lg font-bold text-gray-900 mt-1">
-                        {prospect.measurables.benchPress} <span className="text-sm font-normal text-gray-500">reps</span>
-                      </p>
-                    </div>
-                  )}
+              {/* Physical stats */}
+              <div className="border-t border-gray-100 bg-white px-6 py-5">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-4 text-center">
+                  Physical Profile
+                </p>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="rounded-xl bg-gray-50 ring-1 ring-gray-100 px-3 py-3 text-center">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Ht</p>
+                    <p className="mt-1 text-sm font-bold text-gray-900">{prospect.height}</p>
+                  </div>
+                  <div className="rounded-xl bg-gray-50 ring-1 ring-gray-100 px-3 py-3 text-center">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Wt</p>
+                    <p className="mt-1 text-sm font-bold text-gray-900">{prospect.weight}</p>
+                  </div>
+                  <div className="rounded-xl bg-gray-50 ring-1 ring-gray-100 px-3 py-3 text-center">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Age</p>
+                    <p className="mt-1 text-sm font-bold text-gray-900">
+                      {getProspectAge(prospect) != null ? `${getProspectAge(prospect)}` : '—'}
+                    </p>
+                  </div>
                 </div>
               </div>
-            )}
+
+              {/* Measurables (if any) */}
+              {prospect.measurables &&
+                (prospect.measurables.fortyYardDash ||
+                  prospect.measurables.verticalJump ||
+                  prospect.measurables.benchPress) && (
+                  <div className="border-t border-gray-100 bg-white px-6 py-5">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-4 text-center">
+                      Combine
+                    </p>
+                    <div className="grid grid-cols-3 gap-3">
+                      {prospect.measurables.fortyYardDash && (
+                        <div className="rounded-xl bg-gray-50 ring-1 ring-gray-100 px-2 py-3 text-center">
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">40 yd</p>
+                          <p className="mt-1 text-sm font-bold text-gray-900">{prospect.measurables.fortyYardDash}s</p>
+                        </div>
+                      )}
+                      {prospect.measurables.verticalJump && (
+                        <div className="rounded-xl bg-gray-50 ring-1 ring-gray-100 px-2 py-3 text-center">
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Vert</p>
+                          <p className="mt-1 text-sm font-bold text-gray-900">{prospect.measurables.verticalJump}&quot;</p>
+                        </div>
+                      )}
+                      {prospect.measurables.benchPress && (
+                        <div className="rounded-xl bg-gray-50 ring-1 ring-gray-100 px-2 py-3 text-center">
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Bench</p>
+                          <p className="mt-1 text-sm font-bold text-gray-900">{prospect.measurables.benchPress}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+              {/* Play style tags */}
+              {profile?.playStyleTags && profile.playStyleTags.length > 0 && (
+                <div className="border-t border-gray-100 bg-white px-6 py-5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-3 text-center">
+                    Play Style
+                  </p>
+                  <PlayStyleTags tags={profile.playStyleTags} />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── Right Column: Scouting Content ── */}
+          {hasRightContent && (
+            <div className="mt-6 lg:mt-0 flex-1 min-w-0 space-y-4">
+
+              {/* Impact Meters */}
+              {profile && (
+                <div className="rounded-2xl bg-white border border-gray-200 shadow-sm px-6 py-6 animate-slide-up opacity-0" style={{ animationDelay: '0.05s' }}>
+                  <h2 className="text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-5">
+                    Impact & Projection
+                  </h2>
+                  <div className="space-y-5">
+                    <ImpactMeter label="Immediate Impact" value={profile.immediateImpact} variant="impact" />
+                    <ImpactMeter label="Potential" value={profile.potential} variant="potential" />
+                    <ImpactMeter label="Risk Level" value={profile.riskLevel} variant="risk" />
+                  </div>
+                </div>
+              )}
+
+              {/* Analysis */}
+              {(profile?.analysis || mockDraftNotes) && (
+                <div className="rounded-2xl bg-white border border-gray-200 shadow-sm px-6 py-6 animate-slide-up opacity-0" style={{ animationDelay: '0.1s' }}>
+                  <h2 className="text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">
+                    Scouting Report
+                  </h2>
+                  <p className="text-gray-700 leading-relaxed text-[15px]">
+                    {profile?.analysis ?? mockDraftNotes}
+                  </p>
+                </div>
+              )}
+
+              {/* Season Stats */}
+              <div className="rounded-2xl bg-white border border-gray-200 shadow-sm px-6 py-6 animate-slide-up opacity-0" style={{ animationDelay: '0.15s' }}>
+                <h2 className="text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-5">
+                  2025 Season Stats
+                </h2>
+                <SeasonStats prospect={prospect} />
+              </div>
+
+            </div>
+          )}
         </div>
       </div>
     </div>

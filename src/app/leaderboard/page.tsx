@@ -1,11 +1,12 @@
 import { createClient } from '@/lib/supabase/server';
 import { createServiceRoleClient } from '@/lib/supabase/admin';
 import Link from 'next/link';
-import { Trophy, ArrowLeft, Zap, Users } from 'lucide-react';
+import { Trophy, ArrowLeft, Zap, Users, Radio } from 'lucide-react';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
 import { LeaderboardTable } from '@/components/leaderboard/LeaderboardTable';
 import { LeaderboardLiveRefresh } from '@/components/leaderboard/LeaderboardLiveRefresh';
-import { calculatePreDraftScore } from '@/lib/adapters';
+import { ConsensusBoard } from '@/components/draft/ConsensusBoard';
+import { calculatePreDraftScore, getDraftOrder2026 } from '@/lib/adapters';
 import { resolveDraftDisplayLabel } from '@/lib/display-name-filter';
 
 export const dynamic = 'force-dynamic';
@@ -18,16 +19,20 @@ export const metadata = {
 export default async function LeaderboardPage() {
   const supabase = createServiceRoleClient() ?? (await createClient());
 
+  const draftOrder = getDraftOrder2026();
+
   const [
     { data: leaderboard, error },
     { data: participants },
     { count: resultsCount },
     { data: predictions },
+    { data: consensusPicks },
   ] = await Promise.all([
     supabase.rpc('get_leaderboard', { p_year: 2026 }),
     supabase.rpc('get_leaderboard_participants', { p_year: 2026 }),
     supabase.from('draft_results').select('*', { count: 'exact', head: true }).eq('draft_year', 2026),
     supabase.from('draft_predictions').select('id, display_name, name').eq('draft_year', 2026).eq('is_leaderboard_entry', true),
+    supabase.rpc('get_consensus_picks', { p_year: 2026 }),
   ]);
 
   const hasResults = (resultsCount ?? 0) > 0;
@@ -97,8 +102,8 @@ export default async function LeaderboardPage() {
               </h1>
               <p className="mt-2 text-base leading-relaxed text-gray-300/90">
                 {hasResults
-                  ? 'Final standings — ranked by correct first-round picks'
-                  : 'Live rankings before draft night. Submit your picks to compete.'}
+                  ? 'Live scoring — leaderboard updates with every pick announced'
+                  : 'Submit your picks to compete. Scores go live the moment the draft starts.'}
               </p>
               <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5">
                 <Link
@@ -115,6 +120,15 @@ export default async function LeaderboardPage() {
                   <Users className="h-3.5 w-3.5" />
                   Private groups
                 </Link>
+                {hasResults && (
+                  <Link
+                    href="/live"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-400 hover:text-green-300 transition-colors"
+                  >
+                    <Radio className="h-3.5 w-3.5" />
+                    Live scoring
+                  </Link>
+                )}
               </div>
             </div>
             <div className="flex-shrink-0">
@@ -126,29 +140,29 @@ export default async function LeaderboardPage() {
 
       {/* ─── Stats Strip ─────────────────────────────────────────────────── */}
       {participantCount > 0 && (
-        <div className="border-b border-gray-200 bg-white">
+        <div className="bg-gray-950 border-b border-white/5">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-8 py-4">
               <div>
-                <p className="font-display text-2xl font-extrabold tabular-nums text-gray-900">{participantCount}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Competitors</p>
+                <p className="font-display text-2xl font-extrabold tabular-nums text-white">{participantCount}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-0.5">Competitors</p>
               </div>
-              <div className="h-8 w-px bg-gray-200" />
+              <div className="h-8 w-px bg-white/10" />
               <div>
-                <p className="font-display text-2xl font-extrabold text-gray-900">480</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Max Points</p>
+                <p className="font-display text-2xl font-extrabold text-white">480</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-0.5">Max Points</p>
               </div>
-              <div className="h-8 w-px bg-gray-200" />
+              <div className="h-8 w-px bg-white/10" />
               <div>
-                <p className="font-display text-2xl font-extrabold text-gray-900">32</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Round 1 Picks</p>
+                <p className="font-display text-2xl font-extrabold text-white">32</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-0.5">Round 1 Picks</p>
               </div>
               {hasResults && (
                 <>
-                  <div className="h-8 w-px bg-gray-200" />
+                  <div className="h-8 w-px bg-white/10" />
                   <div className="flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-xs font-bold text-green-700">Live</span>
+                    <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
+                    <span className="text-xs font-bold text-green-400">Live</span>
                   </div>
                 </>
               )}
@@ -173,7 +187,7 @@ export default async function LeaderboardPage() {
             {preDraftLeaderboard.length > 0 ? (
               <>
                 <p className="mb-4 text-sm text-gray-500">
-                  Scores will update after the 2026 NFL Draft. Based on completeness and team-fit.
+                  Pre-draft rankings based on pick quality and team fit. Real scores go live the moment the first pick is announced on draft night.
                 </p>
                 <LeaderboardTable
                   rows={preDraftLeaderboard}
@@ -266,6 +280,7 @@ export default async function LeaderboardPage() {
               )}
               showScores
               scoreSuffix="pts"
+              showGap
             />
             <p className="mt-3 text-xs text-gray-400">
               Click a name to preview their first-round picks 1–10.
@@ -289,6 +304,31 @@ export default async function LeaderboardPage() {
               <span className="text-xs text-gray-600">max possible</span>
             </div>
             <LeaderboardLiveRefresh enabled={hasResults} />
+          </div>
+        )}
+
+        {/* Consensus picks widget */}
+        {consensusPicks && consensusPicks.length > 0 && (
+          <div className="mt-10">
+            <ConsensusBoard
+              picks={consensusPicks.map((p: {
+                pick_number: number;
+                prospect_id: string;
+                prospect_name: string;
+                pick_count: number | bigint;
+                total_entries: number | bigint;
+                pick_rank: number;
+              }) => ({
+                pick_number: p.pick_number,
+                prospect_id: p.prospect_id,
+                prospect_name: p.prospect_name,
+                pick_count: Number(p.pick_count),
+                total_entries: Number(p.total_entries),
+                pick_rank: p.pick_rank,
+              }))}
+              draftOrder={draftOrder}
+              totalEntries={participantCount}
+            />
           </div>
         )}
       </div>

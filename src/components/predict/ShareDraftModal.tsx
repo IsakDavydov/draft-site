@@ -60,7 +60,6 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // fallback for older browsers
       const input = document.createElement('input');
       input.value = shareUrl;
       document.body.appendChild(input);
@@ -95,7 +94,7 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
       const { toPng } = await import('html-to-image');
       const dataUrl = await toPng(cardRef.current, {
         pixelRatio: 2,
-        backgroundColor: '#0f172a',
+        backgroundColor: '#013369',
         cacheBust: true,
       });
       const link = document.createElement('a');
@@ -115,7 +114,7 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
         const { toBlob } = await import('html-to-image');
         const blob = await toBlob(cardRef.current, {
           pixelRatio: 2,
-          backgroundColor: '#0f172a',
+          backgroundColor: '#013369',
           cacheBust: true,
         });
         if (blob) {
@@ -155,57 +154,79 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
         <div className="p-6 bg-gray-100 flex justify-center">
           <div
             ref={cardRef}
-            className="w-[320px] rounded-xl overflow-hidden shadow-xl"
-            style={{ backgroundColor: '#0f172a' }}
+            className="w-[400px] rounded-2xl overflow-hidden shadow-2xl"
+            style={{ backgroundColor: '#013369' }}
           >
-            <div className="p-6 text-white">
-              <p className="text-slate-300 text-sm font-medium uppercase tracking-wider mb-1">
-                Check out my top 5 picks!
-              </p>
+            {/* Top gradient stripe */}
+            <div style={{ height: 4, background: 'linear-gradient(to right, #013369, #D50A0A, #013369)' }} />
+
+            <div className="p-6">
+              {/* Header: branding */}
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-lg overflow-hidden bg-white/10 flex-shrink-0 flex items-center justify-center p-1">
+                <div
+                  className="w-11 h-11 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
+                >
                   <img
                     src="/TransparentLogo.png"
                     alt="SAKFootball"
-                    width={40}
-                    height={40}
+                    width={36}
+                    height={36}
                     fetchPriority="high"
                     className="object-contain w-full h-full"
                   />
                 </div>
                 <div>
-                  <p className="text-xl font-bold">SAKFootball</p>
-                  <p className="text-2xl font-extrabold text-amber-400">{score}</p>
-                  <p className="text-xs text-slate-400">Pre-draft score</p>
+                  <p className="text-lg font-black text-white tracking-tight leading-none">SAKFootball</p>
+                  <p className="text-xs text-white/50 mt-0.5 uppercase tracking-wider">2026 NFL Draft</p>
+                </div>
+
+                {/* Score block */}
+                <div
+                  className="ml-auto text-right rounded-xl px-4 py-2"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}
+                >
+                  <p className="text-2xl font-black tabular-nums text-white leading-none">{score}</p>
+                  <p className="text-[10px] text-white/45 mt-0.5 uppercase tracking-wider">Pre-draft pts</p>
                 </div>
               </div>
-              <div className="space-y-2.5">
+
+              {/* Section label */}
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2.5">
+                My Top 5 Picks
+              </p>
+
+              {/* Pick rows */}
+              <div className="space-y-1.5">
                 {topPicks.map(({ pick, team, prospectName }) => {
                   const teamColor = TEAM_COLORS_BY_NAME[team] || '#64748b';
                   return (
                     <div
                       key={pick}
-                      className="flex items-center gap-2 py-1.5 px-2 rounded-lg"
-                      style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
+                      className="flex items-center gap-2.5 py-2 px-2.5 rounded-xl overflow-hidden"
+                      style={{ backgroundColor: 'rgba(255,255,255,0.06)', borderLeft: `3px solid ${teamColor}` }}
                     >
                       <span
-                        className="flex-shrink-0 w-6 h-6 rounded text-[10px] font-bold flex items-center justify-center text-white"
+                        className="flex-shrink-0 w-6 h-6 rounded-md text-[10px] font-black flex items-center justify-center text-white"
                         style={{ backgroundColor: teamColor }}
                       >
                         {pick}
                       </span>
                       <ShareTeamLogo team={team} teamColor={teamColor} />
-                      <span className="text-sm text-slate-200 truncate flex-1">
+                      <span className="text-sm font-semibold text-white truncate flex-1">
                         {prospectName}
                       </span>
-                      <span className="text-xs text-slate-500 flex-shrink-0 max-w-[80px] truncate">
+                      <span className="text-[11px] text-white/40 flex-shrink-0 max-w-[72px] truncate">
                         {team.split(' ').pop()}
                       </span>
                     </div>
                   );
                 })}
               </div>
-              <p className="text-center text-slate-500 text-xs mt-4">sakfootball.com</p>
+
+              <p className="text-center text-white/20 text-[10px] mt-5 tracking-wider uppercase">
+                sakfootball.com
+              </p>
             </div>
           </div>
         </div>

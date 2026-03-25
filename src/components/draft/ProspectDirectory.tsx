@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { Search } from 'lucide-react';
 import { getProspects, getProspectAge } from '@/lib/adapters';
+import { getSchoolPrimaryColor } from '@/lib/adapters/colleges';
 import { Prospect } from '@/types';
 import { CollegeLogo } from '@/components/shared/CollegeLogo';
 
@@ -49,10 +51,25 @@ export function ProspectDirectory() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="animate-pulse">
-            <div className="h-20 bg-gray-200 rounded-lg"></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {[...Array(12)].map((_, i) => (
+          <div key={i} className="animate-pulse rounded-xl bg-white border border-gray-200 overflow-hidden">
+            <div className="h-[3px] bg-gray-200" />
+            <div className="p-5 space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 rounded-xl bg-gray-100 flex-shrink-0" />
+                <div className="flex-1 space-y-2 pt-1">
+                  <div className="h-4 bg-gray-200 rounded w-3/4" />
+                  <div className="h-3 bg-gray-100 rounded w-1/2" />
+                </div>
+              </div>
+              <div className="h-px bg-gray-100" />
+              <div className="grid grid-cols-3 gap-3">
+                <div className="h-8 bg-gray-100 rounded" />
+                <div className="h-8 bg-gray-100 rounded" />
+                <div className="h-8 bg-gray-100 rounded" />
+              </div>
+            </div>
           </div>
         ))}
       </div>
@@ -62,11 +79,12 @@ export function ProspectDirectory() {
   return (
     <div>
       {/* Filters */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="flex flex-wrap items-center gap-3 mb-5">
+        <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Filter:</span>
         <select
           value={filters.position}
           onChange={(e) => setFilters(prev => ({ ...prev, position: e.target.value }))}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
+          className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-red focus:border-transparent"
         >
           <option value="">All Positions</option>
           {positions.map(pos => (
@@ -77,7 +95,7 @@ export function ProspectDirectory() {
         <select
           value={filters.school}
           onChange={(e) => setFilters(prev => ({ ...prev, school: e.target.value }))}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
+          className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-red focus:border-transparent"
         >
           <option value="">All Schools</option>
           {schools.map(school => (
@@ -87,7 +105,7 @@ export function ProspectDirectory() {
       </div>
 
       {/* Results count */}
-      <div className="text-sm text-gray-600 mb-4">
+      <div className="text-sm font-medium text-gray-500 mb-4">
         Showing {startIndex + 1}–{Math.min(startIndex + PROSPECTS_PER_PAGE, prospects.length)} of {prospects.length} prospects
       </div>
 
@@ -97,47 +115,55 @@ export function ProspectDirectory() {
           <Link
             key={prospect.id}
             href={`/draft/prospects/${prospect.id}`}
-            className="group relative bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-lg hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
+            className="group relative bg-white rounded-xl border border-gray-200/80 shadow-sm hover:shadow-md hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
           >
-            {/* Subtle top accent */}
-            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gray-100 to-gray-200 group-hover:from-nfl-blue/20 group-hover:to-nfl-blue/5" />
+            {/* School-colored top accent */}
+            <div
+              className="absolute inset-x-0 top-0 h-[3px]"
+              style={{ backgroundColor: getSchoolPrimaryColor(prospect.school) }}
+            />
 
-            <div className="p-5">
+            <div className="p-5 pt-6">
               <div className="flex items-start justify-between gap-3 mb-4">
                 <div className="flex items-start gap-3 min-w-0">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center ring-1 ring-gray-100">
+                  <div
+                    className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center ring-1 ring-black/5 transition-opacity"
+                    style={{ backgroundColor: `${getSchoolPrimaryColor(prospect.school)}18` }}
+                  >
                     <CollegeLogo school={prospect.school} size={32} />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="font-semibold text-gray-900 text-base truncate group-hover:text-nfl-blue transition-colors">
+                    <h3 className="font-bold text-gray-900 text-base truncate group-hover:text-nfl-red transition-colors">
                       {prospect.name}
                     </h3>
-                    <p className="text-sm text-gray-500 truncate">
-                      {prospect.position} · {prospect.school}
+                    <p className="text-sm text-gray-500 truncate mt-0.5">
+                      <span className="font-semibold text-gray-700">{prospect.position}</span>
+                      {' · '}
+                      {prospect.school}
                     </p>
                     <p className="text-xs text-gray-400 mt-0.5">{prospect.class}</p>
                   </div>
                 </div>
                 {prospect.bigBoardRank && (
-                  <span className="flex-shrink-0 inline-flex h-8 min-w-[2rem] items-center justify-center rounded-lg bg-gray-900 text-white text-xs font-bold">
+                  <span className="flex-shrink-0 inline-flex h-8 min-w-[2rem] items-center justify-center rounded-lg bg-nfl-blue text-white text-xs font-black px-1.5">
                     #{prospect.bigBoardRank}
                   </span>
                 )}
               </div>
 
               {/* Stats grid */}
-              <div className="grid grid-cols-3 gap-3 py-4 border-y border-gray-100">
+              <div className="grid grid-cols-3 gap-3 py-3.5 border-y border-gray-100">
                 <div className="text-center">
-                  <p className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Ht</p>
-                  <p className="text-sm font-semibold text-gray-900">{prospect.height}</p>
+                  <p className="text-[11px] uppercase tracking-wider text-gray-400 font-semibold">Ht</p>
+                  <p className="text-sm font-bold text-gray-900 mt-0.5">{prospect.height}</p>
                 </div>
                 <div className="text-center border-x border-gray-100">
-                  <p className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Wt</p>
-                  <p className="text-sm font-semibold text-gray-900">{prospect.weight}</p>
+                  <p className="text-[11px] uppercase tracking-wider text-gray-400 font-semibold">Wt</p>
+                  <p className="text-sm font-bold text-gray-900 mt-0.5">{prospect.weight}</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Age</p>
-                  <p className="text-sm font-semibold text-gray-900">
+                  <p className="text-[11px] uppercase tracking-wider text-gray-400 font-semibold">Age</p>
+                  <p className="text-sm font-bold text-gray-900 mt-0.5">
                     {getProspectAge(prospect) != null ? `${getProspectAge(prospect)}` : '—'}
                   </p>
                 </div>
@@ -147,23 +173,23 @@ export function ProspectDirectory() {
                 (prospect.measurables.fortyYardDash ||
                   prospect.measurables.verticalJump ||
                   prospect.measurables.benchPress) && (
-                  <div className="mt-4 flex gap-4">
+                  <div className="mt-3.5 flex gap-2.5">
                     {prospect.measurables.fortyYardDash && (
-                      <div className="flex-1 rounded-lg bg-gray-50 px-2 py-1.5 text-center">
-                        <span className="text-[10px] text-gray-500">40</span>
-                        <p className="text-xs font-semibold text-gray-900">{prospect.measurables.fortyYardDash}s</p>
+                      <div className="flex-1 rounded-lg bg-gray-100 ring-1 ring-gray-200 px-2 py-1.5 text-center">
+                        <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">40</span>
+                        <p className="text-xs font-bold text-gray-900 mt-0.5">{prospect.measurables.fortyYardDash}s</p>
                       </div>
                     )}
                     {prospect.measurables.verticalJump && (
-                      <div className="flex-1 rounded-lg bg-gray-50 px-2 py-1.5 text-center">
-                        <span className="text-[10px] text-gray-500">Vert</span>
-                        <p className="text-xs font-semibold text-gray-900">{prospect.measurables.verticalJump}"</p>
+                      <div className="flex-1 rounded-lg bg-gray-100 ring-1 ring-gray-200 px-2 py-1.5 text-center">
+                        <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Vert</span>
+                        <p className="text-xs font-bold text-gray-900 mt-0.5">{prospect.measurables.verticalJump}"</p>
                       </div>
                     )}
                     {prospect.measurables.benchPress && (
-                      <div className="flex-1 rounded-lg bg-gray-50 px-2 py-1.5 text-center">
-                        <span className="text-[10px] text-gray-500">Bench</span>
-                        <p className="text-xs font-semibold text-gray-900">{prospect.measurables.benchPress}</p>
+                      <div className="flex-1 rounded-lg bg-gray-100 ring-1 ring-gray-200 px-2 py-1.5 text-center">
+                        <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Bench</span>
+                        <p className="text-xs font-bold text-gray-900 mt-0.5">{prospect.measurables.benchPress}</p>
                       </div>
                     )}
                   </div>
@@ -179,7 +205,7 @@ export function ProspectDirectory() {
           <button
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-nfl-blue"
+            className="px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:text-nfl-red hover:border-gray-400 disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-nfl-red transition-colors"
           >
             Previous
           </button>
@@ -188,10 +214,10 @@ export function ProspectDirectory() {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`w-10 h-10 text-sm font-medium rounded-md border focus:outline-none focus:ring-2 focus:ring-nfl-blue ${
+                className={`w-9 h-9 text-sm font-semibold rounded-lg border focus:outline-none focus:ring-2 focus:ring-nfl-red transition-colors ${
                   currentPage === page
                     ? 'bg-nfl-blue border-nfl-blue text-white'
-                    : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                    : 'border-gray-300 bg-white text-gray-700 hover:text-nfl-red hover:border-gray-400'
                 }`}
               >
                 {page}
@@ -201,7 +227,7 @@ export function ProspectDirectory() {
           <button
             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-nfl-blue"
+            className="px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-700 hover:text-nfl-red hover:border-gray-400 disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-nfl-red transition-colors"
           >
             Next
           </button>
@@ -209,8 +235,9 @@ export function ProspectDirectory() {
       )}
 
       {prospects.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
-          No prospects found with the selected filters
+        <div className="text-center py-16 text-gray-400">
+          <Search className="h-8 w-8 mx-auto mb-3 opacity-40" />
+          <p className="text-sm">No prospects found with the selected filters</p>
         </div>
       )}
     </div>

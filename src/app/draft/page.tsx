@@ -76,8 +76,8 @@ export default function DraftPage() {
           {/* Big Board */}
           <div className="rounded-2xl border border-gray-200 bg-white shadow-card overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-100 flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-500/10">
-                <Zap className="h-4 w-4 text-yellow-600" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nfl-blue/10">
+                <Zap className="h-4 w-4 text-nfl-blue" />
               </div>
               <h2 className="font-display text-lg font-bold text-gray-900">Big Board Rankings</h2>
             </div>
