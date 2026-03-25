@@ -9,7 +9,6 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import { DraftCountdown } from '@/components/shared/DraftCountdown';
-import { HomeLeaderboard } from '@/components/shared/HomeLeaderboard';
 import { LeaderboardPreviewSection } from '@/components/shared/LeaderboardPreviewSection';
 
 export default function HomePage() {
@@ -25,7 +24,7 @@ export default function HomePage() {
 
         <div className="relative mx-auto max-w-7xl px-6 pb-28 pt-12 sm:pb-36 xl:flex xl:items-center xl:gap-16 xl:px-8 xl:py-20">
 
-          {/* Left: headline, countdown, mini-leaderboard, CTAs */}
+          {/* Left: headline, countdown, CTAs */}
           <div className="mx-auto max-w-2xl flex-shrink-0 xl:mx-0 xl:max-w-xl">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white ring-1 ring-inset ring-white/20">
               <Zap className="h-3 w-3" />
@@ -44,10 +43,8 @@ export default function HomePage() {
             </p>
 
             <div className="mt-6">
-              <DraftCountdown variant="full" />
+              <DraftCountdown variant="hero" />
             </div>
-
-            <HomeLeaderboard />
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link

@@ -18,7 +18,8 @@ function getTimeLeft() {
 }
 
 interface DraftCountdownProps {
-  variant?: 'compact' | 'full' | 'minimal';
+  /** `hero` — larger type/padding for the home hero (replaces old mini-leaderboard slot). */
+  variant?: 'compact' | 'full' | 'minimal' | 'hero';
   className?: string;
 }
 
@@ -38,14 +39,29 @@ export function DraftCountdown({ variant = 'full', className = '' }: DraftCountd
   }, [mounted]);
 
   if (!mounted) {
-    if (variant === 'full') {
+    if (variant === 'full' || variant === 'hero') {
+      const isHero = variant === 'hero';
       return (
-        <div className={`rounded-xl bg-black/20 px-4 py-3 backdrop-blur-sm ${className}`}>
-          <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-nfl-gold/90">
-            <Clock className="h-3.5 w-3.5" />
+        <div
+          className={`rounded-xl bg-black/20 backdrop-blur-sm ${
+            isHero ? 'px-5 py-4 sm:px-7 sm:py-5' : 'px-4 py-3'
+          } ${className}`}
+        >
+          <div
+            className={`flex items-center gap-2 font-medium uppercase tracking-wider text-nfl-gold/90 ${
+              isHero ? 'text-sm' : 'text-xs'
+            }`}
+          >
+            <Clock className={isHero ? 'h-4 w-4' : 'h-3.5 w-3.5'} />
             Draft countdown
           </div>
-          <div className="mt-1 flex gap-4 text-lg font-bold text-white/70 sm:gap-6 sm:text-xl">
+          <div
+            className={`flex flex-wrap font-bold text-white/70 ${
+              isHero
+                ? 'mt-2 gap-3 text-xl sm:gap-5 sm:text-2xl xl:text-3xl'
+                : 'mt-1 gap-4 text-lg sm:gap-6 sm:text-xl'
+            }`}
+          >
             <span>--</span>
             <span>--</span>
             <span>--</span>
@@ -101,6 +117,35 @@ export function DraftCountdown({ variant = 'full', className = '' }: DraftCountd
         <span className="font-medium text-gray-700">
           {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m
         </span>
+      </div>
+    );
+  }
+
+  if (variant === 'hero') {
+    return (
+      <div className={`rounded-2xl bg-black/25 px-5 py-4 backdrop-blur-md ring-1 ring-white/10 sm:px-7 sm:py-5 ${className}`}>
+        <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-nfl-gold/90">
+          <Clock className="h-4 w-4" />
+          Draft countdown
+        </div>
+        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-2xl font-bold tabular-nums text-white sm:gap-x-6 sm:text-3xl xl:text-4xl">
+          <div>
+            <span className="text-nfl-gold">{String(timeLeft.days).padStart(2, '0')}</span>
+            <span className="ml-1 text-sm font-medium text-white/75 sm:text-base">days</span>
+          </div>
+          <div>
+            <span className="text-nfl-gold">{String(timeLeft.hours).padStart(2, '0')}</span>
+            <span className="ml-1 text-sm font-medium text-white/75 sm:text-base">hrs</span>
+          </div>
+          <div>
+            <span className="text-nfl-gold">{String(timeLeft.minutes).padStart(2, '0')}</span>
+            <span className="ml-1 text-sm font-medium text-white/75 sm:text-base">min</span>
+          </div>
+          <div>
+            <span className="text-nfl-gold">{String(timeLeft.seconds).padStart(2, '0')}</span>
+            <span className="ml-1 text-sm font-medium text-white/75 sm:text-base">sec</span>
+          </div>
+        </div>
       </div>
     );
   }

@@ -9,24 +9,8 @@ import { PredictionTopPicksGrid } from '@/components/predict/PredictionTopPicksG
 
 export const dynamic = 'force-dynamic';
 
-type SearchParamsInput =
-  | Record<string, string | string[] | undefined>
-  | Promise<Record<string, string | string[] | undefined>>
-  | undefined;
-
 interface PageProps {
   params: Promise<{ id: string }>;
-  searchParams?: SearchParamsInput;
-}
-
-async function resolveSearchParams(sp: SearchParamsInput) {
-  return (await Promise.resolve(sp ?? {})) as Record<string, string | string[] | undefined>;
-}
-
-function refIsLeaderboard(ref: string | string[] | undefined): boolean {
-  if (ref === undefined) return false;
-  const v = Array.isArray(ref) ? ref[0] : ref;
-  return v === 'leaderboard';
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -44,10 +28,8 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-export default async function PredictionTopPicksPage({ params, searchParams }: PageProps) {
+export default async function PredictionTopPicksPage({ params }: PageProps) {
   const { id } = await params;
-  const sp = await resolveSearchParams(searchParams);
-  const serverSaysLeaderboard = refIsLeaderboard(sp.ref);
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -106,7 +88,7 @@ export default async function PredictionTopPicksPage({ params, searchParams }: P
             First-round picks 1–10 · 2026 NFL Draft mock
           </p>
 
-          <PredictionTopPicksGrid picks={resolved} serverSaysLeaderboard={serverSaysLeaderboard} />
+          <PredictionTopPicksGrid picks={resolved} />
 
           <p className="mt-6 text-xs text-gray-500">
             Shared when this mock is on the leaderboard or you’re in a group with this player.
