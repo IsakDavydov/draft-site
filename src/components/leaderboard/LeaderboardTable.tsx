@@ -74,9 +74,6 @@ export function LeaderboardTable({
   const leaderScore = showGap && rows.length > 0 ? (rows[0].score ?? 0) : 0;
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-      {/* Top accent stripe */}
-      <div className="h-[3px] bg-gradient-to-r from-nfl-red/0 via-nfl-blue to-nfl-red/0" />
-
       <div className="overflow-x-auto">
         <table className="min-w-full">
           <thead>

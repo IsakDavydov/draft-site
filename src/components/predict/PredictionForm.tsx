@@ -961,12 +961,15 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                       <span className="text-sm font-bold text-gray-800 truncate">{teamNickname}</span>
                     </div>
                     {needsForTeam.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mb-2 flex-shrink-0">
-                        {needsForTeam.slice(0, 3).map((need) => (
-                          <span key={need} className="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold bg-gray-100 text-gray-500">
-                            {need}
-                          </span>
-                        ))}
+                      <div className="mb-2 flex-shrink-0">
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-1">Team Needs</p>
+                        <div className="flex flex-wrap gap-1">
+                          {needsForTeam.slice(0, 5).map((need) => (
+                            <span key={need} className="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold bg-gray-100 text-gray-500">
+                              {need}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     )}
                     <div className="mt-auto flex-shrink-0">
