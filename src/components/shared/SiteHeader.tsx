@@ -154,7 +154,7 @@ export function SiteHeader() {
                         '-mx-3 block rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 transition-colors duration-200',
                         pathname === item.href
                           ? 'text-white bg-white/5'
-                          : 'text-gray-500 hover:bg-white/5 hover:text-gray-200'
+                          : 'text-gray-300 hover:bg-white/5 hover:text-white'
                       )}
                       onClick={() => setMobileMenuOpen(false)}
                     >
@@ -167,7 +167,7 @@ export function SiteHeader() {
                 <div className="py-6 space-y-2">
                   <Link
                     href="/search"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-500 hover:bg-white/5 hover:text-gray-200 transition-colors duration-200"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-300 hover:bg-white/5 hover:text-white transition-colors duration-200"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Search
