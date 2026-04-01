@@ -25,8 +25,8 @@ export function LeaderboardLiveRefresh({ enabled }: LeaderboardLiveRefreshProps)
 
   return (
     <div className="mt-2 inline-flex items-center gap-1.5">
-      <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-      <p className="text-xs font-semibold text-green-600">
+      <span className="h-2 w-2 rounded-full bg-brand-gold animate-pulse" />
+      <p className="text-xs font-semibold text-brand-gold">
         Live scoring — updates every {POLL_INTERVAL_MS / 1000}s as picks are announced
       </p>
     </div>

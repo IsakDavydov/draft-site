@@ -6,10 +6,10 @@ import { FileText, Zap, Target } from 'lucide-react';
 
 export default function DraftPage() {
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-sak-darker min-h-screen">
 
       {/* ─── Hero Header ─────────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-nfl-red via-[#012252] to-[#001530]">
+      <div className="relative overflow-hidden bg-gradient-to-br from-sak-dark via-sak-darker to-sak-dark">
         <div className="absolute inset-0 hero-lines pointer-events-none" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-8 sm:py-12">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
@@ -59,12 +59,12 @@ export default function DraftPage() {
         <div className="space-y-8">
 
           {/* Prospect Directory */}
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-card overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-100 flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nfl-blue/10">
-                <Target className="h-4 w-4 text-nfl-blue" />
+          <div className="rounded-2xl border border-white/[0.06] bg-sak-card shadow-card overflow-hidden">
+            <div className="px-6 py-5 border-b border-white/[0.06] flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-red/10">
+                <Target className="h-4 w-4 text-brand-red" />
               </div>
-              <h2 className="font-display text-lg font-bold text-gray-900">Prospect Directory</h2>
+              <h2 className="font-display text-lg font-bold text-white">Prospect Directory</h2>
             </div>
             <div className="p-6">
               <Suspense fallback={<div className="text-sm text-gray-400 py-8 text-center">Loading prospects...</div>}>
@@ -74,12 +74,12 @@ export default function DraftPage() {
           </div>
 
           {/* Big Board */}
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-card overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-100 flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nfl-blue/10">
-                <Zap className="h-4 w-4 text-nfl-blue" />
+          <div className="rounded-2xl border border-white/[0.06] bg-sak-card shadow-card overflow-hidden">
+            <div className="px-6 py-5 border-b border-white/[0.06] flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-red/10">
+                <Zap className="h-4 w-4 text-brand-red" />
               </div>
-              <h2 className="font-display text-lg font-bold text-gray-900">Big Board Rankings</h2>
+              <h2 className="font-display text-lg font-bold text-white">Big Board Rankings</h2>
             </div>
             <div className="p-6">
               <Suspense fallback={<div className="text-sm text-gray-400 py-8 text-center">Loading big board...</div>}>

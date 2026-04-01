@@ -144,12 +144,12 @@ export function AdminDraftEntryClient({
   const currentSlot = selectedPick ? draftOrder.find((s) => s.pick === selectedPick) : null;
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-sak-darker text-white">
 
       {/* Header */}
       <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Radio className="h-5 w-5 text-nfl-blue" />
+          <Radio className="h-5 w-5 text-brand-red" />
           <h1 className="text-lg font-bold">Draft Entry</h1>
           <span className="text-xs text-gray-500 font-mono">Admin</span>
         </div>
@@ -157,7 +157,7 @@ export function AdminDraftEntryClient({
           <Link
             href="/live"
             target="_blank"
-            className="text-xs font-semibold text-nfl-blue hover:text-nfl-blue/80 transition-colors"
+            className="text-xs font-semibold text-brand-red hover:text-brand-red/80 transition-colors"
           >
             View live page →
           </Link>
@@ -186,7 +186,7 @@ export function AdminDraftEntryClient({
 
         {/* Left: Entry form */}
         <div className="space-y-4">
-          <div className="rounded-2xl bg-gray-900 border border-white/10 p-5">
+          <div className="rounded-2xl bg-sak-card border border-white/10 p-5">
             <h2 className="text-sm font-bold mb-4">Enter Pick</h2>
 
             {/* Pick selector */}
@@ -203,7 +203,7 @@ export function AdminDraftEntryClient({
                       title={slot.team}
                       className={`h-8 rounded text-xs font-bold transition-all ${
                         isSelected
-                          ? 'bg-nfl-blue text-white ring-2 ring-nfl-blue/50'
+                          ? 'bg-brand-red text-white ring-2 ring-brand-red/50'
                           : done
                             ? 'bg-green-900/40 text-green-400'
                             : 'bg-white/5 text-gray-400 hover:bg-white/10'
@@ -220,7 +220,7 @@ export function AdminDraftEntryClient({
             {!selectedPick && nextUnannounced && (
               <button
                 onClick={() => setSelectedPick(nextUnannounced.pick)}
-                className="w-full mb-4 rounded-lg bg-nfl-blue/10 border border-nfl-blue/30 px-4 py-2 text-sm font-semibold text-nfl-blue hover:bg-nfl-blue/20 transition-colors"
+                className="w-full mb-4 rounded-lg bg-brand-red/10 border border-brand-red/30 px-4 py-2 text-sm font-semibold text-brand-red hover:bg-brand-red/20 transition-colors"
               >
                 Next pick: #{nextUnannounced.pick} — {nextUnannounced.team}
               </button>
@@ -240,7 +240,7 @@ export function AdminDraftEntryClient({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Name, position, school…"
-                className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-nfl-blue/50"
+                className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-red/50"
               />
             </div>
 
@@ -252,7 +252,7 @@ export function AdminDraftEntryClient({
                   onClick={() => setSelectedProspect(p.id)}
                   className={`w-full text-left px-3 py-2 text-sm transition-colors ${
                     selectedProspect === p.id
-                      ? 'bg-nfl-blue text-white'
+                      ? 'bg-brand-red text-white'
                       : 'text-gray-300 hover:bg-white/5'
                   }`}
                 >
@@ -266,7 +266,7 @@ export function AdminDraftEntryClient({
             <button
               onClick={submitPick}
               disabled={!selectedPick || !selectedProspect || submitting}
-              className="mt-4 w-full rounded-xl bg-nfl-blue px-4 py-3 text-sm font-bold text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-nfl-blue/90 transition-colors"
+              className="mt-4 w-full rounded-xl bg-brand-red px-4 py-3 text-sm font-bold text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-brand-red/90 transition-colors"
             >
               {submitting ? 'Submitting…' : `Submit Pick #${selectedPick ?? '?'}`}
             </button>
@@ -274,7 +274,7 @@ export function AdminDraftEntryClient({
         </div>
 
         {/* Right: Results log */}
-        <div className="rounded-2xl bg-gray-900 border border-white/10 overflow-hidden">
+        <div className="rounded-2xl bg-sak-card border border-white/10 overflow-hidden">
           <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
             <h2 className="text-sm font-bold">Announced Picks</h2>
             <span className="text-xs text-gray-500">{results.length} / 32</span>

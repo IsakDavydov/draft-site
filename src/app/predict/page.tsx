@@ -48,10 +48,10 @@ export default async function PredictPage() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-sak-darker">
 
       {/* ─── Hero Header ─────────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-nfl-red via-[#012252] to-[#001530]">
+      <div className="relative overflow-hidden bg-gradient-to-br from-brand-red to-brand-gold">
         <div className="absolute inset-0 hero-lines pointer-events-none" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-8 sm:py-12">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">

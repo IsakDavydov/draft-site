@@ -30,7 +30,7 @@ export function WeeklyMock() {
       <div className="space-y-4">
         {[...Array(10)].map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="h-16 bg-gray-200 rounded-lg"></div>
+            <div className="h-16 bg-white/[0.06] rounded-lg"></div>
           </div>
         ))}
       </div>
@@ -48,10 +48,10 @@ export function WeeklyMock() {
   return (
     <div>
       {/* Mock Draft Header */}
-      <div className="bg-gray-50 rounded-lg p-4 mb-6">
+      <div className="bg-white/[0.06] rounded-lg p-4 mb-6">
         <div className="text-center">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">{mockDraft.title}</h3>
-          <p className="text-sm text-gray-600">
+          <h3 className="text-lg font-semibold text-white mb-2">{mockDraft.title}</h3>
+          <p className="text-sm text-gray-400">
             {mockDraft.author} · {mockDraft.date}
           </p>
         </div>
@@ -64,26 +64,26 @@ export function WeeklyMock() {
           return (
           <div
             key={pick.pick}
-            className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-nfl-blue/30 transition-colors"
+            className="bg-white/[0.06] rounded-lg p-4 border border-white/[0.08] hover:border-brand-red/30 transition-colors"
           >
             <div className="flex items-start gap-3">
               <div className="flex flex-col items-center gap-1 flex-shrink-0">
-                <span className="w-8 h-8 bg-nfl-blue text-white rounded-lg flex items-center justify-center font-bold text-sm">
+                <span className="w-8 h-8 bg-brand-red text-white rounded-lg flex items-center justify-center font-bold text-sm">
                   {pick.pick}
                 </span>
                 <TeamLogo teamName={pick.team} size={36} />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-gray-600">{pick.team}</div>
+                <div className="text-sm font-medium text-gray-300">{pick.team}</div>
                 {needs.length > 0 && (
-                  <div className="text-xs text-gray-500 mt-0.5">
+                  <div className="text-xs text-gray-400 mt-0.5">
                     Team needs: {needs.join(', ')}
                   </div>
                 )}
-                <div className="text-lg font-semibold text-gray-900 mt-0.5">
+                <div className="text-lg font-semibold text-white mt-0.5">
                   {pick.player || '—'}
                 </div>
-                <div className="flex flex-wrap gap-x-2 gap-y-1 mt-2 text-sm text-gray-500">
+                <div className="flex flex-wrap gap-x-2 gap-y-1 mt-2 text-sm text-gray-400">
                   {pick.position && <span>{pick.position}</span>}
                   {pick.school && <span>· {pick.school}</span>}
                   {pick.height && pick.weight && (
@@ -91,7 +91,7 @@ export function WeeklyMock() {
                   )}
                 </div>
                 {pick.notes && (
-                  <p className="mt-2 text-sm text-gray-600 line-clamp-2">{pick.notes}</p>
+                  <p className="mt-2 text-sm text-gray-400 line-clamp-2">{pick.notes}</p>
                 )}
               </div>
             </div>

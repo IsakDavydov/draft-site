@@ -137,21 +137,21 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
-        <div className="p-4 flex items-center justify-between border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">Share your mock draft</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="bg-sak-card rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-white/[0.08]">
+        <div className="p-4 flex items-center justify-between border-b border-white/[0.08]">
+          <h3 className="text-lg font-semibold text-white">Share your mock draft</h3>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100"
+            className="p-2 text-gray-400 hover:text-gray-300 rounded-lg hover:bg-white/[0.06]"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Share card preview */}
-        <div className="p-6 bg-gray-100 flex justify-center">
+        <div className="p-6 bg-sak-hover flex justify-center">
           <div
             ref={cardRef}
             className="w-[400px] rounded-2xl overflow-hidden shadow-2xl"
@@ -235,7 +235,7 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
           <button
             type="button"
             onClick={handleShare}
-            className="flex-1 min-w-[120px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-nfl-red text-white font-medium hover:bg-nfl-red/90"
+            className="flex-1 min-w-[120px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-brand-red text-white font-medium hover:bg-brand-red/90"
           >
             <Share2 className="h-4 w-4" />
             Share
@@ -243,7 +243,7 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
           <button
             type="button"
             onClick={handleDownload}
-            className="flex-1 min-w-[120px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200"
+            className="flex-1 min-w-[120px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white/[0.06] text-gray-300 font-medium hover:bg-white/[0.08]"
           >
             <Download className="h-4 w-4" />
             Download
@@ -251,7 +251,7 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
           <button
             type="button"
             onClick={handleCopyLink}
-            className="flex-1 min-w-[120px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200"
+            className="flex-1 min-w-[120px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white/[0.06] text-gray-300 font-medium hover:bg-white/[0.08]"
           >
             <Copy className="h-4 w-4" />
             {copied ? 'Copied!' : 'Copy link'}

@@ -7,8 +7,8 @@ interface SeasonStatsProps {
 function StatCell({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="flex items-baseline gap-1.5">
-      <span className="text-xs font-medium text-gray-500 uppercase">{label}</span>
-      <span className="text-xs font-semibold text-gray-900 tabular-nums">{value}</span>
+      <span className="text-xs font-medium text-gray-400 uppercase">{label}</span>
+      <span className="text-xs font-semibold text-white tabular-nums">{value}</span>
     </div>
   );
 }
@@ -17,13 +17,13 @@ export function SeasonStats({ prospect }: SeasonStatsProps) {
   const stats = prospect.lastSeasonStats;
   if (!stats) {
     return (
-      <p className="text-sm text-gray-500 italic">
+      <p className="text-sm text-gray-400 italic">
         Stats not yet available. Add data from{' '}
         <a
           href="https://cfbstats.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-nfl-blue hover:underline"
+          className="text-brand-red hover:underline"
         >
           cfbstats.com
         </a>{' '}
@@ -32,7 +32,7 @@ export function SeasonStats({ prospect }: SeasonStatsProps) {
           href="https://www.sports-reference.com/cfb/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-nfl-blue hover:underline"
+          className="text-brand-red hover:underline"
         >
           Sports Reference
         </a>
@@ -96,7 +96,7 @@ export function SeasonStats({ prospect }: SeasonStatsProps) {
   }
 
   if (rows.length === 0) {
-    return <p className="text-sm text-gray-500 italic">2025 stats not yet added for this position.</p>;
+    return <p className="text-sm text-gray-400 italic">2025 stats not yet added for this position.</p>;
   }
 
   return (
@@ -106,13 +106,13 @@ export function SeasonStats({ prospect }: SeasonStatsProps) {
           <StatCell key={label} label={label} value={value} />
         ))}
       </div>
-      <p className="mt-2 text-xs text-gray-400">
+      <p className="mt-2 text-xs text-gray-500">
         Source:{' '}
         <a
           href="https://cfbstats.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-nfl-blue hover:underline"
+          className="text-brand-red hover:underline"
         >
           cfbstats.com
         </a>

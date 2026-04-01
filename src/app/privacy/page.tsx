@@ -7,16 +7,16 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sak-darker">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
-          <div className="border-b border-gray-100 px-8 py-8 sm:px-10">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-nfl-blue mb-2">Legal</p>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">Privacy Policy</h1>
+        <div className="bg-sak-card rounded-2xl shadow-card border border-white/[0.06] overflow-hidden">
+          <div className="border-b border-white/[0.06] px-8 py-8 sm:px-10">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-red mb-2">Legal</p>
+            <h1 className="text-3xl font-bold tracking-tight text-white">Privacy Policy</h1>
             <p className="mt-2 text-sm text-gray-500">Last updated: February 12, 2026</p>
           </div>
 
-          <div className="px-8 py-8 sm:px-10 space-y-8 text-gray-600 text-[15px] leading-relaxed">
+          <div className="px-8 py-8 sm:px-10 space-y-8 text-gray-400 text-[15px] leading-relaxed">
 
             <p>
               SAKFootball (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your privacy. This Privacy
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
             </p>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">1. Information We Collect</h2>
+              <h2 className="text-base font-bold text-white mb-3">1. Information We Collect</h2>
               <p className="mb-3">We collect information you provide directly and information collected automatically:</p>
               <ul className="list-disc pl-5 space-y-2">
                 <li><strong>Account information:</strong> email address and password when you register.</li>
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">2. How We Use Your Information</h2>
+              <h2 className="text-base font-bold text-white mb-3">2. How We Use Your Information</h2>
               <ul className="list-disc pl-5 space-y-2">
                 <li>To create and manage your account and authenticate you.</li>
                 <li>To operate the draft prediction contest, calculate scores, and display leaderboards.</li>
@@ -55,21 +55,21 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">3. Third-Party Advertising & Cookies</h2>
+              <h2 className="text-base font-bold text-white mb-3">3. Third-Party Advertising & Cookies</h2>
               <p className="mb-3">
                 We use Google AdSense and may use other third-party advertising services. These services use cookies,
                 web beacons, and similar technologies to serve ads based on your browsing activity on this and other
                 sites. This does <strong>not</strong> include your name, email, or account credentials.
               </p>
               <ul className="list-disc pl-5 space-y-2">
-                <li>You can review Google&apos;s ad policies at{' '}<a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-nfl-blue hover:underline">policies.google.com/technologies/ads</a>.</li>
-                <li>Opt out of personalized Google ads via{' '}<a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-nfl-blue hover:underline">Google Ads Settings</a>.</li>
-                <li>Opt out of third-party ad networks via the{' '}<a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener noreferrer" className="text-nfl-blue hover:underline">NAI opt-out tool</a>.</li>
+                <li>You can review Google&apos;s ad policies at{' '}<a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-brand-red hover:underline">policies.google.com/technologies/ads</a>.</li>
+                <li>Opt out of personalized Google ads via{' '}<a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-brand-red hover:underline">Google Ads Settings</a>.</li>
+                <li>Opt out of third-party ad networks via the{' '}<a href="https://optout.networkadvertising.org/" target="_blank" rel="noopener noreferrer" className="text-brand-red hover:underline">NAI opt-out tool</a>.</li>
               </ul>
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">4. Data Sharing & Disclosure</h2>
+              <h2 className="text-base font-bold text-white mb-3">4. Data Sharing & Disclosure</h2>
               <p className="mb-3">We do not sell your personal information. We may share it with:</p>
               <ul className="list-disc pl-5 space-y-2">
                 <li><strong>Service providers:</strong> Supabase (database hosting), Vercel (hosting), and other infrastructure providers who process data on our behalf under confidentiality obligations.</li>
@@ -80,7 +80,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">5. Data Retention</h2>
+              <h2 className="text-base font-bold text-white mb-3">5. Data Retention</h2>
               <p>
                 We retain your account and prediction data for as long as your account is active or as needed to provide
                 the Service. You may request deletion of your account and associated data by contacting us. We may retain
@@ -89,7 +89,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">6. Security</h2>
+              <h2 className="text-base font-bold text-white mb-3">6. Security</h2>
               <p>
                 We implement industry-standard security measures including encrypted connections (HTTPS), secure password
                 hashing, and access controls. No method of transmission over the Internet is 100% secure — we cannot
@@ -98,7 +98,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">7. Children&apos;s Privacy</h2>
+              <h2 className="text-base font-bold text-white mb-3">7. Children&apos;s Privacy</h2>
               <p>
                 The Service is not directed to children under 18. We do not knowingly collect personal information from
                 minors. If we learn that we have collected data from a child under 18, we will delete it promptly.
@@ -106,7 +106,7 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">8. Your Rights</h2>
+              <h2 className="text-base font-bold text-white mb-3">8. Your Rights</h2>
               <p className="mb-3">
                 Depending on your jurisdiction, you may have rights regarding your personal data, including the right to:
               </p>
@@ -119,12 +119,12 @@ export default function PrivacyPage() {
               </ul>
               <p className="mt-3">
                 To exercise any of these rights, contact us at{' '}
-                <a href="mailto:contact@sakfootball.com" className="text-nfl-blue hover:underline">contact@sakfootball.com</a>.
+                <a href="mailto:contact@sakfootball.com" className="text-brand-red hover:underline">contact@sakfootball.com</a>.
               </p>
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">9. Changes to This Policy</h2>
+              <h2 className="text-base font-bold text-white mb-3">9. Changes to This Policy</h2>
               <p>
                 We may update this Privacy Policy from time to time. We will post the new policy on this page with an
                 updated date. Continued use of the Service after changes constitutes acceptance of the revised policy.
@@ -132,20 +132,20 @@ export default function PrivacyPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">10. Contact</h2>
+              <h2 className="text-base font-bold text-white mb-3">10. Contact</h2>
               <p>
                 Questions or concerns about this Privacy Policy? Contact us at{' '}
-                <a href="mailto:contact@sakfootball.com" className="text-nfl-blue hover:underline font-medium">
+                <a href="mailto:contact@sakfootball.com" className="text-brand-red hover:underline font-medium">
                   contact@sakfootball.com
                 </a>.
               </p>
             </section>
           </div>
 
-          <div className="border-t border-gray-100 px-8 py-5 sm:px-10 flex flex-wrap gap-4 text-sm text-gray-400">
-            <Link href="/terms" className="hover:text-gray-700 transition-colors">Terms of Service</Link>
-            <Link href="/contest-rules" className="hover:text-gray-700 transition-colors">Contest Rules</Link>
-            <Link href="/responsible-gaming" className="hover:text-gray-700 transition-colors">Responsible Gaming</Link>
+          <div className="border-t border-white/[0.06] px-8 py-5 sm:px-10 flex flex-wrap gap-4 text-sm text-gray-400">
+            <Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
+            <Link href="/contest-rules" className="hover:text-gray-300 transition-colors">Contest Rules</Link>
+            <Link href="/responsible-gaming" className="hover:text-gray-300 transition-colors">Responsible Gaming</Link>
           </div>
         </div>
       </div>

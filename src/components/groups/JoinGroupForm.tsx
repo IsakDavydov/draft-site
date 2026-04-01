@@ -52,19 +52,19 @@ export function JoinGroupForm() {
           required
           maxLength={12}
           disabled={loading}
-          className="w-full rounded-xl border border-gray-200/80 bg-white px-4 py-3 font-mono uppercase tracking-wider text-gray-900 placeholder:text-gray-400 transition-colors focus:border-nfl-blue focus:ring-2 focus:ring-nfl-blue/20 focus:outline-none disabled:opacity-50"
+          className="w-full rounded-xl border border-sak-border bg-sak-hover px-4 py-3 font-mono uppercase tracking-wider text-gray-200 placeholder:text-gray-500 transition-colors focus:border-brand-red focus:ring-2 focus:ring-brand-red/20 focus:outline-none disabled:opacity-50"
           placeholder="e.g. SAKF8X2K"
         />
       </div>
       {message && (
-        <p className={`rounded-xl px-4 py-2.5 text-sm ${message.type === 'error' ? 'bg-red-50 text-red-700 ring-1 ring-red-200/60' : 'bg-green-50 text-green-700 ring-1 ring-green-200/60'}`}>
+        <p className={`rounded-xl px-4 py-2.5 text-sm ${message.type === 'error' ? 'bg-red-950/30 text-red-300 ring-1 ring-red-900/40' : 'bg-green-950/30 text-green-300 ring-1 ring-green-900/40'}`}>
           {message.text}
         </p>
       )}
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-nfl-blue py-3 px-4 font-bold text-white shadow-sm transition-all duration-200 hover:bg-nfl-blue/90 hover:shadow-md hover:scale-[1.01] disabled:opacity-50 disabled:hover:shadow-sm disabled:hover:scale-100"
+        className="w-full rounded-xl bg-brand-red py-3 px-4 font-bold text-white shadow-sm transition-all duration-200 hover:bg-brand-red/90 hover:shadow-md hover:scale-[1.01] disabled:opacity-50 disabled:hover:shadow-sm disabled:hover:scale-100"
       >
         {loading ? 'Joining...' : 'Join Group'}
       </button>

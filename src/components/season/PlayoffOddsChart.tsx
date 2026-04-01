@@ -51,7 +51,7 @@ export function PlayoffOddsChart() {
   if (loading) {
     return (
       <div className="h-64 flex items-center justify-center">
-        <div className="animate-pulse text-gray-500">Loading playoff odds...</div>
+        <div className="animate-pulse text-gray-400">Loading playoff odds...</div>
       </div>
     );
   }
@@ -60,25 +60,27 @@ export function PlayoffOddsChart() {
     <div className="h-96">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis 
-            dataKey="teamName" 
+          <CartesianGrid strokeDasharray="3 3" stroke="#262D3D" />
+          <XAxis
+            dataKey="teamName"
             angle={-45}
             textAnchor="end"
             height={100}
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: 12, fill: '#9CA3AF' }}
           />
-          <YAxis 
+          <YAxis
             tickFormatter={(value) => `${value.toFixed(0)}%`}
             domain={[0, 100]}
+            tick={{ fontSize: 12, fill: '#9CA3AF' }}
           />
-          <Tooltip 
+          <Tooltip
             formatter={(value: number) => [`${value.toFixed(1)}%`, 'Playoff Odds']}
             labelFormatter={(label) => label}
+            contentStyle={{ backgroundColor: '#151B2B', border: '1px solid #262D3D', color: '#E5E7EB' }}
           />
-          <Bar 
-            dataKey="odds" 
-            fill="#013369"
+          <Bar
+            dataKey="odds"
+            fill="#E8372C"
             radius={[4, 4, 0, 0]}
           />
         </BarChart>

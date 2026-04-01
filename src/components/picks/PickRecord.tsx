@@ -32,7 +32,7 @@ export function PickRecord() {
       <div className="animate-pulse">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-20 bg-gray-200 rounded-lg"></div>
+            <div key={i} className="h-20 bg-sak-hover rounded-lg"></div>
           ))}
         </div>
       </div>
@@ -41,14 +41,14 @@ export function PickRecord() {
 
   if (!seasonRecord) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-gray-400">
         No season record available for {selectedSeason}
       </div>
     );
   }
 
-  const winRate = seasonRecord.totalWins + seasonRecord.totalLosses > 0 
-    ? (seasonRecord.totalWins / (seasonRecord.totalWins + seasonRecord.totalLosses)) * 100 
+  const winRate = seasonRecord.totalWins + seasonRecord.totalLosses > 0
+    ? (seasonRecord.totalWins / (seasonRecord.totalWins + seasonRecord.totalLosses)) * 100
     : 0;
 
   return (
@@ -56,50 +56,50 @@ export function PickRecord() {
       {/* Season Selector - Only 2026 */}
       <div className="flex justify-center mb-6">
         <div className="text-center">
-          <div className="text-lg font-semibold text-gray-900 mb-2">2026 NFL Season</div>
-          <div className="text-sm text-gray-600">Fresh start - no picks yet!</div>
+          <div className="text-lg font-semibold text-white mb-2">2026 NFL Season</div>
+          <div className="text-sm text-gray-400">Fresh start - no picks yet!</div>
         </div>
       </div>
 
       {/* Season Summary - All 0s */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         <div className="text-center">
-          <div className="text-3xl font-bold text-gray-900">{seasonRecord.totalWins}</div>
-          <div className="text-sm text-gray-600">Total Wins</div>
+          <div className="text-3xl font-bold text-white">{seasonRecord.totalWins}</div>
+          <div className="text-sm text-gray-400">Total Wins</div>
         </div>
         <div className="text-center">
-          <div className="text-3xl font-bold text-gray-900">{seasonRecord.totalLosses}</div>
-          <div className="text-sm text-gray-600">Total Losses</div>
+          <div className="text-3xl font-bold text-white">{seasonRecord.totalLosses}</div>
+          <div className="text-sm text-gray-400">Total Losses</div>
         </div>
         <div className="text-center">
-          <div className="text-3xl font-bold text-gray-900">{seasonRecord.totalPushes}</div>
-          <div className="text-sm text-gray-600">Total Pushes</div>
+          <div className="text-3xl font-bold text-white">{seasonRecord.totalPushes}</div>
+          <div className="text-sm text-gray-400">Total Pushes</div>
         </div>
         <div className="text-center">
-          <div className="text-3xl font-bold text-gray-900">{winRate.toFixed(1)}%</div>
-          <div className="text-sm text-gray-600">Win Rate</div>
+          <div className="text-3xl font-bold text-white">{winRate.toFixed(1)}%</div>
+          <div className="text-sm text-gray-400">Win Rate</div>
         </div>
       </div>
 
       {/* Units and ROI - All 0s */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-gray-50 rounded-lg p-6 text-center">
-          <div className="text-2xl font-bold text-gray-900">{seasonRecord.totalUnits}</div>
-          <div className="text-sm text-gray-600">Total Units Wagered</div>
+        <div className="bg-sak-hover rounded-lg p-6 text-center">
+          <div className="text-2xl font-bold text-white">{seasonRecord.totalUnits}</div>
+          <div className="text-sm text-gray-400">Total Units Wagered</div>
         </div>
-        <div className="bg-gray-50 rounded-lg p-6 text-center">
-          <div className="text-2xl font-bold text-gray-600">
+        <div className="bg-sak-hover rounded-lg p-6 text-center">
+          <div className="text-2xl font-bold text-gray-400">
             {seasonRecord.totalRoi.toFixed(1)}%
           </div>
-          <div className="text-sm text-gray-600">Total ROI</div>
+          <div className="text-sm text-gray-400">Total ROI</div>
         </div>
       </div>
 
       {/* Season Start Message */}
       <div className="mt-8">
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-          <div className="text-lg font-medium text-blue-900 mb-2">2026 Season Starting Soon!</div>
-          <div className="text-sm text-blue-700">
+        <div className="bg-brand-red/10 border border-brand-red/30 rounded-lg p-6 text-center">
+          <div className="text-lg font-medium text-brand-red/90 mb-2">2026 Season Starting Soon!</div>
+          <div className="text-sm text-brand-red/70">
             The 2026 NFL season begins in September. Your picks and performance tracking will appear here once the season starts.
           </div>
         </div>

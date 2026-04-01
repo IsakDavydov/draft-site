@@ -55,37 +55,37 @@ function TradeModal({
   const currentHolder = effectiveOrder.find((d) => d.pick === assignPick)?.team ?? '—';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Trade Picks</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="bg-sak-card rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl ring-1 ring-white/[0.06] max-h-[90vh] overflow-y-auto">
+        <h3 className="text-lg font-semibold text-white mb-2">Trade Picks</h3>
         <div className="flex gap-2 mb-4">
           <button
             type="button"
             onClick={() => setMode('swap')}
-            className={`px-3 py-1.5 text-sm font-medium rounded-lg ${mode === 'swap' ? 'bg-nfl-red text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            className={`px-3 py-1.5 text-sm font-medium rounded-lg ${mode === 'swap' ? 'bg-brand-red text-white' : 'bg-sak-hover text-gray-400 hover:bg-sak-border'}`}
           >
             Swap two
           </button>
           <button
             type="button"
             onClick={() => setMode('assign')}
-            className={`px-3 py-1.5 text-sm font-medium rounded-lg ${mode === 'assign' ? 'bg-nfl-red text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            className={`px-3 py-1.5 text-sm font-medium rounded-lg ${mode === 'assign' ? 'bg-brand-red text-white' : 'bg-sak-hover text-gray-400 hover:bg-sak-border'}`}
           >
             Assign team
           </button>
         </div>
         {mode === 'swap' ? (
           <>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-400 mb-4">
               Select two picks to swap. The teams at those spots will exchange draft positions.
             </p>
             <div className="flex gap-4 mb-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Pick A</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Pick A</label>
                 <select
                   value={pickA}
                   onChange={(e) => setPickA(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-sak-border rounded-lg text-sm bg-sak-hover text-gray-200"
                 >
                   {effectiveOrder.map((d) => (
                     <option key={d.pick} value={d.pick}>
@@ -95,11 +95,11 @@ function TradeModal({
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Pick B</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Pick B</label>
                 <select
                   value={pickB}
                   onChange={(e) => setPickB(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-sak-border rounded-lg text-sm bg-sak-hover text-gray-200"
                 >
                   {effectiveOrder.map((d) => (
                     <option key={d.pick} value={d.pick}>
@@ -110,23 +110,23 @@ function TradeModal({
               </div>
             </div>
             {pickA !== pickB && (
-              <p className="text-sm text-gray-600 mb-4">
-                After swap: <strong>{pickA}. {teamB}</strong> ↔ <strong>{pickB}. {teamA}</strong>
+              <p className="text-sm text-gray-400 mb-4">
+                After swap: <strong className="text-white">{pickA}. {teamB}</strong> ↔ <strong className="text-white">{pickB}. {teamA}</strong>
               </p>
             )}
           </>
         ) : (
           <>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-400 mb-4">
               Assign a team (e.g. one without a first-round pick) to a specific pick—for when a team trades into the first round.
             </p>
             <div className="flex gap-4 mb-4">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Pick</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Pick</label>
                 <select
                   value={assignPick}
                   onChange={(e) => setAssignPick(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-sak-border rounded-lg text-sm bg-sak-hover text-gray-200"
                 >
                   {effectiveOrder.map((d) => (
                     <option key={d.pick} value={d.pick}>
@@ -136,11 +136,11 @@ function TradeModal({
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">New team</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1">New team</label>
                 <select
                   value={assignTeam}
                   onChange={(e) => setAssignTeam(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-sak-border rounded-lg text-sm bg-sak-hover text-gray-200"
                 >
                   {NFL_TEAM_NAMES.map((name) => (
                     <option key={name} value={name}>
@@ -150,8 +150,8 @@ function TradeModal({
                 </select>
               </div>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
-              Pick <strong>{assignPick}</strong> will be held by <strong>{assignTeam}</strong>
+            <p className="text-sm text-gray-400 mb-4">
+              Pick <strong className="text-white">{assignPick}</strong> will be held by <strong className="text-white">{assignTeam}</strong>
               {assignTeam !== currentHolder && (
                 <span className="block mt-1 text-gray-500">(currently {currentHolder})</span>
               )}
@@ -162,7 +162,7 @@ function TradeModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+            className="px-4 py-2 text-sm font-medium text-gray-400 hover:bg-sak-hover rounded-lg"
           >
             Cancel
           </button>
@@ -171,7 +171,7 @@ function TradeModal({
               type="button"
               onClick={() => pickA !== pickB && onSwap(pickA, pickB)}
               disabled={loading || pickA === pickB}
-              className="px-4 py-2 text-sm font-semibold bg-nfl-red text-white rounded-lg hover:bg-nfl-red/90 disabled:opacity-50"
+              className="px-4 py-2 text-sm font-semibold bg-brand-red text-white rounded-lg hover:bg-brand-red/90 disabled:opacity-50"
             >
               Swap
             </button>
@@ -180,7 +180,7 @@ function TradeModal({
               type="button"
               onClick={() => onAssign(assignPick, assignTeam)}
               disabled={loading}
-              className="px-4 py-2 text-sm font-semibold bg-nfl-red text-white rounded-lg hover:bg-nfl-red/90 disabled:opacity-50"
+              className="px-4 py-2 text-sm font-semibold bg-brand-red text-white rounded-lg hover:bg-brand-red/90 disabled:opacity-50"
             >
               Assign
             </button>
@@ -670,10 +670,10 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   return (
     <div className="space-y-6">
       {/* Draft selector */}
-      <div className="rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
+      <div className="rounded-2xl border border-white/[0.06] bg-sak-card px-5 py-4 shadow-card">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-widest text-gray-400">Your Drafts</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Your Drafts</p>
             <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
               {drafts.map((draft) => {
                 const score = draft.picks.length === 32
@@ -687,7 +687,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                 return (
                   <div
                     key={draft.id}
-                    className="flex flex-shrink-0 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50"
+                    className="flex flex-shrink-0 items-center gap-0.5 rounded-lg border border-white/[0.06] bg-sak-hover"
                   >
                     <button
                       type="button"
@@ -696,8 +696,8 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                       title={onLeaderboard ? 'Leaderboard entry' : undefined}
                       className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-all rounded-l-md ${
                         isSelected
-                          ? 'bg-nfl-blue text-white shadow-sm'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+                          ? 'bg-brand-red text-white shadow-sm'
+                          : 'bg-sak-hover text-gray-400 hover:bg-sak-border hover:text-gray-200'
                       }`}
                     >
                       {onLeaderboard && (
@@ -721,7 +721,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                       }}
                       disabled={loading}
                       aria-label={`Delete ${draft.name || draft.display_name || 'draft'}`}
-                      className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 disabled:opacity-50"
+                      className="p-1.5 text-gray-600 hover:text-brand-red hover:bg-brand-red/10 disabled:opacity-50"
                     >
                       <Trash2 className="h-3 w-3" />
                     </button>
@@ -730,11 +730,11 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               })}
             </div>
             {selectedDraft?.is_leaderboard_entry && (
-              <p className="mt-2 inline-flex max-w-full flex-wrap items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950">
-                <Trophy className="h-4 w-4 shrink-0 text-amber-600" aria-hidden />
+              <p className="mt-2 inline-flex max-w-full flex-wrap items-center gap-2 rounded-lg border border-brand-gold/20 bg-brand-gold/10 px-3 py-2 text-xs text-brand-gold">
+                <Trophy className="h-4 w-4 shrink-0 text-brand-gold" aria-hidden />
                 <span>
                   <span className="font-semibold">Leaderboard draft</span>
-                  <span className="text-amber-900/90">
+                  <span className="text-brand-gold/80">
                     {' '}
                     — you&apos;re editing the entry shown on the public leaderboard (save to apply changes).
                   </span>
@@ -746,7 +746,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
             type="button"
             onClick={handleCreateNewDraft}
             disabled={loading || drafts.length >= MAX_DRAFTS}
-            className="inline-flex flex-shrink-0 items-center gap-2 rounded-lg border border-dashed border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-500 hover:border-nfl-blue hover:text-nfl-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex flex-shrink-0 items-center gap-2 rounded-lg border border-dashed border-white/[0.1] px-3 py-1.5 text-xs font-semibold text-gray-500 hover:border-brand-red/40 hover:text-brand-red transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus className="h-3.5 w-3.5" />
             <span className="whitespace-nowrap">
@@ -757,24 +757,24 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       </div>
 
       {message && (
-        <div className={`rounded-xl px-4 py-3 text-sm font-medium border ${message.type === 'error' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'}`}>
+        <div className={`rounded-xl px-4 py-3 text-sm font-medium border ${message.type === 'error' ? 'bg-brand-red/10 text-brand-red border-brand-red/20' : 'bg-green-500/10 text-green-400 border-green-500/20'}`}>
           {message.text}
         </div>
       )}
       {submitResult && message?.type === 'success' && (
-        <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3">
+        <div className="rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="font-semibold text-green-800">
-                You&apos;re ranked <span className="text-green-900">#{submitResult.rank}</span> with {submitResult.score} points!
+              <p className="font-semibold text-green-400">
+                You&apos;re ranked <span className="text-brand-gold font-display font-black">#{submitResult.rank}</span> with <span className="text-brand-gold font-display font-black">{submitResult.score}</span> points!
               </p>
-              <p className="mt-0.5 text-xs sm:text-sm text-green-700">
+              <p className="mt-0.5 text-xs sm:text-sm text-green-400/80">
                 Refine your picks and resubmit this draft to try to climb the leaderboard.
               </p>
             </div>
             <Link
               href="/leaderboard"
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-green-800 hover:text-green-900 hover:underline"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-green-400 hover:text-green-300 hover:underline"
             >
               <TrendingUp className="h-4 w-4" />
               View full leaderboard
@@ -791,10 +791,10 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
           }}
           className="space-y-6"
         >
-          <div className="rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
+          <div className="rounded-2xl border border-white/[0.06] bg-sak-card px-5 py-4 shadow-card">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="max-w-md">
-                <label htmlFor="draftName" className="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-1">
+                <label htmlFor="draftName" className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">
                   Draft name
                 </label>
                 <input
@@ -803,7 +803,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                   value={draftName}
                   onChange={(e) => setDraftName(e.target.value)}
                   maxLength={50}
-                  className="mt-1 w-full max-w-xs px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-nfl-blue focus:border-transparent"
+                  className="mt-1 w-full max-w-xs px-3 py-2 border border-sak-border rounded-lg bg-sak-hover text-sm text-white placeholder:text-gray-600 focus:ring-2 focus:ring-brand-red focus:border-transparent"
                   placeholder="e.g. DraftKing"
                 />
                 <p className="mt-1 text-xs text-gray-500">
@@ -813,16 +813,16 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               <div className="flex flex-col items-start gap-2 md:items-end">
                 {selectedDraft?.is_leaderboard_entry ? (
                   <div className="inline-flex flex-col items-start gap-1 sm:items-end sm:text-right">
-                    <div className="inline-flex items-center gap-2 rounded-lg bg-amber-50 px-3 py-1.5 text-xs sm:text-sm text-amber-800">
+                    <div className="inline-flex items-center gap-2 rounded-lg bg-brand-gold/10 px-3 py-1.5 text-xs sm:text-sm text-brand-gold">
                       <Trophy className="h-4 w-4 shrink-0" />
                       <span>
                         On leaderboard as{' '}
-                        <span className="font-semibold">
+                        <span className="font-semibold text-white">
                           {selectedDraft.display_name || selectedDraft.name || '—'}
                         </span>
                       </span>
                     </div>
-                    <p className="text-[11px] text-amber-900/80 max-w-xs">
+                    <p className="text-[11px] text-brand-gold/70 max-w-xs">
                       Edit the draft name above and save to update the leaderboard.
                     </p>
                   </div>
@@ -830,7 +830,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                   <button
                     type="button"
                     onClick={() => setSubmitToLeaderboardModal(true)}
-                    className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white hover:bg-amber-600"
+                    className="inline-flex items-center gap-2 rounded-lg bg-brand-gold px-3 py-1.5 text-xs sm:text-sm font-semibold text-sak-dark hover:bg-brand-gold/90"
                   >
                     <Trophy className="h-4 w-4" />
                     Submit this draft to leaderboard
@@ -838,13 +838,13 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                 )}
                 {currentScore !== null && (
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs sm:text-sm text-gray-700 font-medium">
-                      Pre-draft score: <strong>{currentScore}</strong>
+                    <span className="text-xs sm:text-sm text-gray-300 font-medium">
+                      Pre-draft score: <strong className="text-brand-gold font-display">{currentScore}</strong>
                     </span>
                     <button
                       type="button"
                       onClick={() => setShareModalOpen(true)}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-200"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-sak-hover px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 ring-1 ring-white/[0.06] hover:bg-sak-border"
                     >
                       <Share2 className="h-4 w-4" />
                       Share top 5
@@ -853,7 +853,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                       <button
                         type="button"
                         onClick={() => setShareFullModalOpen(true)}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-200"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-sak-hover px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 ring-1 ring-white/[0.06] hover:bg-sak-border"
                       >
                         <Share2 className="h-4 w-4" />
                         Share full draft
@@ -867,23 +867,23 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
 
           <div className="space-y-4">
             {/* Progress bar */}
-            <div className="rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
+            <div className="rounded-2xl border border-white/[0.06] bg-sak-card px-5 py-4 shadow-card">
               <div className="flex items-center justify-between mb-2">
-                <h2 className="font-display text-base font-bold text-gray-900">Your First Round Picks</h2>
-                <span className={`text-sm font-bold tabular-nums ${filledCount === totalPicks ? 'text-nfl-blue' : 'text-gray-500'}`}>
-                  {filledCount}<span className="font-normal text-gray-400">/{totalPicks}</span>
+                <h2 className="font-display text-base font-bold text-white">Your First Round Picks</h2>
+                <span className={`text-sm font-bold tabular-nums ${filledCount === totalPicks ? 'text-brand-red' : 'text-gray-500'}`}>
+                  {filledCount}<span className="font-normal text-gray-500">/{totalPicks}</span>
                 </span>
               </div>
-              <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+              <div className="w-full h-2 rounded-full bg-sak-hover overflow-hidden">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-nfl-blue to-red-500 transition-all duration-500"
+                  className="h-full rounded-full bg-gradient-to-r from-brand-red to-brand-gold transition-all duration-500"
                   style={{ width: `${totalPicks > 0 ? (filledCount / totalPicks) * 100 : 0}%` }}
                 />
               </div>
               {hasDuplicates && (
-                <p className="mt-2 text-xs font-medium text-red-600">Remove duplicate players before saving</p>
+                <p className="mt-2 text-xs font-medium text-red-400">Remove duplicate players before saving</p>
               )}
-              <p className="mt-1.5 text-xs text-gray-400">
+              <p className="mt-1.5 text-xs text-gray-500">
                 {filledCount === totalPicks ? '🎉 All picks filled — ready to save!' : 'Select one prospect per pick. Each player can only be used once.'}
               </p>
             </div>
@@ -892,7 +892,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               <button
                 type="button"
                 onClick={fillFromBigBoard}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-nfl-blue/10 text-nfl-blue border border-nfl-blue/20 hover:bg-nfl-blue/15 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-red/10 text-brand-red border border-brand-red/20 hover:bg-brand-red/15 transition-colors"
               >
                 <Zap className="h-3.5 w-3.5" />
                 Use Big Board
@@ -901,16 +901,16 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                 type="button"
                 onClick={fillRemaining}
                 disabled={effectiveOrder.every(({ pick }) => picks[pick])}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-sak-hover text-gray-400 hover:bg-white/[0.08] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Zap className="h-3.5 w-3.5" />
                 Fill remaining
               </button>
-              <div className="h-4 w-px bg-gray-200" />
+              <div className="h-4 w-px bg-white/10" />
               <button
                 type="button"
                 onClick={() => setTradeModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-sak-hover text-gray-400 hover:bg-white/[0.08] transition-colors"
               >
                 <ArrowLeftRight className="h-3.5 w-3.5" />
                 Add trade
@@ -920,7 +920,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                   type="button"
                   onClick={handleClearTrades}
                   disabled={loading}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg text-amber-700 border border-amber-200 hover:bg-amber-50 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg text-brand-gold border border-brand-gold/20 hover:bg-brand-gold/10 transition-colors"
                 >
                   Reset trades
                 </button>
@@ -928,7 +928,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               <button
                 type="button"
                 onClick={clearAll}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg text-red-600 border border-red-100 hover:bg-red-50 transition-colors ml-auto"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg text-red-400 border border-red-400/20 hover:bg-red-400/10 transition-colors ml-auto"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 Clear all
@@ -947,7 +947,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                       if (el) pickCardRefs.current[pick] = el;
                       else delete pickCardRefs.current[pick];
                     }}
-                    className="flex flex-col rounded-xl border bg-white p-3 sm:p-4 shadow-sm hover:shadow-card transition-shadow"
+                    className="flex flex-col rounded-xl border border-white/[0.06] bg-sak-card p-3 sm:p-4 shadow-sm hover:shadow-card transition-shadow"
                     style={{ borderLeftWidth: '4px', borderLeftColor: teamColor }}
                   >
                     <div className="mb-2 flex-shrink-0 flex items-center gap-2">
@@ -958,14 +958,14 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                         {pick}
                       </span>
                       <TeamLogo teamName={team} size={20} />
-                      <span className="text-sm font-bold text-gray-800 truncate">{teamNickname}</span>
+                      <span className="text-sm font-bold text-gray-200 truncate">{teamNickname}</span>
                     </div>
                     {needsForTeam.length > 0 && (
                       <div className="mb-2 flex-shrink-0">
                         <p className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-1">Team Needs</p>
                         <div className="flex flex-wrap gap-1">
                           {needsForTeam.slice(0, 5).map((need) => (
-                            <span key={need} className="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold bg-gray-100 text-gray-500">
+                            <span key={need} className="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold bg-white/[0.06] text-gray-500">
                               {need}
                             </span>
                           ))}
@@ -1002,7 +1002,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-2 rounded-xl bg-nfl-blue px-8 py-3 text-base font-bold text-white shadow-lg shadow-nfl-blue/25 hover:bg-nfl-blue/90 hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="inline-flex items-center gap-2 rounded-xl bg-brand-red px-8 py-3 text-base font-bold text-white shadow-lg shadow-brand-red/25 hover:bg-brand-red/90 hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               <Zap className="h-5 w-5" />
               {loading ? 'Saving...' : saved ? 'Update Draft' : 'Save Draft'}
@@ -1015,7 +1015,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       )}
 
       {drafts.length === 0 && (
-        <p className="text-gray-500 text-sm">
+        <p className="text-gray-400 text-sm">
           Click &quot;New draft&quot; to create your first mock draft, or your drafts will load shortly.
         </p>
       )}
@@ -1066,18 +1066,18 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
 
       {/* Submit to leaderboard modal */}
       {submitToLeaderboardModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Submit to Leaderboard</h3>
-            <p className="text-sm text-gray-600 mb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-sak-card border border-white/[0.08] rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold text-white mb-2">Submit to Leaderboard</h3>
+            <p className="text-sm text-gray-400 mb-4">
               Your entry will appear as{' '}
-              <span className="font-semibold text-gray-900">
+              <span className="font-semibold text-white">
                 {draftName.trim() || '—'}
               </span>{' '}
               (your draft name). This replaces any other draft you&apos;ve submitted.
             </p>
             {!draftName.trim() && (
-              <p className="text-sm text-amber-800 bg-amber-50 rounded-lg px-3 py-2 mb-4">
+              <p className="text-sm text-brand-gold bg-brand-gold/10 rounded-lg px-3 py-2 mb-4">
                 Add a draft name in the field above first.
               </p>
             )}
@@ -1085,7 +1085,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               <button
                 type="button"
                 onClick={() => setSubmitToLeaderboardModal(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+                className="px-4 py-2 text-sm font-medium text-gray-400 hover:bg-white/[0.06] rounded-lg transition-colors"
               >
                 Cancel
               </button>
@@ -1093,7 +1093,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                 type="button"
                 onClick={handleSubmitToLeaderboard}
                 disabled={loading || !draftName.trim()}
-                className="px-4 py-2 text-sm font-semibold bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-brand-gold text-white rounded-lg hover:bg-brand-gold/90 disabled:opacity-50 transition-colors"
               >
                 Submit
               </button>

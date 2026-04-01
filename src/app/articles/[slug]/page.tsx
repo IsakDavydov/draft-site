@@ -28,11 +28,11 @@ export default function ArticlePage({ params }: ArticlePageProps) {
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-sak-darker">
       <article className="mx-auto max-w-3xl px-6 py-16 sm:py-24 lg:px-8">
         <Link
           href="/articles"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-nfl-red mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-brand-red mb-8 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Articles
@@ -45,7 +45,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
               {article.category}
             </span>
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-6">
+          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl mb-6">
             {article.title}
           </h1>
           <div className="flex items-center gap-x-6 text-sm text-gray-500">
@@ -63,7 +63,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
         {article.format === 'mock-draft' ? (
           <MockDraftArticleContent content={article.content} />
         ) : (
-          <div className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-800 prose-a:text-nfl-red prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-code:text-nfl-red prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded [&_p]:text-gray-800 [&_li]:text-gray-800">
+          <div className="prose prose-lg max-w-none prose-headings:text-white prose-p:text-gray-300 prose-a:text-brand-red prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-code:text-brand-red prose-code:bg-sak-dark prose-code:px-1 prose-code:py-0.5 prose-code:rounded [&_p]:text-gray-300 [&_li]:text-gray-300">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {article.content}
             </ReactMarkdown>

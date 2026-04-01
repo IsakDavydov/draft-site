@@ -32,12 +32,12 @@ export function ImpactMeter({ label, value, max = 10, variant = 'impact' }: Impa
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm">
-        <span className="font-medium text-gray-700">{label}</span>
-        <span className="font-semibold tabular-nums text-gray-900">
+        <span className="font-medium text-gray-300">{label}</span>
+        <span className="font-semibold tabular-nums text-white">
           {value}/{max}
         </span>
       </div>
-      <div className="h-3.5 w-full overflow-hidden rounded-xl bg-gray-200/80">
+      <div className="h-3.5 w-full overflow-hidden rounded-xl bg-white/[0.06]">
         <div
           className={`h-full rounded-xl ${barColor} shadow-sm transition-[width] duration-700 ease-out`}
           style={{ width: `${animatedPercent}%` }}

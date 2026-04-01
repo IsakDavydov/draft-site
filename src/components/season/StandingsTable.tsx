@@ -33,7 +33,7 @@ export function StandingsTable() {
       <div className="p-6">
         <div className="animate-pulse space-y-4">
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="h-12 bg-gray-200 rounded"></div>
+            <div key={i} className="h-12 bg-sak-hover rounded"></div>
           ))}
         </div>
       </div>
@@ -64,82 +64,82 @@ export function StandingsTable() {
       {divisionStandings.map(({ conference, division, standings: divStandings }) => (
         <div
           key={`${conference}-${division}`}
-          className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"
+          className="rounded-xl border border-sak-border bg-sak-card shadow-sm overflow-hidden"
         >
-          <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
+          <div className="px-4 py-3 bg-sak-hover border-b border-sak-border">
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
               {conference} {division}
             </h3>
           </div>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-sak-border">
+              <thead className="bg-sak-hover">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Team
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     W
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     L
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     T
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     PCT
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     PF
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     PA
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Playoff %
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-sak-card divide-y divide-sak-border">
                 {divStandings.map((standing) => {
                   const team = teams.find(t => t.id === standing.teamId);
                   if (!team) return null;
 
                   return (
-                    <tr key={standing.teamId} className="hover:bg-gray-50">
+                    <tr key={standing.teamId} className="hover:bg-sak-hover">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
                           <TeamLogo teamName={team.name} size={32} />
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm font-medium text-white">
                             {team.city} {team.nickname}
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                         {standing.wins}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                         {standing.losses}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                         {standing.ties}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                         {standing.winPercentage.toFixed(3).replace(/^0+/, '')}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                         {standing.pointsFor}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                         {standing.pointsAgainst}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
                         <div className="flex items-center">
                           <span className="mr-2">{(standing.playoffOdds * 100).toFixed(1)}%</span>
-                          <div className="w-16 bg-gray-200 rounded-full h-2">
+                          <div className="w-16 bg-sak-border rounded-full h-2">
                             <div
-                              className="bg-nfl-red h-2 rounded-full transition-all duration-300"
+                              className="bg-brand-red h-2 rounded-full transition-all duration-300"
                               style={{ width: `${standing.playoffOdds * 100}%` }}
                             ></div>
                           </div>

@@ -22,7 +22,7 @@ export function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 bg-gray-950 border-b border-nfl-blue/30">
+    <header className="sticky top-0 z-50 bg-sak-darker/90 backdrop-blur-xl border-b border-white/[0.06]">
 
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-8"
@@ -62,10 +62,7 @@ export function SiteHeader() {
           <Link
             href="/predict"
             className={cn(
-              'flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-bold transition-all mr-2',
-              pathname === '/predict'
-                ? 'bg-nfl-blue text-white'
-                : 'bg-nfl-blue/10 text-nfl-blue ring-1 ring-inset ring-nfl-blue/30 hover:bg-nfl-blue hover:text-white'
+              'flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-bold transition-all mr-2 bg-brand-red text-white animate-glow-pulse'
             )}
           >
             <Zap className="h-3.5 w-3.5" />
@@ -78,10 +75,10 @@ export function SiteHeader() {
               href={item.href}
               prefetch={false}
               className={cn(
-                'rounded-md px-3 py-2 text-sm font-semibold transition-colors',
+                'rounded-md px-3 py-2 text-sm font-semibold transition-colors duration-200',
                 pathname === item.href
                   ? 'text-white'
-                  : 'text-gray-400 hover:text-white'
+                  : 'text-gray-500 hover:text-gray-200'
               )}
             >
               {item.name}
@@ -93,7 +90,7 @@ export function SiteHeader() {
         <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-3 lg:items-center">
           <Link
             href="/search"
-            className="rounded-md p-2 text-gray-400 hover:text-white transition-colors"
+            className="rounded-md p-2 text-gray-500 hover:text-gray-200 transition-colors duration-200"
             aria-label="Search"
           >
             <Search className="h-4.5 w-4.5" />
@@ -111,7 +108,7 @@ export function SiteHeader() {
             aria-hidden="true"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-gray-950 px-6 py-4 sm:max-w-sm border-l border-white/10">
+          <div className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-sak-dark px-6 py-4 sm:max-w-sm border-l border-white/[0.06]">
             <div className="flex items-center justify-between">
               <Link href="/" className="flex items-center gap-2.5" onClick={() => setMobileMenuOpen(false)}>
                 <LogoImage
@@ -138,7 +135,7 @@ export function SiteHeader() {
                 <div className="py-5">
                   <Link
                     href="/predict"
-                    className="flex items-center gap-2 rounded-xl bg-nfl-blue px-4 py-3 text-sm font-bold text-white"
+                    className="flex items-center gap-2 rounded-xl bg-brand-red px-4 py-3 text-sm font-bold text-white"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <Zap className="h-4 w-4" />
@@ -154,10 +151,10 @@ export function SiteHeader() {
                       href={item.href}
                       prefetch={false}
                       className={cn(
-                        '-mx-3 block rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 transition-colors',
+                        '-mx-3 block rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 transition-colors duration-200',
                         pathname === item.href
                           ? 'text-white bg-white/5'
-                          : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                          : 'text-gray-500 hover:bg-white/5 hover:text-gray-200'
                       )}
                       onClick={() => setMobileMenuOpen(false)}
                     >
@@ -170,7 +167,7 @@ export function SiteHeader() {
                 <div className="py-6 space-y-2">
                   <Link
                     href="/search"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-500 hover:bg-white/5 hover:text-gray-200 transition-colors duration-200"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Search

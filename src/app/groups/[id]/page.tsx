@@ -124,12 +124,12 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
   const showMembersOnly = !hasResults && preDraftLeaderboard.length === 0 && members && members.length > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-sak-darker to-sak-darker">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <Link
             href="/groups"
-            className="group inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-all duration-200 hover:text-nfl-red"
+            className="group inline-flex items-center gap-2 text-sm font-medium text-gray-400 transition-all duration-200 hover:text-brand-red"
           >
             <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
             Back to Groups
@@ -137,14 +137,14 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
           <div className="flex flex-wrap gap-3">
             <Link
               href="/leaderboard"
-              className="inline-flex items-center gap-2 text-sm font-medium text-nfl-blue transition-colors hover:text-nfl-blue/80"
+              className="inline-flex items-center gap-2 text-sm font-medium text-brand-red transition-colors hover:text-brand-red/80"
             >
               <Trophy className="h-4 w-4" />
               View full leaderboard →
             </Link>
             <Link
               href="/predict"
-              className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
+              className="inline-flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors hover:text-gray-200"
             >
               Predict →
             </Link>
@@ -152,20 +152,20 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
         </div>
 
         <div className="flex items-center gap-4 mb-8">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-nfl-blue/15 to-nfl-blue/5 ring-1 ring-nfl-blue/20 shadow-card-sm">
-            <Users className="h-7 w-7 text-nfl-blue" />
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-red/15 to-brand-red/5 ring-1 ring-brand-red/20 shadow-card-sm">
+            <Users className="h-7 w-7 text-brand-red" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{group.name}</h1>
-            <p className="mt-1 text-sm text-gray-600">
-              Invite code: <span className="font-mono font-semibold text-gray-700">{group.invite_code}</span>
+            <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">{group.name}</h1>
+            <p className="mt-1 text-sm text-gray-400">
+              Invite code: <span className="font-mono font-semibold text-gray-300">{group.invite_code}</span>
             </p>
           </div>
         </div>
 
         {!hasResults ? (
           <>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-400 mb-4">
               {showPreDraft
                 ? 'Scores go live pick-by-pick on draft night.'
                 : showMembersOnly
@@ -192,16 +192,16 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
                 showScores={false}
               />
             ) : (
-              <div className="rounded-3xl border border-gray-200/80 bg-white p-10 text-center shadow-card-sm">
-                <p className="text-gray-600">No members have submitted predictions yet.</p>
-                <Link href="/predict" className="mt-4 inline-block font-medium text-nfl-red transition-colors hover:text-nfl-red/90">
+              <div className="rounded-3xl border border-white/[0.06] bg-sak-card p-10 text-center shadow-card">
+                <p className="text-gray-400">No members have submitted predictions yet.</p>
+                <Link href="/predict" className="mt-4 inline-block font-medium text-brand-red transition-colors hover:text-brand-red/90">
                   Submit your predictions →
                 </Link>
               </div>
             )}
             {(showPreDraft || showMembersOnly) && (
-              <p className="mt-4 text-sm text-gray-500">
-                <Link href="/predict" className="text-nfl-red font-medium hover:underline">
+              <p className="mt-4 text-sm text-gray-400">
+                <Link href="/predict" className="text-brand-red font-medium hover:underline">
                   Submit your predictions →
                 </Link>{' '}
                 {showPreDraft ? 'to join or update your score.' : 'to join the leaderboard.'}
@@ -209,12 +209,12 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
             )}
           </>
         ) : error ? (
-          <div className="rounded-3xl border border-gray-200/80 bg-white p-10 text-center shadow-card-sm">
-            <p className="text-red-600">Unable to load leaderboard. Please try again later.</p>
+          <div className="rounded-3xl border border-white/[0.06] bg-sak-card p-10 text-center shadow-card">
+            <p className="text-red-400">Unable to load leaderboard. Please try again later.</p>
           </div>
         ) : !leaderboard || leaderboard.length === 0 ? (
-          <div className="rounded-3xl border border-gray-200/80 bg-white p-10 text-center shadow-card-sm">
-            <p className="text-gray-600">No scores yet. Scores appear after the 2026 NFL Draft.</p>
+          <div className="rounded-3xl border border-white/[0.06] bg-sak-card p-10 text-center shadow-card">
+            <p className="text-gray-400">No scores yet. Scores appear after the 2026 NFL Draft.</p>
           </div>
         ) : (
           <>
@@ -244,7 +244,7 @@ export default async function GroupDetailPage({ params }: GroupDetailPageProps) 
 
         {hasResults && (
           <>
-            <p className="mt-6 text-[13px] text-gray-500">
+            <p className="mt-6 text-[13px] text-gray-400">
               15 pts = correct player at correct pick. 5 pts = player went 1 pick before or after. Max 480 pts.
             </p>
             <LeaderboardLiveRefresh enabled={hasResults} />

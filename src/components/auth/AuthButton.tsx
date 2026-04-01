@@ -15,7 +15,7 @@ export function AuthButton({ dark = false }: AuthButtonProps) {
 
   const baseText = dark
     ? 'text-gray-300 hover:text-white transition-colors'
-    : 'text-gray-900 hover:text-nfl-red transition-colors';
+    : 'text-white hover:text-brand-red transition-colors';
 
   useEffect(() => {
     let sub: { unsubscribe: () => void } | undefined;

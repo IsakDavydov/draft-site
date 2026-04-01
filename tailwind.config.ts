@@ -2,6 +2,9 @@ const config = {
   // Force inclusion of custom classes that may not be detected by content scan
   safelist: [
     "animate-leaderboard-row",
+    "animate-fade-up",
+    "animate-glow-pulse",
+    "animate-score-tick",
   ],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -54,15 +57,36 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Football-specific colors
-        nfl: {
-          red: "#013369",
-          blue: "#D50A0A",
-          green: "#008E97",
-          orange: "#FF8C00",
-          purple: "#4B0082",
-          gold: "#FFD700",
+
+        /* ── SAK brand palette ─────────────────────────────────── */
+        sak: {
+          dark:    "#0C1220",   // deep ink navy — base dark surface
+          darker:  "#080D18",   // even deeper — page background
+          card:    "#151B2B",   // elevated dark card surface
+          hover:   "#1E2538",   // interactive hover / input bg
+          border:  "#262D3D",   // subtle borders on dark surfaces
         },
+        brand: {
+          red:     "#E8372C",   // primary action / energy accent
+          gold:    "#F0A030",   // reward / achievement / premium
+          navy:    "#0C1220",   // redundant alias for sak-dark
+        },
+        surface: {
+          light:   "#F5F6F8",   // warm gray background (light mode)
+          card:    "#FFFFFF",   // white cards on warm gray
+        },
+
+        /* ── Legacy NFL aliases (kept for backward compat) ───── */
+        nfl: {
+          red:     "#0C1220",   // was #013369 — remapped to dark navy
+          blue:    "#E8372C",   // was #D50A0A — remapped to brand red
+          green:   "#008E97",
+          orange:  "#FF8C00",
+          purple:  "#4B0082",
+          gold:    "#F0A030",   // warmer amber
+        },
+
+        /* ── NFL team colors (unchanged) ───────────────────────── */
         team: {
           chiefs: "#E31837",
           raiders: "#000000",
@@ -113,26 +137,38 @@ const config = {
         "128": "32rem",
       },
       boxShadow: {
-        card: "0 4px 24px -4px rgba(0,0,0,0.08), 0 8px 48px -8px rgba(0,0,0,0.06)",
-        "card-hover": "0 8px 32px -4px rgba(0,0,0,0.1), 0 16px 64px -8px rgba(0,0,0,0.08)",
-        "card-sm": "0 4px 24px -4px rgba(0,0,0,0.08)",
-        accent: "0 2px 12px -4px rgba(251,191,36,0.2)",
+        card: "0 4px 24px -4px rgba(0,0,0,0.25), 0 8px 48px -8px rgba(0,0,0,0.15)",
+        "card-hover": "0 8px 32px -4px rgba(0,0,0,0.35), 0 16px 64px -8px rgba(0,0,0,0.2)",
+        "card-sm": "0 4px 24px -4px rgba(0,0,0,0.2)",
+        accent: "0 2px 12px -4px rgba(240,160,48,0.3)",
+        glow: "0 0 20px -4px rgba(232,55,44,0.25)",
+        "glow-gold": "0 0 20px -4px rgba(240,160,48,0.25)",
       },
       animation: {
         "leaderboard-row": "leaderboardRowFadeIn 0.4s ease-out backwards",
         "fade-in": "fadeIn 0.5s ease-in-out",
+        "fade-up": "fadeUp 0.5s ease-out forwards",
         "slide-up": "slideUp 0.4s ease-out forwards",
         "slide-down": "slideDown 0.3s ease-out",
         "scale-in": "scaleIn 0.2s ease-out",
+        "glow-pulse": "glowPulse 3s ease-in-out infinite",
+        "score-tick": "scoreTick 0.3s ease-out",
+        "check-pop": "checkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "field-drift": "fieldDrift 30s linear infinite",
+        "ticker-scroll": "tickerScroll 40s linear infinite",
       },
       keyframes: {
         leaderboardRowFadeIn: {
-          "0%": { opacity: "0", transform: "translateY(4px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
+          "0%": { opacity: "0", transform: "translateY(8px) scale(0.98)" },
+          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
         },
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
+        },
+        fadeUp: {
+          "0%": { transform: "translateY(20px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
         },
         slideUp: {
           "0%": { transform: "translateY(12px)", opacity: "0" },
@@ -145,6 +181,27 @@ const config = {
         scaleIn: {
           "0%": { transform: "scale(0.95)", opacity: "0" },
           "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        glowPulse: {
+          "0%, 100%": { boxShadow: "0 0 12px -2px rgba(232,55,44,0.3)" },
+          "50%": { boxShadow: "0 0 24px -2px rgba(232,55,44,0.5)" },
+        },
+        scoreTick: {
+          "0%": { transform: "translateY(-100%)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        checkPop: {
+          "0%": { transform: "scale(0)", opacity: "0" },
+          "60%": { transform: "scale(1.2)", opacity: "1" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        fieldDrift: {
+          "0%": { backgroundPosition: "0 0" },
+          "100%": { backgroundPosition: "0 80px" },
+        },
+        tickerScroll: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         },
       },
     },

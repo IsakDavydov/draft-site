@@ -24,43 +24,43 @@ interface LeaderboardTableProps {
 function RankBadge({ rank }: { rank: number }) {
   if (rank === 1) {
     return (
-      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-nfl-blue to-nfl-blue/80 text-white text-sm font-black shadow-[0_2px_8px_-2px_rgba(213,10,10,0.45)] ring-1 ring-nfl-blue/30">
+      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-red to-brand-red/80 text-white text-sm font-black shadow-glow ring-1 ring-brand-red/30">
         {rank}
       </span>
     );
   }
   if (rank === 2) {
     return (
-      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-nfl-red to-nfl-red/80 text-white text-sm font-black shadow-[0_2px_8px_-2px_rgba(1,51,105,0.4)] ring-1 ring-nfl-red/30">
+      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-gold to-brand-gold/80 text-white text-sm font-black shadow-glow-gold ring-1 ring-brand-gold/30">
         {rank}
       </span>
     );
   }
   if (rank === 3) {
     return (
-      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-slate-600 to-slate-700 text-white text-sm font-black shadow-[0_2px_8px_-2px_rgba(71,85,105,0.4)] ring-1 ring-slate-500/40">
+      <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 text-white text-sm font-black ring-1 ring-gray-400/30">
         {rank}
       </span>
     );
   }
   return (
-    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-500 text-sm font-semibold ring-1 ring-gray-200">
+    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sak-hover text-gray-400 text-sm font-semibold ring-1 ring-white/[0.06]">
       {rank}
     </span>
   );
 }
 
 function rowBg(rank: number) {
-  if (rank === 1) return 'bg-red-50/50 hover:bg-red-50/80';
-  if (rank === 2) return 'bg-blue-50/30 hover:bg-blue-50/60';
-  if (rank === 3) return 'bg-slate-50/50 hover:bg-slate-50/80';
-  return 'hover:bg-gray-50/80';
+  if (rank === 1) return 'bg-brand-red/[0.06] hover:bg-brand-red/[0.1]';
+  if (rank === 2) return 'bg-brand-gold/[0.04] hover:bg-brand-gold/[0.08]';
+  if (rank === 3) return 'bg-white/[0.02] hover:bg-white/[0.04]';
+  return 'hover:bg-white/[0.03]';
 }
 
 function rankAccent(rank: number) {
-  if (rank === 1) return 'border-l-[3px] border-l-nfl-blue';
-  if (rank === 2) return 'border-l-[3px] border-l-nfl-red';
-  if (rank === 3) return 'border-l-[3px] border-l-slate-500';
+  if (rank === 1) return 'border-l-[3px] border-l-brand-red';
+  if (rank === 2) return 'border-l-[3px] border-l-brand-gold';
+  if (rank === 3) return 'border-l-[3px] border-l-gray-500';
   return '';
 }
 
@@ -73,30 +73,30 @@ export function LeaderboardTable({
 }: LeaderboardTableProps) {
   const leaderScore = showGap && rows.length > 0 ? (rows[0].score ?? 0) : 0;
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-sak-card shadow-card">
       <div className="overflow-x-auto">
         <table className="min-w-full">
           <thead>
-            <tr className="border-b border-gray-200 bg-gray-50/80">
-              <th className="px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 w-16">
+            <tr className="border-b border-white/[0.06] bg-sak-dark/50">
+              <th className="px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 w-16">
                 Rank
               </th>
-              <th className="px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+              <th className="px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
                 Name
               </th>
               {showScores && (
-                <th className="px-6 py-3.5 text-right text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                <th className="px-6 py-3.5 text-right text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
                   Score
                 </th>
               )}
               {showScores && showGap && (
-                <th className="px-4 py-3.5 text-right text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 hidden sm:table-cell">
+                <th className="px-4 py-3.5 text-right text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 hidden sm:table-cell">
                   Gap
                 </th>
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-white/[0.04]">
             {rows.map((row, i) => (
               <tr
                 key={(row.prediction_id ?? '') + row.display_name + row.rank + i}
@@ -110,13 +110,13 @@ export function LeaderboardTable({
                   {row.prediction_id ? (
                     <Link
                       href={`/predictions/${row.prediction_id}?ref=leaderboard`}
-                      className="font-medium text-gray-900 no-underline visited:text-gray-900 transition-colors underline-offset-2 group-hover:text-gray-800 hover:text-nfl-blue hover:underline decoration-nfl-blue/40 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nfl-blue/35 focus-visible:ring-offset-2"
+                      className="font-medium text-gray-200 no-underline visited:text-gray-200 transition-colors underline-offset-2 group-hover:text-white hover:text-brand-red hover:underline decoration-brand-red/40 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red/35 focus-visible:ring-offset-2 focus-visible:ring-offset-sak-card"
                       title="View picks 1–10"
                     >
                       {sanitizeDisplayName(row.display_name)}
                     </Link>
                   ) : (
-                    <span className="font-medium text-gray-900 group-hover:text-gray-800">
+                    <span className="font-medium text-gray-200 group-hover:text-white">
                       {sanitizeDisplayName(row.display_name)}
                     </span>
                   )}
@@ -125,25 +125,25 @@ export function LeaderboardTable({
                   <td className="px-6 py-4 whitespace-nowrap text-right">
                     {row.score != null ? (
                       <span className={`font-bold tabular-nums ${
-                        row.rank === 1 ? 'text-nfl-blue' :
-                        row.rank === 2 ? 'text-nfl-red' :
-                        row.rank === 3 ? 'text-slate-600' :
-                        'text-gray-700'
+                        row.rank === 1 ? 'text-brand-red' :
+                        row.rank === 2 ? 'text-brand-gold' :
+                        row.rank === 3 ? 'text-gray-300' :
+                        'text-gray-300'
                       }`}>
                         {row.score}{scoreSuffix ? ` ${scoreSuffix}` : ''}
                       </span>
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-gray-600">&mdash;</span>
                     )}
                   </td>
                 )}
                 {showScores && showGap && (
                   <td className="px-4 py-4 whitespace-nowrap text-right hidden sm:table-cell">
                     {row.rank === 1 ? (
-                      <span className="text-xs font-bold text-nfl-blue">Leader</span>
+                      <span className="text-xs font-bold text-brand-red">Leader</span>
                     ) : row.score != null ? (
-                      <span className="text-xs font-semibold text-gray-400 tabular-nums">
-                        −{leaderScore - row.score}
+                      <span className="text-xs font-semibold text-gray-500 tabular-nums">
+                        &minus;{leaderScore - row.score}
                       </span>
                     ) : null}
                   </td>

@@ -29,10 +29,10 @@ const positionColor: Record<string, string> = {
 };
 
 function getRankStyle(rank: number) {
-  if (rank === 1) return { bg: 'bg-nfl-blue', text: 'text-white' };
-  if (rank <= 5) return { bg: 'bg-nfl-blue/10', text: 'text-nfl-blue' };
-  if (rank <= 10) return { bg: 'bg-gray-100', text: 'text-gray-700' };
-  return { bg: 'bg-gray-50', text: 'text-gray-500' };
+  if (rank === 1) return { bg: 'bg-brand-red', text: 'text-white' };
+  if (rank <= 5) return { bg: 'bg-brand-red/10', text: 'text-brand-red' };
+  if (rank <= 10) return { bg: 'bg-white/[0.06]', text: 'text-gray-200' };
+  return { bg: 'bg-white/[0.06]', text: 'text-gray-500' };
 }
 
 export function BigBoard() {
@@ -64,7 +64,7 @@ export function BigBoard() {
     return (
       <div className="space-y-2">
         {[...Array(10)].map((_, i) => (
-          <div key={i} className="animate-pulse h-[68px] bg-gray-100 rounded-xl" />
+          <div key={i} className="animate-pulse h-[68px] bg-white/[0.06] rounded-xl" />
         ))}
       </div>
     );
@@ -95,7 +95,7 @@ export function BigBoard() {
             <Link
               key={prospect.id}
               href={`/draft/prospects/${prospect.id}`}
-              className="group flex items-center gap-3 rounded-xl bg-white ring-1 ring-gray-100 px-4 py-3 hover:ring-nfl-blue/30 hover:shadow-sm transition-all"
+              className="group flex items-center gap-3 rounded-xl bg-sak-card ring-1 ring-white/[0.06] px-4 py-3 hover:ring-brand-red/30 hover:shadow-card transition-all"
             >
               {/* Rank */}
               <div className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold ${bg} ${text}`}>
@@ -104,7 +104,7 @@ export function BigBoard() {
 
               {/* School logo with school-color tint */}
               <div
-                className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ring-1 ring-black/5"
+                className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ring-1 ring-white/[0.08]"
                 style={{ backgroundColor: `${schoolColor}18` }}
               >
                 <CollegeLogo school={prospect.school} size={26} />
@@ -113,7 +113,7 @@ export function BigBoard() {
               {/* Name + school + measurables */}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-gray-900 truncate group-hover:text-nfl-blue transition-colors">
+                  <span className="text-sm font-bold text-white truncate group-hover:text-brand-red transition-colors">
                     {prospect.name}
                   </span>
                   {/* Position badge */}
@@ -128,13 +128,13 @@ export function BigBoard() {
                   <span className="text-xs text-gray-400">{prospect.school}</span>
                   {age != null && (
                     <>
-                      <span className="text-gray-200">·</span>
+                      <span className="text-gray-500">·</span>
                       <span className="text-xs text-gray-400">{age} yrs</span>
                     </>
                   )}
                   {prospect.height && (
                     <>
-                      <span className="text-gray-200">·</span>
+                      <span className="text-gray-500">·</span>
                       <span className="text-xs text-gray-400">{prospect.height}, {prospect.weight} lbs</span>
                     </>
                   )}
@@ -144,8 +144,8 @@ export function BigBoard() {
               {/* Draft projection */}
               {prospect.mockDraftRound != null && (
                 <div className="flex-shrink-0 hidden sm:flex flex-col items-end">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-300">Proj.</span>
-                  <span className="text-xs font-bold text-gray-500">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Proj.</span>
+                  <span className="text-xs font-bold text-gray-400">
                     Rd {prospect.mockDraftRound}{prospect.mockDraftPick != null ? ` · #${prospect.mockDraftPick}` : ''}
                   </span>
                 </div>
@@ -167,7 +167,7 @@ export function BigBoard() {
           <button
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-white/[0.08] bg-sak-card text-gray-400 hover:bg-white/[0.06] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             <ChevronLeft className="h-4 w-4" />
             Prev
@@ -191,8 +191,8 @@ export function BigBoard() {
                     onClick={() => setCurrentPage(p as number)}
                     className={`w-9 h-9 text-sm font-medium rounded-lg transition-colors ${
                       currentPage === p
-                        ? 'bg-nfl-blue text-white'
-                        : 'text-gray-600 hover:bg-gray-100'
+                        ? 'bg-brand-red text-white'
+                        : 'text-gray-400 hover:bg-white/[0.06]'
                     }`}
                   >
                     {p}
@@ -204,7 +204,7 @@ export function BigBoard() {
           <button
             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg border border-white/[0.08] bg-sak-card text-gray-400 hover:bg-white/[0.06] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             Next
             <ChevronRight className="h-4 w-4" />

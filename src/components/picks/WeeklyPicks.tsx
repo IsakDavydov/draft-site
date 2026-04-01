@@ -35,7 +35,7 @@ export function WeeklyPicks() {
       <div className="animate-pulse">
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-24 bg-gray-200 rounded-lg"></div>
+            <div key={i} className="h-24 bg-sak-hover rounded-lg"></div>
           ))}
         </div>
       </div>
@@ -47,11 +47,11 @@ export function WeeklyPicks() {
       {/* Season and Week Selector */}
       <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
         <div className="flex items-center space-x-2">
-          <label className="text-sm font-medium text-gray-700">Season:</label>
+          <label className="text-sm font-medium text-gray-200">Season:</label>
           <select
             value={selectedSeason}
             onChange={(e) => setSelectedSeason(Number(e.target.value))}
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-green focus:border-transparent"
+            className="px-3 py-2 border border-sak-border rounded-md text-sm bg-sak-hover text-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent"
           >
             {seasons.map(season => (
               <option key={season} value={season}>{season} Season</option>
@@ -60,11 +60,11 @@ export function WeeklyPicks() {
         </div>
 
         <div className="flex items-center space-x-2">
-          <label className="text-sm font-medium text-gray-700">Week:</label>
+          <label className="text-sm font-medium text-gray-200">Week:</label>
           <select
             value={selectedWeek}
             onChange={(e) => setSelectedWeek(Number(e.target.value))}
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-green focus:border-transparent"
+            className="px-3 py-2 border border-sak-border rounded-md text-sm bg-sak-hover text-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent"
           >
             {weeks.map(week => (
               <option key={week} value={week}>Week {week}</option>
@@ -77,17 +77,17 @@ export function WeeklyPicks() {
       {selectedSeason === 2026 && (
         <div className="text-center py-12">
           <div className="max-w-md mx-auto">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 bg-sak-hover rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Picks Yet</h3>
-            <p className="text-gray-600 mb-4">
+            <h3 className="text-lg font-medium text-white mb-2">No Picks Yet</h3>
+            <p className="text-gray-400 mb-4">
               The 2026 NFL season hasn't started yet. Your weekly picks will appear here once the season begins.
             </p>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="text-sm text-blue-800">
+            <div className="bg-brand-red/10 border border-brand-red/30 rounded-lg p-4">
+              <div className="text-sm text-brand-red/80">
                 <strong>Season Start:</strong> September 2026<br />
                 <strong>First Picks:</strong> Week 1 games
               </div>
@@ -100,29 +100,29 @@ export function WeeklyPicks() {
       {weeklyPicks && weeklyPicks.picks.length > 0 && (
         <div className="space-y-4">
           {weeklyPicks.picks.map((pick) => (
-            <div key={pick.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div key={pick.id} className="bg-sak-hover rounded-lg p-4 border border-sak-border">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className={`w-3 h-3 rounded-full ${
                     pick.result === 'win' ? 'bg-green-500' :
-                    pick.result === 'loss' ? 'bg-red-500' : 'bg-gray-400'
+                    pick.result === 'loss' ? 'bg-red-500' : 'bg-gray-500'
                   }`}></div>
                   <div>
-                    <div className="font-medium text-gray-900">
+                    <div className="font-medium text-white">
                       {pick.type === 'spread' ? 'Spread' : 'Total'} Pick
                     </div>
-                    <div className="text-sm text-gray-600">
-                      {pick.selection === 'home' ? 'Home Team' : 
-                       pick.selection === 'away' ? 'Away Team' : 
+                    <div className="text-sm text-gray-400">
+                      {pick.selection === 'home' ? 'Home Team' :
+                       pick.selection === 'away' ? 'Away Team' :
                        pick.selection === 'over' ? 'Over' : 'Under'}
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-400">
                     Confidence: {pick.confidence}/5
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-400">
                     Units: {pick.units}
                   </div>
                 </div>
@@ -134,19 +134,19 @@ export function WeeklyPicks() {
 
       {/* Week Summary (will show when picks are available) */}
       {weeklyPicks && weeklyPicks.picks.length > 0 && (
-        <div className="mt-6 bg-gray-50 rounded-lg p-4">
+        <div className="mt-6 bg-sak-hover rounded-lg p-4">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div className="text-lg font-semibold text-gray-900">{weeklyPicks.record.wins}</div>
-              <div className="text-sm text-gray-600">Wins</div>
+              <div className="text-lg font-semibold text-white">{weeklyPicks.record.wins}</div>
+              <div className="text-sm text-gray-400">Wins</div>
             </div>
             <div>
-              <div className="text-lg font-semibold text-gray-900">{weeklyPicks.record.losses}</div>
-              <div className="text-sm text-gray-600">Losses</div>
+              <div className="text-lg font-semibold text-white">{weeklyPicks.record.losses}</div>
+              <div className="text-sm text-gray-400">Losses</div>
             </div>
             <div>
-              <div className="text-lg font-semibold text-gray-900">{weeklyPicks.record.pushes}</div>
-              <div className="text-sm text-gray-600">Pushes</div>
+              <div className="text-lg font-semibold text-white">{weeklyPicks.record.pushes}</div>
+              <div className="text-sm text-gray-400">Pushes</div>
             </div>
           </div>
         </div>

@@ -4,9 +4,9 @@ import { Zap } from 'lucide-react';
 
 export function SiteFooter() {
   return (
-    <footer className="bg-gray-950 text-white">
+    <footer className="bg-sak-darker text-white">
       {/* Red accent stripe */}
-      <div className="h-[3px] bg-gradient-to-r from-nfl-blue/0 via-nfl-blue to-nfl-blue/0" />
+      <div className="h-[3px] bg-gradient-to-r from-brand-red/0 via-brand-red to-brand-red/0" />
 
       <div className="mx-auto max-w-7xl px-6 py-14 sm:px-8 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
@@ -31,7 +31,7 @@ export function SiteFooter() {
             {/* CTA in footer */}
             <Link
               href="/predict"
-              className="inline-flex items-center gap-2 rounded-lg bg-nfl-blue/10 border border-nfl-blue/30 px-4 py-2 text-sm font-bold text-nfl-blue hover:bg-nfl-blue hover:text-white transition-all"
+              className="inline-flex items-center gap-2 rounded-lg bg-brand-red/10 border border-brand-red/30 px-4 py-2 text-sm font-bold text-brand-red hover:bg-brand-red hover:text-white transition-all"
             >
               <Zap className="h-3.5 w-3.5" />
               Submit Your Mock Draft

@@ -60,7 +60,7 @@ export function WeeklySchedule() {
       <div className="space-y-4">
         {[...Array(5)].map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="h-24 bg-gray-200 rounded-lg"></div>
+            <div className="h-24 bg-sak-hover rounded-lg"></div>
           </div>
         ))}
       </div>
@@ -124,8 +124,8 @@ export function WeeklySchedule() {
             onClick={() => setViewMode('weekly')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               viewMode === 'weekly'
-                ? 'bg-nfl-red text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-brand-red text-white'
+                : 'bg-sak-hover text-gray-200 hover:bg-white/[0.08]'
             }`}
           >
             Weekly View
@@ -134,8 +134,8 @@ export function WeeklySchedule() {
             onClick={() => setViewMode('upcoming')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               viewMode === 'upcoming'
-                ? 'bg-nfl-red text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-brand-red text-white'
+                : 'bg-sak-hover text-gray-200 hover:bg-white/[0.08]'
             }`}
           >
             Upcoming Games
@@ -144,8 +144,8 @@ export function WeeklySchedule() {
             onClick={() => setViewMode('today')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               viewMode === 'today'
-                ? 'bg-nfl-red text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-brand-red text-white'
+                : 'bg-sak-hover text-gray-200 hover:bg-white/[0.08]'
             }`}
           >
             Today's Games
@@ -155,11 +155,11 @@ export function WeeklySchedule() {
         {/* Week Selector (only for weekly view) */}
         {viewMode === 'weekly' && (
           <div className="flex items-center space-x-4">
-            <label className="text-sm font-medium text-gray-700">Week:</label>
+            <label className="text-sm font-medium text-gray-200">Week:</label>
             <select
               value={selectedWeek}
               onChange={(e) => setSelectedWeek(Number(e.target.value))}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-nfl-red focus:border-transparent"
+              className="px-3 py-2 border border-sak-border rounded-md text-sm bg-sak-hover text-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent"
             >
               {[...Array(18)].map((_, i) => (
                 <option key={i + 1} value={i + 1}>
@@ -173,16 +173,16 @@ export function WeeklySchedule() {
 
       {/* API Status Indicator */}
       {apiStatus === 'mock' && (
-        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <div className="mb-4 p-3 bg-brand-gold/10 border border-brand-gold/30 rounded-lg">
           <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-            <span className="text-sm text-yellow-800">
+            <div className="w-2 h-2 bg-brand-gold rounded-full"></div>
+            <span className="text-sm text-brand-gold/80">
               Using sample data. Get your free API key at{' '}
-              <a 
-                href="https://the-odds-api.com/" 
-                target="_blank" 
+              <a
+                href="https://the-odds-api.com/"
+                target="_blank"
                 rel="noopener noreferrer"
-                className="underline hover:text-yellow-900"
+                className="underline hover:text-brand-gold"
               >
                 the-odds-api.com
               </a>
@@ -201,7 +201,7 @@ export function WeeklySchedule() {
           if (!homeTeam || !awayTeam) return null;
 
           return (
-            <div key={game.id} className="bg-gray-50 rounded-lg p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+            <div key={game.id} className="bg-sak-hover rounded-lg p-6 border border-sak-border shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between">
                 {/* Game Info */}
                 <div className="flex-1">
@@ -210,23 +210,23 @@ export function WeeklySchedule() {
                     <div className="flex items-center space-x-4">
                       <TeamLogo teamName={awayTeam.name} size={56} className="shadow-lg" />
                       <div>
-                        <div className="font-semibold text-gray-900 text-lg">{awayTeam.city} {awayTeam.nickname}</div>
+                        <div className="font-semibold text-white text-lg">{awayTeam.city} {awayTeam.nickname}</div>
                         {game.awayScore !== undefined && (
-                          <div className="text-3xl font-bold text-gray-900">{game.awayScore}</div>
+                          <div className="text-3xl font-bold text-white">{game.awayScore}</div>
                         )}
                       </div>
                     </div>
 
                     {/* VS */}
-                    <div className="text-gray-400 font-medium text-2xl">@</div>
+                    <div className="text-gray-500 font-medium text-2xl">@</div>
 
                     {/* Home Team */}
                     <div className="flex items-center space-x-4">
                       <TeamLogo teamName={homeTeam.name} size={56} className="shadow-lg" />
                       <div>
-                        <div className="font-semibold text-gray-900 text-lg">{homeTeam.city} {homeTeam.nickname}</div>
+                        <div className="font-semibold text-white text-lg">{homeTeam.city} {homeTeam.nickname}</div>
                         {game.homeScore !== undefined && (
-                          <div className="text-3xl font-bold text-gray-900">{game.homeScore}</div>
+                          <div className="text-3xl font-bold text-white">{game.homeScore}</div>
                         )}
                       </div>
                     </div>
@@ -238,22 +238,22 @@ export function WeeklySchedule() {
                   <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${status.color}`}>
                     {status.label}
                   </div>
-                  
+
                   <div className="mt-3 space-y-2">
-                    <div className="flex items-center justify-end space-x-2 text-sm text-gray-600">
+                    <div className="flex items-center justify-end space-x-2 text-sm text-gray-400">
                       <Calendar className="w-4 h-4" />
                       <span>{formatDate(game.date)}</span>
                     </div>
-                    
+
                     {game.time && (
-                      <div className="flex items-center justify-end space-x-2 text-sm text-gray-600">
+                      <div className="flex items-center justify-end space-x-2 text-sm text-gray-400">
                         <Clock className="w-4 h-4" />
                         <span>{formatTime(game.date + 'T' + game.time)}</span>
                       </div>
                     )}
-                    
+
                     {game.network && game.network !== 'TBD' && (
-                      <div className="flex items-center justify-end space-x-2 text-sm text-gray-600">
+                      <div className="flex items-center justify-end space-x-2 text-sm text-gray-400">
                         <Tv className="w-4 h-4" />
                         <span>{game.network}</span>
                       </div>
@@ -271,24 +271,24 @@ export function WeeklySchedule() {
 
               {/* Odds (if available) */}
               {game.odds && (
-                <div className="mt-6 pt-4 border-t border-gray-200">
+                <div className="mt-6 pt-4 border-t border-sak-border">
                   <div className="flex items-center justify-center space-x-8 text-sm">
                     <div className="flex items-center space-x-2">
                       <TrendingUp className="w-4 h-4 text-gray-500" />
-                      <span className="font-medium text-gray-700">Spread:</span>
-                      <span className="text-gray-900">
+                      <span className="font-medium text-gray-300">Spread:</span>
+                      <span className="text-gray-200">
                         {game.odds.homeLine && game.odds.homeLine > 0 ? `+${game.odds.homeLine}` : game.odds.homeLine || 'N/A'}
                       </span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <TrendingUp className="w-4 h-4 text-gray-500" />
-                      <span className="font-medium text-gray-700">Total:</span>
-                      <span className="text-gray-900">{game.odds.total || 'N/A'}</span>
+                      <span className="font-medium text-gray-300">Total:</span>
+                      <span className="text-gray-200">{game.odds.total || 'N/A'}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <TrendingUp className="w-4 h-4 text-gray-500" />
-                      <span className="font-medium text-gray-700">ML:</span>
-                      <span className="text-gray-900">
+                      <span className="font-medium text-gray-300">ML:</span>
+                      <span className="text-gray-200">
                         {game.odds.homeMoneyline && game.odds.homeMoneyline > 0 ? `+${game.odds.homeMoneyline}` : game.odds.homeMoneyline || 'N/A'}
                       </span>
                     </div>
@@ -301,9 +301,9 @@ export function WeeklySchedule() {
       </div>
 
       {games.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
-          {viewMode === 'today' ? 'No games scheduled for today' : 
-           viewMode === 'upcoming' ? 'No upcoming games found' : 
+        <div className="text-center py-12 text-gray-400">
+          {viewMode === 'today' ? 'No games scheduled for today' :
+           viewMode === 'upcoming' ? 'No upcoming games found' :
            `No games scheduled for Week ${selectedWeek}`}
         </div>
       )}

@@ -7,22 +7,22 @@ export const metadata = {
 
 export default function ResponsibleGamingPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sak-darker">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
-          <div className="border-b border-gray-100 px-8 py-8 sm:px-10">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-nfl-blue mb-2">Legal</p>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">Responsible Gaming</h1>
+        <div className="bg-sak-card rounded-2xl shadow-card border border-white/[0.06] overflow-hidden">
+          <div className="border-b border-white/[0.06] px-8 py-8 sm:px-10">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-red mb-2">Legal</p>
+            <h1 className="text-3xl font-bold tracking-tight text-white">Responsible Gaming</h1>
             <p className="mt-2 text-sm text-gray-500">Last updated: February 12, 2026</p>
           </div>
 
-          <div className="px-8 py-8 sm:px-10 space-y-8 text-gray-600 text-[15px] leading-relaxed">
+          <div className="px-8 py-8 sm:px-10 space-y-8 text-gray-400 text-[15px] leading-relaxed">
 
             {/* Emergency callout */}
-            <div className="rounded-xl bg-red-50 border border-red-200 p-6">
-              <p className="text-sm font-bold uppercase tracking-wider text-red-700 mb-1">Need help now?</p>
-              <p className="text-2xl font-black text-red-800 mb-2">Call 1-800-GAMBLER</p>
-              <p className="text-red-700 text-sm mb-3">
+            <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-6">
+              <p className="text-sm font-bold uppercase tracking-wider text-red-400 mb-1">Need help now?</p>
+              <p className="text-2xl font-black text-red-300 mb-2">Call 1-800-GAMBLER</p>
+              <p className="text-red-400 text-sm mb-3">
                 The National Problem Gambling Helpline is available 24/7, free and confidential.
                 Trained counselors are standing by to help you or someone you care about.
               </p>
@@ -31,7 +31,7 @@ export default function ResponsibleGamingPage() {
                   href="https://www.ncpgambling.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-red-700 hover:text-red-900 underline underline-offset-2"
+                  className="font-semibold text-red-400 hover:text-red-300 underline underline-offset-2"
                 >
                   ncpgambling.org →
                 </a>
@@ -39,7 +39,7 @@ export default function ResponsibleGamingPage() {
                   href="https://www.gamblingtherapy.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-red-700 hover:text-red-900 underline underline-offset-2"
+                  className="font-semibold text-red-400 hover:text-red-300 underline underline-offset-2"
                 >
                   gamblingtherapy.org →
                 </a>
@@ -47,7 +47,7 @@ export default function ResponsibleGamingPage() {
             </div>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">About SAKFootball</h2>
+              <h2 className="text-base font-bold text-white mb-3">About SAKFootball</h2>
               <p>
                 SAKFootball provides NFL draft analysis, prospect profiles, and a free-to-play draft prediction
                 contest for <strong>entertainment purposes only</strong>. We do not operate any real-money gambling
@@ -56,7 +56,7 @@ export default function ResponsibleGamingPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">Age Requirement</h2>
+              <h2 className="text-base font-bold text-white mb-3">Age Requirement</h2>
               <p>
                 SAKFootball is intended for users 18 years of age or older. Content related to picks, analysis,
                 and predictions is not appropriate for minors. Where local laws require a higher minimum age
@@ -66,7 +66,7 @@ export default function ResponsibleGamingPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">Responsible Gambling Principles</h2>
+              <h2 className="text-base font-bold text-white mb-3">Responsible Gambling Principles</h2>
               <p className="mb-3">
                 If you use our content to inform sports betting or other gambling activities, we encourage you to:
               </p>
@@ -82,7 +82,7 @@ export default function ResponsibleGamingPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">Warning Signs of Problem Gambling</h2>
+              <h2 className="text-base font-bold text-white mb-3">Warning Signs of Problem Gambling</h2>
               <p className="mb-3">You may have a gambling problem if you:</p>
               <ul className="list-disc pl-5 space-y-2">
                 <li>Feel the need to gamble with increasing amounts of money to get the same excitement.</li>
@@ -95,7 +95,7 @@ export default function ResponsibleGamingPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">Resources & Support</h2>
+              <h2 className="text-base font-bold text-white mb-3">Resources & Support</h2>
               <div className="space-y-3">
                 {[
                   { name: 'National Council on Problem Gambling', url: 'https://www.ncpgambling.org', note: '1-800-GAMBLER · 24/7 helpline' },
@@ -103,13 +103,13 @@ export default function ResponsibleGamingPage() {
                   { name: 'Gambling Therapy', url: 'https://www.gamblingtherapy.org', note: 'Free online support' },
                   { name: 'National Alliance on Mental Illness (NAMI)', url: 'https://www.nami.org', note: '1-800-950-6264' },
                 ].map(({ name, url, note }) => (
-                  <div key={name} className="flex items-start gap-3 rounded-xl bg-gray-50 ring-1 ring-gray-100 px-4 py-3">
+                  <div key={name} className="flex items-start gap-3 rounded-xl bg-sak-darker ring-1 ring-white/[0.06] px-4 py-3">
                     <div className="min-w-0">
                       <a
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm font-semibold text-nfl-blue hover:underline"
+                        className="text-sm font-semibold text-brand-red hover:underline"
                       >
                         {name}
                       </a>
@@ -121,7 +121,7 @@ export default function ResponsibleGamingPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">Self-Exclusion</h2>
+              <h2 className="text-base font-bold text-white mb-3">Self-Exclusion</h2>
               <p>
                 If you believe your use of gambling sites is becoming problematic, most regulated gambling operators
                 offer self-exclusion tools that allow you to restrict or close your accounts. Contact your state&apos;s
@@ -130,7 +130,7 @@ export default function ResponsibleGamingPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-gray-900 mb-3">Disclaimer</h2>
+              <h2 className="text-base font-bold text-white mb-3">Disclaimer</h2>
               <p>
                 SAKFootball&apos;s picks, analysis, and predictions are opinions for entertainment only. They are not
                 guaranteed to be accurate and should not be relied upon as the sole basis for any financial decision,
@@ -141,10 +141,10 @@ export default function ResponsibleGamingPage() {
 
           </div>
 
-          <div className="border-t border-gray-100 px-8 py-5 sm:px-10 flex flex-wrap gap-4 text-sm text-gray-400">
-            <Link href="/privacy" className="hover:text-gray-700 transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-gray-700 transition-colors">Terms of Service</Link>
-            <Link href="/contest-rules" className="hover:text-gray-700 transition-colors">Contest Rules</Link>
+          <div className="border-t border-white/[0.06] px-8 py-5 sm:px-10 flex flex-wrap gap-4 text-sm text-gray-400">
+            <Link href="/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
+            <Link href="/contest-rules" className="hover:text-gray-300 transition-colors">Contest Rules</Link>
           </div>
         </div>
       </div>
