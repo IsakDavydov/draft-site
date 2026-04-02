@@ -669,78 +669,64 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
 
   return (
     <div className="space-y-6">
-      {/* Draft selector */}
+      {/* Combined card: draft tabs + name + progress */}
       <div className="rounded-2xl border border-white/[0.06] bg-sak-card px-5 py-4 shadow-card">
-        <div className="flex items-center justify-between gap-3">
-          <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Your Drafts</p>
-            <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-              {drafts.map((draft) => {
-                const score = draft.picks.length === 32
-                  ? computeScore(
-                      draft.picks.map((p) => ({ pick_number: p.pick_number, prospect_id: p.prospect_id, team: p.team })),
-                      effectiveOrder
-                    )
-                  : null;
-                const isSelected = draft.id === selectedDraftId;
-                const onLeaderboard = draft.is_leaderboard_entry;
-                return (
-                  <div
-                    key={draft.id}
-                    className="flex flex-shrink-0 items-center gap-0.5 rounded-lg border border-white/[0.06] bg-sak-hover"
+        {/* Tabs row */}
+        <div className="flex items-center gap-3">
+          <div className="flex-1 min-w-0 flex gap-2 overflow-x-auto pb-1">
+            {drafts.map((draft) => {
+              const score = draft.picks.length === 32
+                ? computeScore(
+                    draft.picks.map((p) => ({ pick_number: p.pick_number, prospect_id: p.prospect_id, team: p.team })),
+                    effectiveOrder
+                  )
+                : null;
+              const isSelected = draft.id === selectedDraftId;
+              const onLeaderboard = draft.is_leaderboard_entry;
+              return (
+                <div
+                  key={draft.id}
+                  className="flex flex-shrink-0 items-center gap-0.5 rounded-lg border border-white/[0.06] bg-sak-hover"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setSelectedDraftId(draft.id)}
+                    aria-pressed={isSelected}
+                    title={onLeaderboard ? 'Leaderboard entry' : undefined}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-all rounded-l-md ${
+                      isSelected
+                        ? 'bg-brand-red text-white shadow-sm'
+                        : 'bg-sak-hover text-gray-400 hover:bg-sak-border hover:text-gray-200'
+                    }`}
                   >
-                    <button
-                      type="button"
-                      onClick={() => setSelectedDraftId(draft.id)}
-                      aria-pressed={isSelected}
-                      title={onLeaderboard ? 'Leaderboard entry' : undefined}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-all rounded-l-md ${
-                        isSelected
-                          ? 'bg-brand-red text-white shadow-sm'
-                          : 'bg-sak-hover text-gray-400 hover:bg-sak-border hover:text-gray-200'
-                      }`}
-                    >
-                      {onLeaderboard && (
-                        <Trophy
-                          className={`h-3.5 w-3.5 flex-shrink-0 ${isSelected ? 'text-amber-700' : 'text-amber-500'}`}
-                          aria-hidden
-                        />
-                      )}
-                      <span className="truncate max-w-[120px]">
-                        {draft.name || draft.display_name || `Draft ${drafts.indexOf(draft) + 1}`}
-                      </span>
-                      {score !== null && (
-                        <span className="text-[11px] opacity-90">({score})</span>
-                      )}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteDraft(draft.id);
-                      }}
-                      disabled={loading}
-                      aria-label={`Delete ${draft.name || draft.display_name || 'draft'}`}
-                      className="p-1.5 text-gray-600 hover:text-brand-red hover:bg-brand-red/10 disabled:opacity-50"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-            {selectedDraft?.is_leaderboard_entry && (
-              <p className="mt-2 inline-flex max-w-full flex-wrap items-center gap-2 rounded-lg border border-brand-gold/20 bg-brand-gold/10 px-3 py-2 text-xs text-brand-gold">
-                <Trophy className="h-4 w-4 shrink-0 text-brand-gold" aria-hidden />
-                <span>
-                  <span className="font-semibold">Leaderboard draft</span>
-                  <span className="text-brand-gold/80">
-                    {' '}
-                    — you&apos;re editing the entry shown on the public leaderboard (save to apply changes).
-                  </span>
-                </span>
-              </p>
-            )}
+                    {onLeaderboard && (
+                      <Trophy
+                        className={`h-3.5 w-3.5 flex-shrink-0 ${isSelected ? 'text-amber-700' : 'text-amber-500'}`}
+                        aria-hidden
+                      />
+                    )}
+                    <span className="truncate max-w-[120px]">
+                      {draft.name || draft.display_name || `Draft ${drafts.indexOf(draft) + 1}`}
+                    </span>
+                    {score !== null && (
+                      <span className="text-[11px] opacity-90">({score})</span>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteDraft(draft.id);
+                    }}
+                    disabled={loading}
+                    aria-label={`Delete ${draft.name || draft.display_name || 'draft'}`}
+                    className="p-1.5 text-gray-600 hover:text-brand-red hover:bg-brand-red/10 disabled:opacity-50"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
+                </div>
+              );
+            })}
           </div>
           <button
             type="button"
@@ -754,6 +740,111 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
             </span>
           </button>
         </div>
+
+        {selectedDraft?.is_leaderboard_entry && (
+          <p className="mt-2 inline-flex max-w-full flex-wrap items-center gap-2 rounded-lg border border-brand-gold/20 bg-brand-gold/10 px-3 py-2 text-xs text-brand-gold">
+            <Trophy className="h-4 w-4 shrink-0 text-brand-gold" aria-hidden />
+            <span>
+              <span className="font-semibold">Leaderboard draft</span>
+              <span className="text-brand-gold/80">
+                {' '}
+                — you&apos;re editing the entry shown on the public leaderboard (save to apply changes).
+              </span>
+            </span>
+          </p>
+        )}
+
+        {selectedDraftId && (
+          <>
+            <div className="mt-3 pt-3 border-t border-white/[0.06] flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div className="max-w-md">
+                <label htmlFor="draftName" className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">
+                  Draft name
+                </label>
+                <input
+                  id="draftName"
+                  type="text"
+                  value={draftName}
+                  onChange={(e) => setDraftName(e.target.value)}
+                  maxLength={50}
+                  className="mt-1 w-full max-w-xs px-3 py-2 border border-sak-border rounded-lg bg-sak-hover text-sm text-white placeholder:text-gray-600 focus:ring-2 focus:ring-brand-red focus:border-transparent"
+                  placeholder="e.g. DraftKing"
+                />
+              </div>
+              <div className="flex flex-col items-start gap-2 md:items-end">
+                {selectedDraft?.is_leaderboard_entry ? (
+                  <div className="inline-flex flex-col items-start gap-1 sm:items-end sm:text-right">
+                    <div className="inline-flex items-center gap-2 rounded-lg bg-brand-gold/10 px-3 py-1.5 text-xs sm:text-sm text-brand-gold">
+                      <Trophy className="h-4 w-4 shrink-0" />
+                      <span>
+                        On leaderboard as{' '}
+                        <span className="font-semibold text-white">
+                          {selectedDraft.display_name || selectedDraft.name || '—'}
+                        </span>
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-brand-gold/70 max-w-xs">
+                      Edit the draft name above and save to update the leaderboard.
+                    </p>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setSubmitToLeaderboardModal(true)}
+                    className="inline-flex items-center gap-2 rounded-lg bg-brand-gold px-3 py-1.5 text-xs sm:text-sm font-semibold text-sak-dark hover:bg-brand-gold/90"
+                  >
+                    <Trophy className="h-4 w-4" />
+                    Submit this draft to leaderboard
+                  </button>
+                )}
+                {currentScore !== null && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs sm:text-sm text-gray-300 font-medium">
+                      Score: <strong className="text-brand-gold font-display">{currentScore}</strong>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShareModalOpen(true)}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-sak-hover px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 ring-1 ring-white/[0.06] hover:bg-sak-border"
+                    >
+                      <Share2 className="h-4 w-4" />
+                      Share top 5
+                    </button>
+                    {allPicksFilled && (
+                      <button
+                        type="button"
+                        onClick={() => setShareFullModalOpen(true)}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-sak-hover px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 ring-1 ring-white/[0.06] hover:bg-sak-border"
+                      >
+                        <Share2 className="h-4 w-4" />
+                        Share full draft
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs text-gray-500">
+                  {filledCount === totalPicks ? '🎉 All picks filled — ready to save!' : `${filledCount} of ${totalPicks} picks filled`}
+                </span>
+                <span className={`text-xs font-bold tabular-nums ${filledCount === totalPicks ? 'text-brand-red' : 'text-gray-500'}`}>
+                  {filledCount}<span className="font-normal">/{totalPicks}</span>
+                </span>
+              </div>
+              <div className="w-full h-1.5 rounded-full bg-sak-hover overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-brand-red to-brand-gold transition-all duration-500"
+                  style={{ width: `${totalPicks > 0 ? (filledCount / totalPicks) * 100 : 0}%` }}
+                />
+              </div>
+              {hasDuplicates && (
+                <p className="mt-1.5 text-xs font-medium text-red-400">Remove duplicate players before saving</p>
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       {message && (
@@ -791,102 +882,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
           }}
           className="space-y-6"
         >
-          <div className="rounded-2xl border border-white/[0.06] bg-sak-card px-5 py-4 shadow-card">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="max-w-md">
-                <label htmlFor="draftName" className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">
-                  Draft name
-                </label>
-                <input
-                  id="draftName"
-                  type="text"
-                  value={draftName}
-                  onChange={(e) => setDraftName(e.target.value)}
-                  maxLength={50}
-                  className="mt-1 w-full max-w-xs px-3 py-2 border border-sak-border rounded-lg bg-sak-hover text-sm text-white placeholder:text-gray-600 focus:ring-2 focus:ring-brand-red focus:border-transparent"
-                  placeholder="e.g. DraftKing"
-                />
-                <p className="mt-1 text-xs text-gray-500">
-                  Shown in your draft list. If you submit to the leaderboard, this same name appears publicly.
-                </p>
-              </div>
-              <div className="flex flex-col items-start gap-2 md:items-end">
-                {selectedDraft?.is_leaderboard_entry ? (
-                  <div className="inline-flex flex-col items-start gap-1 sm:items-end sm:text-right">
-                    <div className="inline-flex items-center gap-2 rounded-lg bg-brand-gold/10 px-3 py-1.5 text-xs sm:text-sm text-brand-gold">
-                      <Trophy className="h-4 w-4 shrink-0" />
-                      <span>
-                        On leaderboard as{' '}
-                        <span className="font-semibold text-white">
-                          {selectedDraft.display_name || selectedDraft.name || '—'}
-                        </span>
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-brand-gold/70 max-w-xs">
-                      Edit the draft name above and save to update the leaderboard.
-                    </p>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setSubmitToLeaderboardModal(true)}
-                    className="inline-flex items-center gap-2 rounded-lg bg-brand-gold px-3 py-1.5 text-xs sm:text-sm font-semibold text-sak-dark hover:bg-brand-gold/90"
-                  >
-                    <Trophy className="h-4 w-4" />
-                    Submit this draft to leaderboard
-                  </button>
-                )}
-                {currentScore !== null && (
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs sm:text-sm text-gray-300 font-medium">
-                      Pre-draft score: <strong className="text-brand-gold font-display">{currentScore}</strong>
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setShareModalOpen(true)}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-sak-hover px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 ring-1 ring-white/[0.06] hover:bg-sak-border"
-                    >
-                      <Share2 className="h-4 w-4" />
-                      Share top 5
-                    </button>
-                    {allPicksFilled && (
-                      <button
-                        type="button"
-                        onClick={() => setShareFullModalOpen(true)}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-sak-hover px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 ring-1 ring-white/[0.06] hover:bg-sak-border"
-                      >
-                        <Share2 className="h-4 w-4" />
-                        Share full draft
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
           <div className="space-y-4">
-            {/* Progress bar */}
-            <div className="rounded-2xl border border-white/[0.06] bg-sak-card px-5 py-4 shadow-card">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="font-display text-base font-bold text-white">Your First Round Picks</h2>
-                <span className={`text-sm font-bold tabular-nums ${filledCount === totalPicks ? 'text-brand-red' : 'text-gray-500'}`}>
-                  {filledCount}<span className="font-normal text-gray-500">/{totalPicks}</span>
-                </span>
-              </div>
-              <div className="w-full h-2 rounded-full bg-sak-hover overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-brand-red to-brand-gold transition-all duration-500"
-                  style={{ width: `${totalPicks > 0 ? (filledCount / totalPicks) * 100 : 0}%` }}
-                />
-              </div>
-              {hasDuplicates && (
-                <p className="mt-2 text-xs font-medium text-red-400">Remove duplicate players before saving</p>
-              )}
-              <p className="mt-1.5 text-xs text-gray-500">
-                {filledCount === totalPicks ? '🎉 All picks filled — ready to save!' : 'Select one prospect per pick. Each player can only be used once.'}
-              </p>
-            </div>
             {/* Quick-fill toolbar */}
             <div className="flex flex-wrap items-center gap-2">
               <button
