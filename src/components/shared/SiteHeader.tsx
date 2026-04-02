@@ -22,6 +22,7 @@ export function SiteHeader() {
   const pathname = usePathname();
 
   return (
+    <>
     <header className="sticky top-0 z-50 bg-sak-darker/90 backdrop-blur-xl border-b border-white/[0.06]">
 
       <nav
@@ -100,7 +101,9 @@ export function SiteHeader() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
+    </header>
+
+      {/* Mobile menu — rendered outside <header> to avoid backdrop-filter clipping on iOS Safari */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
           <div
@@ -181,6 +184,6 @@ export function SiteHeader() {
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
