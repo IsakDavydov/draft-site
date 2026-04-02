@@ -53,8 +53,8 @@ function ShareFullPickRow({ pick, team, prospectName }: ShareFullPick) {
     <div
       className="flex items-center gap-1.5 py-1 px-1.5 rounded overflow-hidden"
       style={{
-        backgroundColor: isTopPick ? 'rgba(213,10,10,0.08)' : (pick % 2 === 0 ? 'rgba(255,255,255,0.04)' : 'transparent'),
-        borderLeft: isTopPick ? '2px solid rgba(213,10,10,0.6)' : `2px solid ${teamColor}55`,
+        backgroundColor: isTopPick ? 'rgba(232,55,44,0.08)' : (pick % 2 === 0 ? 'rgba(255,255,255,0.04)' : 'transparent'),
+        borderLeft: isTopPick ? '2px solid rgba(232,55,44,0.6)' : `2px solid ${teamColor}55`,
       }}
     >
       <span
@@ -122,7 +122,7 @@ export function ShareFullDraftModal({ onClose, allPicks }: ShareFullDraftModalPr
       const { toPng } = await import('html-to-image');
       const dataUrl = await toPng(clone, {
         pixelRatio: 2,
-        backgroundColor: '#013369',
+        backgroundColor: '#080D18',
         cacheBust: true,
       });
       const link = document.createElement('a');
@@ -148,7 +148,7 @@ export function ShareFullDraftModal({ onClose, allPicks }: ShareFullDraftModalPr
         const { toBlob } = await import('html-to-image');
         const blob = await toBlob(clone, {
           pixelRatio: 2,
-          backgroundColor: '#013369',
+          backgroundColor: '#080D18',
           cacheBust: true,
         });
         if (blob) {
@@ -207,10 +207,10 @@ export function ShareFullDraftModal({ onClose, allPicks }: ShareFullDraftModalPr
           <div
             ref={cardRef}
             className="w-[520px] rounded-2xl shadow-2xl shrink-0 overflow-visible"
-            style={{ backgroundColor: '#013369' }}
+            style={{ backgroundColor: '#080D18' }}
           >
             {/* Top gradient stripe */}
-            <div style={{ height: 4, borderRadius: '16px 16px 0 0', background: 'linear-gradient(to right, #013369, #D50A0A, #013369)' }} />
+            <div style={{ height: 4, borderRadius: '16px 16px 0 0', background: 'linear-gradient(to right, #080D18, #E8372C, #F0A030, #080D18)' }} />
 
             <div className="p-5">
               {/* Header: branding */}

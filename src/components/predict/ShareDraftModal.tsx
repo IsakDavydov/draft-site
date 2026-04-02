@@ -94,7 +94,7 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
       const { toPng } = await import('html-to-image');
       const dataUrl = await toPng(cardRef.current, {
         pixelRatio: 2,
-        backgroundColor: '#013369',
+        backgroundColor: '#080D18',
         cacheBust: true,
       });
       const link = document.createElement('a');
@@ -114,7 +114,7 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
         const { toBlob } = await import('html-to-image');
         const blob = await toBlob(cardRef.current, {
           pixelRatio: 2,
-          backgroundColor: '#013369',
+          backgroundColor: '#080D18',
           cacheBust: true,
         });
         if (blob) {
@@ -155,10 +155,10 @@ export function ShareDraftModal({ onClose, score, topPicks }: ShareDraftModalPro
           <div
             ref={cardRef}
             className="w-[400px] rounded-2xl overflow-hidden shadow-2xl"
-            style={{ backgroundColor: '#013369' }}
+            style={{ backgroundColor: '#080D18' }}
           >
             {/* Top gradient stripe */}
-            <div style={{ height: 4, background: 'linear-gradient(to right, #013369, #D50A0A, #013369)' }} />
+            <div style={{ height: 4, background: 'linear-gradient(to right, #080D18, #E8372C, #F0A030, #080D18)' }} />
 
             <div className="p-6">
               {/* Header: branding */}

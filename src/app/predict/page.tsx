@@ -51,12 +51,13 @@ export default async function PredictPage() {
     <div className="min-h-screen bg-sak-darker">
 
       {/* ─── Hero Header ─────────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-brand-red to-brand-gold">
-        <div className="absolute inset-0 hero-lines pointer-events-none" />
+      <div className="relative overflow-hidden bg-sak-dark border-b border-white/[0.06]">
+        <div className="absolute inset-0 hero-lines pointer-events-none opacity-60" />
+        <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-brand-red/40 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-8 sm:py-12">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div>
-              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white ring-1 ring-inset ring-white/20">
+              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-brand-red/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-brand-red ring-1 ring-inset ring-brand-red/20">
                 <Zap className="h-3 w-3" />
                 2026 Draft Challenge
               </div>
