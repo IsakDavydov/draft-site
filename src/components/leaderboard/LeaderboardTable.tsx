@@ -78,14 +78,14 @@ export function LeaderboardTable({
         <table className="min-w-full">
           <thead>
             <tr className="border-b border-white/[0.06] bg-sak-dark/50">
-              <th className="px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 w-16">
+              <th className="px-3 sm:px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 w-16">
                 Rank
               </th>
-              <th className="px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
+              <th className="px-3 sm:px-6 py-3.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
                 Name
               </th>
               {showScores && (
-                <th className="px-6 py-3.5 text-right text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
+                <th className="px-3 sm:px-6 py-3.5 text-right text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
                   Score
                 </th>
               )}
@@ -103,10 +103,10 @@ export function LeaderboardTable({
                 className={`group transition-colors duration-150 ${rowBg(row.rank)} ${animate ? 'animate-leaderboard-row' : ''}`}
                 style={animate ? { animationDelay: `${Math.min(i * 40, 400)}ms` } : undefined}
               >
-                <td className={`px-6 py-4 whitespace-nowrap ${rankAccent(row.rank)}`}>
+                <td className={`px-3 sm:px-6 py-4 whitespace-nowrap ${rankAccent(row.rank)}`}>
                   <RankBadge rank={row.rank} />
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                   {row.prediction_id ? (
                     <Link
                       href={`/predictions/${row.prediction_id}?ref=leaderboard`}
@@ -122,7 +122,7 @@ export function LeaderboardTable({
                   )}
                 </td>
                 {showScores && (
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
                     {row.score != null ? (
                       <span className={`font-bold tabular-nums ${
                         row.rank === 1 ? 'text-brand-red' :

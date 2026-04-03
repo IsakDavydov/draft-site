@@ -174,20 +174,20 @@ export function DraftCountdown({ variant = 'full', className = '' }: DraftCountd
           Draft countdown
         </div>
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-3 justify-start">
+          <div className="flex items-center gap-1.5 sm:gap-3 justify-start">
             {[
               { value: timeLeft.days, label: 'Days' },
               { value: timeLeft.hours, label: 'Hours' },
               { value: timeLeft.minutes, label: 'Minutes' },
               { value: timeLeft.seconds, label: 'Seconds' },
             ].map(({ value, label }, i) => (
-              <div key={label} className="flex items-center gap-2">
-                {i > 0 && <span className="text-gray-600 font-bold text-2xl">:</span>}
-                <div className="bg-white/[0.06] ring-1 ring-white/[0.06] rounded-xl p-4 sm:p-5 text-center">
-                  <p className="text-3xl sm:text-4xl font-display font-black text-white tabular-nums">
+              <div key={label} className="flex items-center gap-1 sm:gap-2">
+                {i > 0 && <span className="text-gray-600 font-bold text-lg sm:text-2xl">:</span>}
+                <div className="bg-white/[0.06] ring-1 ring-white/[0.06] rounded-xl p-2.5 sm:p-4 lg:p-5 text-center">
+                  <p className="text-2xl sm:text-3xl lg:text-4xl font-display font-black text-white tabular-nums">
                     {String(value).padStart(2, '0')}
                   </p>
-                  <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
+                  <p className="mt-1 sm:mt-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
                     {label}
                   </p>
                 </div>
