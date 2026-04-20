@@ -66,11 +66,11 @@ Tyson has by far the most upside out of any receiver in this entire draft. He is
 
 The Chiefs lost a lot of secondary pieces this offseason, and Caleb Downs is arguably the most solid defensive player in the class. He is best in the box but can play in coverage. He can be an awesome chess piece for Steve Spagnuolo and this Chiefs defense.
 
-## 10. Cincinnati Bengals — Mansoor Delane, CB, LSU
+## 10. New York Giants — Mansoor Delane, CB, LSU
 
 **6'1" | 185 lbs**
 
-The Bengals desperately need upgrades all over their defense, and they take CB1 here at pick 10. He is a sticky corner who can run with everybody. He and Dax Hill should form an excellent cornerback duo for Cincinnati, who ranked 26th in passing yards per game allowed.
+The Giants sent a defensive tackle to Cincinnati to move up here, and they make it count. With Sonny Styles locked in at #5, New York uses this second first-round pick to address their secondary. Delane is a sticky corner who can run with everybody and should immediately upgrade a Giants cornerback room that has needed reinforcements for years. An excellent return for what they gave up.
 
 ## 11. Miami Dolphins — Carnell Tate, WR, Ohio State
 
