@@ -61,10 +61,10 @@ export function SeasonSchedule() {
       <div className="space-y-6">
         {[...Array(3)].map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="h-8 bg-sak-hover rounded mb-4"></div>
+            <div className="h-8 bg-gray-50 rounded mb-4"></div>
             <div className="space-y-3">
               {[...Array(4)].map((_, j) => (
-                <div key={j} className="h-20 bg-sak-hover rounded"></div>
+                <div key={j} className="h-20 bg-gray-50 rounded"></div>
               ))}
             </div>
           </div>
@@ -101,15 +101,15 @@ export function SeasonSchedule() {
   return (
     <div>
       {/* Filters */}
-      <div className="bg-sak-card p-4 rounded-lg shadow-sm border border-sak-border mb-6">
+      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center space-x-2">
             <Users className="w-4 h-4 text-gray-500" />
-            <label className="text-sm font-medium text-gray-200">Team:</label>
+            <label className="text-sm font-medium text-gray-700">Team:</label>
             <select
               value={selectedTeam}
               onChange={(e) => setSelectedTeam(e.target.value)}
-              className="px-3 py-2 border border-sak-border rounded-md text-sm bg-sak-hover text-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent"
+              className="px-3 py-2 border border-gray-200 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
             >
               <option value="all">All Teams</option>
               {teams.map(team => (
@@ -122,11 +122,11 @@ export function SeasonSchedule() {
 
           <div className="flex items-center space-x-2">
             <Calendar className="w-4 h-4 text-gray-500" />
-            <label className="text-sm font-medium text-gray-200">Week:</label>
+            <label className="text-sm font-medium text-gray-700">Week:</label>
             <select
               value={selectedWeek}
               onChange={(e) => setSelectedWeek(e.target.value)}
-              className="px-3 py-2 border border-sak-border rounded-md text-sm bg-sak-hover text-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent"
+              className="px-3 py-2 border border-gray-200 rounded-md text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
             >
               <option value="all">All Weeks</option>
               {uniqueWeeks.map(week => (
@@ -149,14 +149,14 @@ export function SeasonSchedule() {
           Object.entries(gamesByWeek)
             .sort(([a], [b]) => parseInt(a) - parseInt(b))
             .map(([week, games]) => (
-              <div key={week} className="bg-sak-card rounded-lg shadow-sm border border-sak-border overflow-hidden">
-                <div className="bg-sak-hover px-6 py-4 border-b border-sak-border">
-                  <h3 className="text-lg font-semibold text-white">
+              <div key={week} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                  <h3 className="text-lg font-semibold text-gray-900">
                     Week {week} - {games.length} Game{games.length !== 1 ? 's' : ''}
                   </h3>
                 </div>
 
-                <div className="divide-y divide-sak-border">
+                <div className="divide-y divide-gray-200">
                   {games.map((game) => {
                     const homeTeam = getTeam(game.homeTeamId);
                     const awayTeam = getTeam(game.awayTeamId);
@@ -165,7 +165,7 @@ export function SeasonSchedule() {
                     if (!homeTeam || !awayTeam) return null;
 
                     return (
-                      <div key={game.id} className="p-6 hover:bg-sak-hover transition-colors">
+                      <div key={game.id} className="p-6 hover:bg-gray-50 transition-colors">
                         <div className="flex items-center justify-between">
                           {/* Teams */}
                           <div className="flex items-center space-x-6">
@@ -173,9 +173,9 @@ export function SeasonSchedule() {
                             <div className="flex items-center space-x-3">
                               <TeamLogo teamName={awayTeam.name} size={48} className="shadow-sm" />
                               <div>
-                                <div className="font-semibold text-white">{awayTeam.city} {awayTeam.nickname}</div>
+                                <div className="font-semibold text-gray-900">{awayTeam.city} {awayTeam.nickname}</div>
                                 {game.awayScore !== undefined && (
-                                  <div className="text-xl font-bold text-white">{game.awayScore}</div>
+                                  <div className="text-xl font-bold text-gray-900">{game.awayScore}</div>
                                 )}
                               </div>
                             </div>
@@ -187,9 +187,9 @@ export function SeasonSchedule() {
                             <div className="flex items-center space-x-3">
                               <TeamLogo teamName={homeTeam.name} size={48} className="shadow-sm" />
                               <div>
-                                <div className="font-semibold text-white">{homeTeam.city} {homeTeam.nickname}</div>
+                                <div className="font-semibold text-gray-900">{homeTeam.city} {homeTeam.nickname}</div>
                                 {game.homeScore !== undefined && (
-                                  <div className="text-xl font-bold text-white">{game.homeScore}</div>
+                                  <div className="text-xl font-bold text-gray-900">{game.homeScore}</div>
                                 )}
                               </div>
                             </div>
@@ -226,7 +226,7 @@ export function SeasonSchedule() {
 
                         {/* Odds (if available) */}
                         {game.odds && (
-                          <div className="mt-4 pt-4 border-t border-sak-border/50">
+                          <div className="mt-4 pt-4 border-t border-gray-200/50">
                             <div className="flex items-center justify-center space-x-6 text-xs text-gray-400">
                               <div>
                                 <span className="font-medium">Spread:</span> {game.odds.homeLine && game.odds.homeLine > 0 ? `+${game.odds.homeLine}` : game.odds.homeLine || 'N/A'}

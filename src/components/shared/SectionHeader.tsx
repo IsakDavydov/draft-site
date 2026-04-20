@@ -9,11 +9,11 @@ export function SectionHeader({ title, description, children }: SectionHeaderPro
     <div className="mb-8">
       <div className="md:flex md:items-center md:justify-between">
         <div className="min-w-0 flex-1">
-          <h1 className="text-3xl font-bold leading-7 text-white sm:truncate sm:text-4xl sm:tracking-tight">
+          <h1 className="text-3xl font-bold leading-7 text-gray-900 sm:truncate sm:text-4xl sm:tracking-tight">
             {title}
           </h1>
           {description && (
-            <p className="mt-2 text-lg text-gray-400">
+            <p className="mt-2 text-lg text-gray-500">
               {description}
             </p>
           )}

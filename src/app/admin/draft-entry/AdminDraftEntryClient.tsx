@@ -144,27 +144,27 @@ export function AdminDraftEntryClient({
   const currentSlot = selectedPick ? draftOrder.find((s) => s.pick === selectedPick) : null;
 
   return (
-    <div className="min-h-screen bg-sak-darker text-white">
+    <div className="min-h-screen bg-cream text-gray-900">
 
       {/* Header */}
-      <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
+      <div className="border-b border-gray-200 bg-white px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Radio className="h-5 w-5 text-brand-red" />
-          <h1 className="text-lg font-bold">Draft Entry</h1>
-          <span className="text-xs text-gray-500 font-mono">Admin</span>
+          <Radio className="h-5 w-5 text-rose-500" />
+          <h1 className="text-lg font-bold text-gray-900">Draft Entry</h1>
+          <span className="text-xs text-gray-400 font-mono">Admin</span>
         </div>
         <div className="flex items-center gap-3">
           <Link
             href="/live"
             target="_blank"
-            className="text-xs font-semibold text-brand-red hover:text-brand-red/80 transition-colors"
+            className="text-xs font-semibold text-rose-500 hover:text-rose-600 transition-colors"
           >
             View live page →
           </Link>
           <button
             onClick={sendNotifications}
             disabled={notifying || results.length < 32}
-            className="flex items-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 px-3 py-2 text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 px-3 py-2 text-sm font-semibold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             <Mail className="h-4 w-4" />
             {notifying ? 'Sending…' : 'Send Score Emails'}
@@ -175,7 +175,7 @@ export function AdminDraftEntryClient({
       {/* Toast */}
       {toast && (
         <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold shadow-lg ${
-          toast.type === 'success' ? 'bg-green-900 text-green-100' : 'bg-red-900 text-red-100'
+          toast.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'
         }`}>
           {toast.type === 'success' ? <CheckCircle className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
           {toast.msg}
@@ -186,12 +186,12 @@ export function AdminDraftEntryClient({
 
         {/* Left: Entry form */}
         <div className="space-y-4">
-          <div className="rounded-2xl bg-sak-card border border-white/10 p-5">
-            <h2 className="text-sm font-bold mb-4">Enter Pick</h2>
+          <div className="rounded-2xl bg-white border border-gray-200 shadow-sm p-5">
+            <h2 className="text-sm font-bold text-gray-900 mb-4">Enter Pick</h2>
 
             {/* Pick selector */}
             <div className="mb-4">
-              <label className="text-xs text-gray-400 mb-2 block">Pick #</label>
+              <label className="text-xs text-gray-500 mb-2 block">Pick #</label>
               <div className="grid grid-cols-8 gap-1.5">
                 {draftOrder.map((slot) => {
                   const done = completedPickNums.has(slot.pick);
@@ -203,10 +203,10 @@ export function AdminDraftEntryClient({
                       title={slot.team}
                       className={`h-8 rounded text-xs font-bold transition-all ${
                         isSelected
-                          ? 'bg-brand-red text-white ring-2 ring-brand-red/50'
+                          ? 'bg-rose-500 text-white ring-2 ring-rose-300'
                           : done
-                            ? 'bg-green-900/40 text-green-400'
-                            : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                            ? 'bg-green-50 text-green-600 border border-green-200'
+                            : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                       }`}
                     >
                       {slot.pick}
@@ -220,40 +220,40 @@ export function AdminDraftEntryClient({
             {!selectedPick && nextUnannounced && (
               <button
                 onClick={() => setSelectedPick(nextUnannounced.pick)}
-                className="w-full mb-4 rounded-lg bg-brand-red/10 border border-brand-red/30 px-4 py-2 text-sm font-semibold text-brand-red hover:bg-brand-red/20 transition-colors"
+                className="w-full mb-4 rounded-lg bg-rose-50 border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-500 hover:bg-rose-100 transition-colors"
               >
                 Next pick: #{nextUnannounced.pick} — {nextUnannounced.team}
               </button>
             )}
 
             {currentSlot && (
-              <p className="text-xs text-gray-400 mb-4">
-                Pick <span className="font-bold text-white">#{currentSlot.pick}</span> — {currentSlot.team}
+              <p className="text-xs text-gray-500 mb-4">
+                Pick <span className="font-bold text-gray-900">#{currentSlot.pick}</span> — {currentSlot.team}
               </p>
             )}
 
             {/* Prospect search */}
             <div className="mb-3">
-              <label className="text-xs text-gray-400 mb-2 block">Search Prospect</label>
+              <label className="text-xs text-gray-500 mb-2 block">Search Prospect</label>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Name, position, school…"
-                className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-red/50"
+                className="w-full rounded-lg bg-white border border-gray-200 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-500/30 focus:border-rose-500"
               />
             </div>
 
             {/* Prospect list */}
-            <div className="max-h-56 overflow-y-auto rounded-lg bg-black/20 border border-white/5">
+            <div className="max-h-56 overflow-y-auto rounded-lg bg-gray-50 border border-gray-200">
               {filteredProspects.slice(0, 30).map((p) => (
                 <button
                   key={p.id}
                   onClick={() => setSelectedProspect(p.id)}
                   className={`w-full text-left px-3 py-2 text-sm transition-colors ${
                     selectedProspect === p.id
-                      ? 'bg-brand-red text-white'
-                      : 'text-gray-300 hover:bg-white/5'
+                      ? 'bg-rose-500 text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
                   <span className="font-semibold">{p.name}</span>
@@ -266,7 +266,7 @@ export function AdminDraftEntryClient({
             <button
               onClick={submitPick}
               disabled={!selectedPick || !selectedProspect || submitting}
-              className="mt-4 w-full rounded-xl bg-brand-red px-4 py-3 text-sm font-bold text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-brand-red/90 transition-colors"
+              className="mt-4 w-full rounded-xl bg-rose-500 px-4 py-3 text-sm font-bold text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-rose-600 transition-colors"
             >
               {submitting ? 'Submitting…' : `Submit Pick #${selectedPick ?? '?'}`}
             </button>
@@ -274,27 +274,27 @@ export function AdminDraftEntryClient({
         </div>
 
         {/* Right: Results log */}
-        <div className="rounded-2xl bg-sak-card border border-white/10 overflow-hidden">
-          <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
-            <h2 className="text-sm font-bold">Announced Picks</h2>
+        <div className="rounded-2xl bg-white border border-gray-200 shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h2 className="text-sm font-bold text-gray-900">Announced Picks</h2>
             <span className="text-xs text-gray-500">{results.length} / 32</span>
           </div>
-          <div className="divide-y divide-white/5 max-h-[600px] overflow-y-auto">
+          <div className="divide-y divide-gray-100 max-h-[600px] overflow-y-auto">
             {results.length === 0 ? (
-              <p className="px-5 py-8 text-sm text-gray-600 text-center">No picks entered yet</p>
+              <p className="px-5 py-8 text-sm text-gray-500 text-center">No picks entered yet</p>
             ) : (
               results.map((r) => (
-                <div key={r.pick_number} className="flex items-center gap-3 px-4 py-3">
-                  <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-xs font-bold text-gray-400">
+                <div key={r.pick_number} className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
                     {r.pick_number}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-white truncate">{r.prospect_name}</p>
+                    <p className="text-sm font-semibold text-gray-900 truncate">{r.prospect_name}</p>
                     <p className="text-xs text-gray-500">{r.team}</p>
                   </div>
                   <button
                     onClick={() => deletePick(r.pick_number)}
-                    className="flex-shrink-0 rounded p-1.5 text-gray-600 hover:text-red-400 hover:bg-red-400/10 transition-colors"
+                    className="flex-shrink-0 rounded p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
                     title="Delete pick"
                   >
                     <Trash2 className="h-3.5 w-3.5" />

@@ -4,9 +4,9 @@ import { Zap } from 'lucide-react';
 
 export function SiteFooter() {
   return (
-    <footer className="bg-sak-darker text-white">
-      {/* Red accent stripe */}
-      <div className="h-[3px] bg-gradient-to-r from-brand-red/0 via-brand-red to-brand-red/0" />
+    <footer className="bg-cream-deep text-gray-900 border-t border-gray-200">
+      {/* Rose accent stripe */}
+      <div className="h-[3px] bg-gradient-to-r from-rose-500/0 via-rose-500 to-rose-500/0" />
 
       <div className="mx-auto max-w-7xl px-6 py-14 sm:px-8 lg:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
@@ -17,13 +17,13 @@ export function SiteFooter() {
                 width={36}
                 height={36}
                 className="h-9 w-9 object-contain"
-                lightBg={false}
+                lightBg={true}
               />
-              <span className="font-display text-lg font-bold tracking-tight text-white">
+              <span className="font-display text-lg font-bold tracking-tight text-gray-900">
                 SAKFootball
               </span>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed max-w-sm mb-5">
+            <p className="text-sm text-gray-500 leading-relaxed max-w-sm mb-5">
               The 2026 NFL Mock Draft Challenge — submit your first-round predictions,
               compete on the leaderboard, and create groups with friends.
             </p>
@@ -31,7 +31,7 @@ export function SiteFooter() {
             {/* CTA in footer */}
             <Link
               href="/predict"
-              className="inline-flex items-center gap-2 rounded-lg bg-brand-red/10 border border-brand-red/30 px-4 py-2 text-sm font-bold text-brand-red hover:bg-brand-red hover:text-white transition-all"
+              className="inline-flex items-center gap-2 rounded-lg bg-rose-50 border border-rose-200 px-4 py-2 text-sm font-bold text-rose-500 hover:bg-rose-500 hover:text-white hover:border-rose-500 transition-all"
             >
               <Zap className="h-3.5 w-3.5" />
               Submit Your Mock Draft
@@ -43,7 +43,7 @@ export function SiteFooter() {
                 href="https://www.instagram.com/sak.football"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white transition-colors"
+                className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-700 transition-colors"
                 aria-label="Instagram"
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -55,7 +55,7 @@ export function SiteFooter() {
 
           {/* Nav links */}
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
               Sections
             </h3>
             <ul className="space-y-2.5">
@@ -71,7 +71,7 @@ export function SiteFooter() {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-sm text-gray-400 hover:text-white transition-colors"
+                    className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -82,7 +82,7 @@ export function SiteFooter() {
 
           {/* Legal */}
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
               Legal
             </h3>
             <ul className="space-y-2.5">
@@ -96,7 +96,7 @@ export function SiteFooter() {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-sm text-gray-400 hover:text-white transition-colors"
+                    className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -107,11 +107,11 @@ export function SiteFooter() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 border-t border-white/5 pt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <p className="text-sm text-gray-500">
+        <div className="mt-12 border-t border-gray-200 pt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <p className="text-sm text-gray-400">
             © 2026 SAKFootball. All rights reserved.
           </p>
-          <p className="text-xs text-gray-600 text-center sm:text-right">
+          <p className="text-xs text-gray-400 text-center sm:text-right">
             21+ only. Gambling problem? Call 1-800-GAMBLER.
             <br className="sm:hidden" />
             {' '}Not investment advice. Please gamble responsibly.

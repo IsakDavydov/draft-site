@@ -5,25 +5,25 @@
 /* ─── Design tokens ──────────────────────────────────────────── */
 
 :root {
-  --background: 220 25% 8%;      /* sak-darker #080D18 */
-  --foreground: 220 10% 92%;     /* light text on dark */
-  --border: 220 18% 18%;         /* sak-border */
-  --input: 220 18% 18%;
-  --ring: 5 80% 53%;             /* brand-red focus ring */
-  --primary: 5 80% 53%;          /* brand-red */
+  --background: 36 33% 96%;      /* cream #faf7f2 */
+  --foreground: 220 15% 12%;     /* gray-900 */
+  --border: 220 13% 88%;         /* gray-200 */
+  --input: 220 13% 88%;
+  --ring: 351 83% 57%;           /* rose-500 focus ring */
+  --primary: 351 83% 57%;        /* rose-500 */
   --primary-foreground: 0 0% 100%;
-  --secondary: 220 20% 14%;      /* sak-card */
-  --secondary-foreground: 220 10% 85%;
-  --muted: 220 18% 16%;
-  --muted-foreground: 220 10% 55%;
-  --accent: 35 86% 55%;          /* brand-gold */
+  --secondary: 36 20% 94%;       /* cream-deep #f0ebe1 */
+  --secondary-foreground: 220 15% 25%;
+  --muted: 36 20% 94%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 351 83% 57%;         /* rose-500 */
   --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
-  --card: 220 22% 11%;           /* sak-card #151B2B */
-  --card-foreground: 220 10% 90%;
-  --popover: 220 22% 11%;
-  --popover-foreground: 220 10% 90%;
+  --card: 0 0% 100%;             /* white cards */
+  --card-foreground: 220 15% 12%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 15% 12%;
   --radius: 0.625rem;
 }
 
@@ -41,8 +41,8 @@ html {
 }
 
 body {
-  background: #080D18;
-  color: #e5e7eb;
+  background: #faf7f2;
+  color: #111827;
   font-family: Inter, system-ui, sans-serif;
 }
 
@@ -108,7 +108,7 @@ textarea:focus {
 /* ─── Background patterns ─────────────────────────────────────── */
 
 @layer utilities {
-  /* Animated yard-line stripes for hero sections */
+  /* Animated yard-line stripes for hero sections (dark bg) */
   .hero-lines {
     background-image: repeating-linear-gradient(
       0deg,
@@ -118,6 +118,18 @@ textarea:focus {
       rgba(255, 255, 255, 0.03) 80px
     );
     animation: fieldDrift 30s linear infinite;
+  }
+
+  /* Animated yard-line stripes for light bg sections */
+  .hero-lines-light {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 79px,
+      rgba(0, 0, 0, 0.07) 79px,
+      rgba(0, 0, 0, 0.07) 80px
+    );
+    animation: fieldDrift 40s linear infinite;
   }
 
   /* Subtle dot grid */

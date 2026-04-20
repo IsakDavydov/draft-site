@@ -62,26 +62,26 @@ export default async function PredictionTopPicksPage({ params }: PageProps) {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sak-darker to-sak-darker">
+    <div className="min-h-screen bg-cream-deep">
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <Link
             href="/leaderboard"
-            className="group inline-flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors hover:text-brand-red"
+            className="group inline-flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors hover:text-rose-500"
           >
             <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
             Leaderboard
           </Link>
           <Link
             href="/groups"
-            className="text-sm font-medium text-brand-red hover:text-brand-red/80"
+            className="text-sm font-medium text-rose-500 hover:text-rose-500/80"
           >
             Groups →
           </Link>
         </div>
 
-        <div className="rounded-3xl border border-white/[0.06] bg-sak-card p-6 shadow-card sm:p-8">
-          <h1 className="text-2xl font-bold tracking-tight text-white">
+        <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">
             {displayName}
           </h1>
           <p className="mt-1 text-sm text-gray-400">

@@ -32,7 +32,7 @@ export function PickRecord() {
       <div className="animate-pulse">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-20 bg-sak-hover rounded-lg"></div>
+            <div key={i} className="h-20 bg-gray-50 rounded-lg"></div>
           ))}
         </div>
       </div>
@@ -56,7 +56,7 @@ export function PickRecord() {
       {/* Season Selector - Only 2026 */}
       <div className="flex justify-center mb-6">
         <div className="text-center">
-          <div className="text-lg font-semibold text-white mb-2">2026 NFL Season</div>
+          <div className="text-lg font-semibold text-gray-900 mb-2">2026 NFL Season</div>
           <div className="text-sm text-gray-400">Fresh start - no picks yet!</div>
         </div>
       </div>
@@ -64,31 +64,31 @@ export function PickRecord() {
       {/* Season Summary - All 0s */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         <div className="text-center">
-          <div className="text-3xl font-bold text-white">{seasonRecord.totalWins}</div>
+          <div className="text-3xl font-bold text-gray-900">{seasonRecord.totalWins}</div>
           <div className="text-sm text-gray-400">Total Wins</div>
         </div>
         <div className="text-center">
-          <div className="text-3xl font-bold text-white">{seasonRecord.totalLosses}</div>
+          <div className="text-3xl font-bold text-gray-900">{seasonRecord.totalLosses}</div>
           <div className="text-sm text-gray-400">Total Losses</div>
         </div>
         <div className="text-center">
-          <div className="text-3xl font-bold text-white">{seasonRecord.totalPushes}</div>
+          <div className="text-3xl font-bold text-gray-900">{seasonRecord.totalPushes}</div>
           <div className="text-sm text-gray-400">Total Pushes</div>
         </div>
         <div className="text-center">
-          <div className="text-3xl font-bold text-white">{winRate.toFixed(1)}%</div>
+          <div className="text-3xl font-bold text-gray-900">{winRate.toFixed(1)}%</div>
           <div className="text-sm text-gray-400">Win Rate</div>
         </div>
       </div>
 
       {/* Units and ROI - All 0s */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-sak-hover rounded-lg p-6 text-center">
-          <div className="text-2xl font-bold text-white">{seasonRecord.totalUnits}</div>
+        <div className="bg-cream-deep rounded-lg p-6 text-center border border-gray-200">
+          <div className="text-2xl font-bold text-gray-900">{seasonRecord.totalUnits}</div>
           <div className="text-sm text-gray-400">Total Units Wagered</div>
         </div>
-        <div className="bg-sak-hover rounded-lg p-6 text-center">
-          <div className="text-2xl font-bold text-gray-400">
+        <div className="bg-cream-deep rounded-lg p-6 text-center border border-gray-200">
+          <div className="text-2xl font-bold text-gray-700">
             {seasonRecord.totalRoi.toFixed(1)}%
           </div>
           <div className="text-sm text-gray-400">Total ROI</div>
@@ -97,9 +97,9 @@ export function PickRecord() {
 
       {/* Season Start Message */}
       <div className="mt-8">
-        <div className="bg-brand-red/10 border border-brand-red/30 rounded-lg p-6 text-center">
-          <div className="text-lg font-medium text-brand-red/90 mb-2">2026 Season Starting Soon!</div>
-          <div className="text-sm text-brand-red/70">
+        <div className="bg-rose-50 border border-rose-200 rounded-lg p-6 text-center">
+          <div className="text-lg font-medium text-rose-500/90 mb-2">2026 Season Starting Soon!</div>
+          <div className="text-sm text-rose-500/70">
             The 2026 NFL season begins in September. Your picks and performance tracking will appear here once the season starts.
           </div>
         </div>

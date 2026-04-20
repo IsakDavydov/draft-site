@@ -60,23 +60,23 @@ export function PlayoffOddsChart() {
     <div className="h-96">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#262D3D" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis
             dataKey="teamName"
             angle={-45}
             textAnchor="end"
             height={100}
-            tick={{ fontSize: 12, fill: '#9CA3AF' }}
+            tick={{ fontSize: 12, fill: '#6b7280' }}
           />
           <YAxis
             tickFormatter={(value) => `${value.toFixed(0)}%`}
             domain={[0, 100]}
-            tick={{ fontSize: 12, fill: '#9CA3AF' }}
+            tick={{ fontSize: 12, fill: '#6b7280' }}
           />
           <Tooltip
             formatter={(value: number) => [`${value.toFixed(1)}%`, 'Playoff Odds']}
             labelFormatter={(label) => label}
-            contentStyle={{ backgroundColor: '#151B2B', border: '1px solid #262D3D', color: '#E5E7EB' }}
+            contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', color: '#111827' }}
           />
           <Bar
             dataKey="odds"

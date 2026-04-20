@@ -22,10 +22,10 @@ const MD_ROW_START: Record<number, string> = {
 
 function PickCard({ pick }: { pick: TopPickRow }) {
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.06] px-3 py-2.5 shadow-card">
+    <div className="rounded-2xl border border-gray-200 bg-white px-3 py-2.5 shadow-sm">
       <div className="flex gap-2.5">
         <span
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-red/10 text-xs font-bold text-brand-red"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-rose-50 text-xs font-bold text-rose-500"
           aria-label={`Pick ${pick.pick_number}`}
         >
           {pick.pick_number}
@@ -34,7 +34,7 @@ function PickCard({ pick }: { pick: TopPickRow }) {
           <div className="flex items-start gap-2">
             <CollegeLogo school={pick.school} size={32} className="mt-0.5" />
             <div className="min-w-0 flex-1">
-              <div className="font-semibold leading-tight text-white">{pick.prospectName}</div>
+              <div className="font-semibold leading-tight text-gray-900">{pick.prospectName}</div>
               <div className="mt-0.5 text-xs text-gray-400">
                 {pick.position}
                 {pick.school ? ` · ${pick.school}` : ''}
@@ -42,8 +42,8 @@ function PickCard({ pick }: { pick: TopPickRow }) {
             </div>
           </div>
           <p className="pl-0.5 text-xs text-gray-400">
-            <span className="text-gray-500">To </span>
-            <span className="font-medium text-gray-200">{pick.team}</span>
+            <span className="text-gray-400">To </span>
+            <span className="font-medium text-gray-700">{pick.team}</span>
           </p>
         </div>
       </div>

@@ -6,15 +6,15 @@ export default function AuthErrorPage({
   searchParams: { message?: string };
 }) {
   return (
-    <div className="min-h-screen bg-sak-darker flex items-center justify-center px-4">
+    <div className="min-h-screen bg-cream flex items-center justify-center px-4">
       <div className="text-center">
-        <h1 className="text-xl font-bold text-white font-display mb-2">Authentication error</h1>
-        <p className="text-gray-200 mb-6">
+        <h1 className="text-xl font-bold text-gray-900 font-display mb-2">Authentication error</h1>
+        <p className="text-gray-600 mb-6">
           {searchParams.message || 'Something went wrong. Please try again.'}
         </p>
         <Link
           href="/auth/signin"
-          className="text-brand-red font-medium hover:text-brand-red/80"
+          className="text-rose-500 font-medium hover:text-rose-600"
         >
           Back to sign in
         </Link>

@@ -8,47 +8,45 @@ export const metadata = {
 
 export default function ContestRulesPage() {
   return (
-    <div className="min-h-screen bg-sak-darker">
+    <div className="min-h-screen bg-cream">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-sak-card rounded-2xl shadow-card border border-white/[0.06] overflow-hidden">
-          <div className="border-b border-white/[0.06] px-8 py-8 sm:px-10">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-red mb-2">Legal</p>
-            <h1 className="text-3xl font-bold tracking-tight text-white">2026 Draft Prediction Challenge</h1>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="border-b border-gray-200 px-8 py-8 sm:px-10">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-rose-500 mb-2">Legal</p>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">2026 Draft Prediction Challenge</h1>
             <p className="mt-1 text-base text-gray-500">Official Contest Rules</p>
             <p className="mt-1 text-sm text-gray-400">Last updated: March 25, 2026</p>
           </div>
 
           {/* Grand Prize callout */}
-          <div id="grand-prize" className="mx-8 my-8 sm:mx-10 rounded-2xl bg-gradient-to-br from-brand-red via-[#012252] to-[#001530] p-px">
-            <div className="rounded-2xl bg-[#011a3a] px-7 py-6">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-gold/20 border border-brand-gold/30">
-                  <DollarSign className="h-6 w-6 text-brand-red" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-red mb-1">Grand Prize</p>
-                  <h2 className="text-2xl font-black text-white">$10,000 Cash Award</h2>
-                  <p className="mt-2 text-sm text-white/70 leading-relaxed">
-                    Any participant who achieves a <strong className="text-white">perfect score of 480 out of 480 points</strong> —
-                    meaning all 32 first-round prospects predicted at their exact pick number — will be awarded a $10,000 cash prize.
-                    No purchase necessary. Full eligibility requirements in Section 6A below.
-                  </p>
-                </div>
+          <div id="grand-prize" className="mx-8 my-8 sm:mx-10 rounded-2xl bg-rose-50 border border-rose-200 p-6">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-rose-100 border border-rose-200">
+                <DollarSign className="h-6 w-6 text-rose-500" />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-rose-500 mb-1">Grand Prize</p>
+                <h2 className="text-2xl font-black text-gray-900">$10,000 Cash Award</h2>
+                <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+                  Any participant who achieves a <strong className="text-gray-900">perfect score of 480 out of 480 points</strong> —
+                  meaning all 32 first-round prospects predicted at their exact pick number — will be awarded a $10,000 cash prize.
+                  No purchase necessary. Full eligibility requirements in Section 6A below.
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="px-8 py-8 sm:px-10 space-y-8 text-gray-400 text-[15px] leading-relaxed">
+          <div className="px-8 py-8 sm:px-10 space-y-8 text-gray-700 text-[15px] leading-relaxed">
 
             <p>
               These Official Contest Rules (&quot;Rules&quot;) govern participation in the SAKFootball 2026 NFL Draft
               Prediction Challenge (&quot;Contest&quot;). By submitting an entry, you agree to these Rules and our{' '}
-              <Link href="/terms" className="text-brand-red hover:underline">Terms of Service</Link> and{' '}
-              <Link href="/privacy" className="text-brand-red hover:underline">Privacy Policy</Link>.
+              <Link href="/terms" className="text-rose-500 hover:underline">Terms of Service</Link> and{' '}
+              <Link href="/privacy" className="text-rose-500 hover:underline">Privacy Policy</Link>.
             </p>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">1. Eligibility</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">1. Eligibility</h2>
               <ul className="list-disc pl-5 space-y-2">
                 <li>The Contest is open to individuals 18 years of age or older (21+ where required by applicable law).</li>
                 <li>One entry per person. Only one account per individual is permitted.</li>
@@ -59,7 +57,7 @@ export default function ContestRulesPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">2. Contest Period & Deadlines</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">2. Contest Period & Deadlines</h2>
               <ul className="list-disc pl-5 space-y-2">
                 <li>The Contest begins when SAKFootball opens prediction submissions and ends at the official start of the 2026 NFL Draft.</li>
                 <li>Entries must be submitted and marked as your leaderboard entry <strong>before the 2026 NFL Draft begins</strong>. Late entries will not be scored.</li>
@@ -69,7 +67,7 @@ export default function ContestRulesPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">3. How to Enter</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">3. How to Enter</h2>
               <ul className="list-disc pl-5 space-y-2">
                 <li>Create a free account at sakfootball.com.</li>
                 <li>Navigate to the Predict page and select one prospect for each of the 32 first-round draft picks.</li>
@@ -79,7 +77,7 @@ export default function ContestRulesPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">4. Scoring</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">4. Scoring</h2>
               <ul className="list-disc pl-5 space-y-2">
                 <li><strong>15 points</strong> — the correct prospect is predicted at the exact pick number (team does not affect scoring).</li>
                 <li><strong>5 points</strong> — the correct prospect is predicted within one slot of the actual pick (e.g., predicted pick 3, actual pick 4).</li>
@@ -93,7 +91,7 @@ export default function ContestRulesPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">5. Fair Play</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">5. Fair Play</h2>
               <ul className="list-disc pl-5 space-y-2">
                 <li>All predictions must be your own. Do not share your specific picks with other participants before the draft.</li>
                 <li>You may use expert mock drafts and analysis for research, but your submitted entry must be your independent prediction.</li>
@@ -104,9 +102,9 @@ export default function ContestRulesPage() {
             </section>
 
             <section id="prizes">
-              <h2 className="text-base font-bold text-white mb-3">6. Prizes</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">6. Prizes</h2>
 
-              <h3 className="text-sm font-bold text-gray-200 mb-2 mt-4">6A. Grand Prize — $10,000 Cash</h3>
+              <h3 className="text-sm font-bold text-gray-700 mb-2 mt-4">6A. Grand Prize — $10,000 Cash</h3>
               <p className="mb-3">
                 A cash prize of <strong>$10,000 USD</strong> will be awarded to any eligible participant who achieves
                 a <strong>perfect score of 480 out of 480 points</strong> — meaning all 32 first-round prospects
@@ -124,21 +122,21 @@ export default function ContestRulesPage() {
                 <li><strong>Taxes:</strong> The Grand Prize winner is solely responsible for all applicable federal, state, and local taxes. SAKFootball will issue IRS Form 1099-MISC to winners as required by law. SAKFootball may withhold amounts required by federal law (currently 24% backup withholding for prizes exceeding $5,000 where applicable).</li>
               </ul>
 
-              <h3 className="text-sm font-bold text-gray-200 mb-2 mt-5">6B. Multiple Winners</h3>
+              <h3 className="text-sm font-bold text-gray-700 mb-2 mt-5">6B. Multiple Winners</h3>
               <p className="mb-3">
                 If more than one eligible participant achieves a perfect score of 480 points, the Grand Prize of
                 $10,000 will be split equally among all verified perfect-score winners. SAKFootball&apos;s determination
                 of winners is final.
               </p>
 
-              <h3 className="text-sm font-bold text-gray-200 mb-2 mt-5">6C. No Perfect Score</h3>
+              <h3 className="text-sm font-bold text-gray-700 mb-2 mt-5">6C. No Perfect Score</h3>
               <p className="mb-3">
                 If no participant achieves a perfect score of 480 points, the $10,000 Grand Prize will go unclaimed
                 for the 2026 contest. SAKFootball may award discretionary prizes to top finishers at its sole
                 discretion. Such discretionary prizes, if any, will be announced separately.
               </p>
 
-              <h3 className="text-sm font-bold text-gray-200 mb-2 mt-5">6D. General Prize Rules</h3>
+              <h3 className="text-sm font-bold text-gray-700 mb-2 mt-5">6D. General Prize Rules</h3>
               <ul className="list-disc pl-5 space-y-2">
                 <li>No purchase is necessary to enter or win any prize.</li>
                 <li>All prizes are non-transferable and may not be substituted or exchanged for cash (except the Grand Prize, which is already cash).</li>
@@ -149,7 +147,7 @@ export default function ContestRulesPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">7. Tiebreakers</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">7. Tiebreakers</h2>
               <p>
                 In the event of a tie in total score, SAKFootball may use tiebreaker criteria at its discretion,
                 such as timestamp of submission, number of correctly predicted teams, or a secondary scoring metric.
@@ -158,7 +156,7 @@ export default function ContestRulesPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">8. Disqualification</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">8. Disqualification</h2>
               <p>
                 SAKFootball reserves the right to disqualify any participant who, in its sole judgment: violates these
                 Rules or the Terms of Service; provides false information; creates multiple accounts; uses any form of
@@ -168,7 +166,7 @@ export default function ContestRulesPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">9. Publicity</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">9. Publicity</h2>
               <p>
                 By participating, you grant SAKFootball the right to use your display name and contest score for
                 promotional purposes (e.g., leaderboard display, social media posts) without additional compensation,
@@ -177,7 +175,7 @@ export default function ContestRulesPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">10. Limitation of Liability</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">10. Limitation of Liability</h2>
               <p>
                 SAKFootball is not responsible for: technical failures; incorrect or incomplete entries;
                 lost, late, or misdirected entries; any error in scoring; unauthorized access to entries;
@@ -187,7 +185,7 @@ export default function ContestRulesPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">11. Modifications to Rules</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">11. Modifications to Rules</h2>
               <p>
                 SAKFootball reserves the right to modify, suspend, or cancel the Contest or these Rules at any time.
                 Changes will be effective when posted to this page. Continued participation after changes constitutes
@@ -196,7 +194,7 @@ export default function ContestRulesPage() {
             </section>
 
             <section>
-              <h2 className="text-base font-bold text-white mb-3">12. Governing Law</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-3">12. Governing Law</h2>
               <p>
                 These Rules are governed by the laws of the United States. Any disputes will be resolved as set forth
                 in the Terms of Service.
@@ -205,18 +203,18 @@ export default function ContestRulesPage() {
 
           </div>
 
-          <div className="border-t border-white/[0.06] px-8 py-5 sm:px-10">
+          <div className="border-t border-gray-200 px-8 py-5 sm:px-10">
             <p className="text-sm text-gray-500 mb-4">
               Questions? Contact us at{' '}
-              <a href="mailto:contact@sakfootball.com" className="text-brand-red hover:underline font-medium">
+              <a href="mailto:contact@sakfootball.com" className="text-rose-500 hover:underline font-medium">
                 contact@sakfootball.com
               </a>
             </p>
-            <div className="flex flex-wrap gap-4 text-sm text-gray-400">
-              <Link href="/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
-              <Link href="/responsible-gaming" className="hover:text-gray-300 transition-colors">Responsible Gaming</Link>
-              <Link href="/predict" className="hover:text-gray-300 transition-colors">← Enter the Contest</Link>
+            <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+              <Link href="/privacy" className="hover:text-gray-700 transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-gray-700 transition-colors">Terms of Service</Link>
+              <Link href="/responsible-gaming" className="hover:text-gray-700 transition-colors">Responsible Gaming</Link>
+              <Link href="/predict" className="hover:text-gray-700 transition-colors">← Enter the Contest</Link>
             </div>
           </div>
         </div>

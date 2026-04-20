@@ -23,7 +23,7 @@ export function SiteHeader() {
 
   return (
     <>
-    <header className="sticky top-0 z-50 bg-sak-darker/90 backdrop-blur-xl border-b border-white/[0.06]">
+    <header className="sticky top-0 z-50 bg-[#faf7f2]/95 backdrop-blur-xl border-b border-gray-200">
 
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-8"
@@ -37,9 +37,9 @@ export function SiteHeader() {
               width={36}
               height={36}
               className="h-9 w-9 object-contain"
-              lightBg={false}
+              lightBg={true}
             />
-            <span className="font-display text-lg font-bold text-white tracking-tight group-hover:text-gray-300 transition-colors">
+            <span className="font-display text-lg font-bold text-gray-900 tracking-tight group-hover:text-rose-500 transition-colors">
               SAKFootball
             </span>
           </Link>
@@ -49,7 +49,7 @@ export function SiteHeader() {
         <div className="flex lg:hidden">
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400 hover:text-white transition-colors"
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-500 hover:text-gray-900 transition-colors"
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className="sr-only">Open main menu</span>
@@ -63,7 +63,7 @@ export function SiteHeader() {
           <Link
             href="/predict"
             className={cn(
-              'flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-bold transition-all mr-2 bg-brand-red text-white animate-glow-pulse'
+              'flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-bold transition-all mr-2 bg-rose-500 text-white hover:bg-rose-600'
             )}
           >
             <Zap className="h-3.5 w-3.5" />
@@ -78,8 +78,8 @@ export function SiteHeader() {
               className={cn(
                 'rounded-md px-3 py-2 text-sm font-semibold transition-colors duration-200',
                 pathname === item.href
-                  ? 'text-white'
-                  : 'text-gray-500 hover:text-gray-200'
+                  ? 'text-gray-900'
+                  : 'text-gray-500 hover:text-gray-900'
               )}
             >
               {item.name}
@@ -91,13 +91,13 @@ export function SiteHeader() {
         <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-3 lg:items-center">
           <Link
             href="/search"
-            className="rounded-md p-2 text-gray-500 hover:text-gray-200 transition-colors duration-200"
+            className="rounded-md p-2 text-gray-500 hover:text-gray-900 transition-colors duration-200"
             aria-label="Search"
           >
             <Search className="h-4.5 w-4.5" />
           </Link>
-          <div className="h-5 w-px bg-white/10" />
-          <AuthButton dark />
+          <div className="h-5 w-px bg-gray-200" />
+          <AuthButton />
         </div>
       </nav>
 
@@ -111,20 +111,20 @@ export function SiteHeader() {
             aria-hidden="true"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-sak-dark px-6 py-4 sm:max-w-sm border-l border-white/[0.06]">
+          <div className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-4 sm:max-w-sm border-l border-gray-200 shadow-xl">
             <div className="flex items-center justify-between">
               <Link href="/" className="flex items-center gap-2.5" onClick={() => setMobileMenuOpen(false)}>
                 <LogoImage
                   width={32}
                   height={32}
                   className="h-8 w-8 object-contain"
-                  lightBg={false}
+                  lightBg={true}
                 />
-                <span className="font-display text-lg font-bold text-white">SAKFootball</span>
+                <span className="font-display text-lg font-bold text-gray-900">SAKFootball</span>
               </Link>
               <button
                 type="button"
-                className="-m-2.5 rounded-md p-2.5 text-gray-400 hover:text-white transition-colors"
+                className="-m-2.5 rounded-md p-2.5 text-gray-500 hover:text-gray-900 transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <span className="sr-only">Close menu</span>
@@ -133,12 +133,12 @@ export function SiteHeader() {
             </div>
 
             <div className="mt-6 flow-root">
-              <div className="-my-6 divide-y divide-white/10">
+              <div className="-my-6 divide-y divide-gray-100">
                 {/* Primary CTA */}
                 <div className="py-5">
                   <Link
                     href="/predict"
-                    className="flex items-center gap-2 rounded-xl bg-brand-red px-4 py-3 text-sm font-bold text-white"
+                    className="flex items-center gap-2 rounded-xl bg-rose-500 px-4 py-3 text-sm font-bold text-white hover:bg-rose-600 transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <Zap className="h-4 w-4" />
@@ -156,8 +156,8 @@ export function SiteHeader() {
                       className={cn(
                         '-mx-3 block rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 transition-colors duration-200',
                         pathname === item.href
-                          ? 'text-white bg-white/5'
-                          : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                          ? 'text-gray-900 bg-gray-50'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       )}
                       onClick={() => setMobileMenuOpen(false)}
                     >
@@ -170,13 +170,13 @@ export function SiteHeader() {
                 <div className="py-6 space-y-2">
                   <Link
                     href="/search"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-300 hover:bg-white/5 hover:text-white transition-colors duration-200"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-sm font-semibold leading-7 text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Search
                   </Link>
                   <div onClick={() => setMobileMenuOpen(false)}>
-                    <AuthButton dark />
+                    <AuthButton />
                   </div>
                 </div>
               </div>

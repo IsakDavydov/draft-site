@@ -59,16 +59,15 @@ export function MockDraftArticleContent({ content, title }: { content: string; t
   const { intro, picks, footer } = parseMockDraftContent(content);
 
   return (
-    <div className="text-gray-200">
+    <div className="text-gray-700">
       {/* Hero banner */}
-      <div className="relative -mx-6 -mt-6 mb-10 overflow-hidden rounded-2xl sm:-mx-8 sm:-mt-8 lg:rounded-3xl h-40 sm:h-52 flex items-center justify-center bg-gradient-to-br from-sak-darker via-sak-dark to-[#1a0a0a]">
-        <div className="absolute inset-0 hero-lines pointer-events-none opacity-40" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(232,55,44,0.25)_0%,_transparent_60%)]" />
+      <div className="relative -mx-6 -mt-6 mb-10 overflow-hidden rounded-2xl sm:-mx-8 sm:-mt-8 lg:rounded-3xl h-40 sm:h-52 flex items-center justify-center bg-cream-deep border border-gray-200">
+        <div className="absolute inset-0 hero-lines pointer-events-none opacity-30" />
         <div className="relative text-center px-6">
-          <p className="text-xs font-bold text-brand-red uppercase tracking-[0.2em] mb-2">
+          <p className="text-xs font-bold text-rose-500 uppercase tracking-[0.2em] mb-2">
             First Round · {picks.length} Picks
           </p>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
             {title}
           </h1>
         </div>
@@ -76,8 +75,8 @@ export function MockDraftArticleContent({ content, title }: { content: string; t
 
       {/* Intro blurb */}
       {intro && (
-        <div className="mb-10 border-l-2 border-brand-red/40 pl-4">
-          <p className="text-lg leading-relaxed text-gray-200">
+        <div className="mb-10 border-l-2 border-rose-300 pl-4">
+          <p className="text-lg leading-relaxed text-gray-700">
             {intro}
           </p>
         </div>
@@ -91,7 +90,7 @@ export function MockDraftArticleContent({ content, title }: { content: string; t
           return (
             <div
               key={pick.heading}
-              className="rounded-2xl overflow-hidden bg-sak-card border border-white/[0.08] shadow-card"
+              className="rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-sm"
               style={{ borderLeftWidth: '4px', borderLeftColor: teamColor }}
             >
               <div className="p-5 sm:p-6">
@@ -114,21 +113,21 @@ export function MockDraftArticleContent({ content, title }: { content: string; t
                   <div className="min-w-0 flex-1">
                     {details ? (
                       <>
-                        <p className="text-xs font-semibold text-white/60 uppercase tracking-wide truncate">
+                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide truncate">
                           {pick.teamName}
                         </p>
-                        <h2 className="mt-0.5 text-lg font-bold text-white sm:text-xl tracking-tight leading-tight">
+                        <h2 className="mt-0.5 text-lg font-bold text-gray-900 sm:text-xl tracking-tight leading-tight">
                           {pick.playerName}
                         </h2>
                         <div className="mt-1 flex flex-wrap items-center gap-2">
-                          <span className="text-sm text-gray-300">{pick.school}</span>
-                          <span className="inline-flex items-center rounded-full bg-white/10 px-2 py-0.5 text-xs font-semibold text-gray-300">
+                          <span className="text-sm text-gray-600">{pick.school}</span>
+                          <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600">
                             {pick.position}
                           </span>
                         </div>
                       </>
                     ) : (
-                      <h2 className="text-lg font-bold text-white sm:text-xl">
+                      <h2 className="text-lg font-bold text-gray-900 sm:text-xl">
                         {pick.heading}
                       </h2>
                     )}
@@ -137,7 +136,7 @@ export function MockDraftArticleContent({ content, title }: { content: string; t
 
                 {/* Analysis body */}
                 {pick.body && (
-                  <div className="mt-4 pt-4 border-t border-white/[0.08] text-base leading-relaxed text-gray-300 [&_strong]:text-white [&_p]:mt-2 [&_p:first-child]:mt-0">
+                  <div className="mt-4 pt-4 border-t border-gray-200 text-base leading-relaxed text-gray-700 [&_strong]:text-gray-900 [&_p]:mt-2 [&_p:first-child]:mt-0">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {pick.body}
                     </ReactMarkdown>
@@ -150,7 +149,7 @@ export function MockDraftArticleContent({ content, title }: { content: string; t
       </div>
 
       {footer && (
-        <p className="mt-10 text-base italic text-gray-400">
+        <p className="mt-10 text-base italic text-gray-500">
           {footer}
         </p>
       )}

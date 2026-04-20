@@ -17,7 +17,7 @@ interface GroupsListProps {
 export function GroupsList({ groups }: GroupsListProps) {
   if (groups.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-sak-border bg-sak-hover px-5 py-8 text-center">
+      <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-5 py-8 text-center">
         <Users className="mx-auto h-10 w-10 text-gray-500" />
         <p className="mt-3 text-sm text-gray-400">
           You haven&apos;t joined any groups yet.
@@ -35,24 +35,24 @@ export function GroupsList({ groups }: GroupsListProps) {
         <li key={group.id}>
           <Link
             href={`/groups/${group.id}`}
-            className="group flex items-center justify-between rounded-xl border border-sak-border bg-sak-card py-3.5 px-4 transition-all duration-200 hover:border-brand-red/40 hover:shadow-sm hover:bg-sak-hover"
+            className="group flex items-center justify-between rounded-xl border border-gray-200 bg-white py-3.5 px-4 transition-all duration-200 hover:border-rose-500/40 hover:shadow-sm hover:bg-gray-50"
           >
             <div className="flex min-w-0 items-center gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-red/10 ring-1 ring-brand-red/20">
-                <Users className="h-5 w-5 text-brand-red" />
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-50 ring-1 ring-rose-200">
+                <Users className="h-5 w-5 text-rose-500" />
               </div>
               <div className="min-w-0">
-                <p className="font-medium text-white truncate group-hover:text-brand-red transition-colors">{group.name}</p>
+                <p className="font-medium text-gray-900 truncate group-hover:text-rose-500 transition-colors">{group.name}</p>
                 <p className="text-xs font-mono text-gray-500 truncate">{group.inviteCode}</p>
               </div>
             </div>
             <div className="flex shrink-0 items-center gap-2">
               {group.role === 'owner' && (
-                <span className="rounded-lg bg-brand-gold/20 px-2.5 py-1 text-[11px] font-medium text-brand-gold ring-1 ring-brand-gold/40">
+                <span className="rounded-lg bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-600 ring-1 ring-amber-200">
                   Owner
                 </span>
               )}
-              <ChevronRight className="h-5 w-5 text-gray-500 transition-colors group-hover:text-brand-red" />
+              <ChevronRight className="h-5 w-5 text-gray-500 transition-colors group-hover:text-rose-500" />
             </div>
           </Link>
         </li>

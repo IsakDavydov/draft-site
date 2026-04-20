@@ -56,36 +56,36 @@ function TradeModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-sak-card rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl ring-1 ring-white/[0.06] max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold text-white mb-2">Trade Picks</h3>
+      <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl ring-1 ring-gray-200 max-h-[90vh] overflow-y-auto">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Trade Picks</h3>
         <div className="flex gap-2 mb-4">
           <button
             type="button"
             onClick={() => setMode('swap')}
-            className={`px-3 py-1.5 text-sm font-medium rounded-lg ${mode === 'swap' ? 'bg-brand-red text-white' : 'bg-sak-hover text-gray-400 hover:bg-sak-border'}`}
+            className={`px-3 py-1.5 text-sm font-medium rounded-lg ${mode === 'swap' ? 'bg-rose-500 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
           >
             Swap two
           </button>
           <button
             type="button"
             onClick={() => setMode('assign')}
-            className={`px-3 py-1.5 text-sm font-medium rounded-lg ${mode === 'assign' ? 'bg-brand-red text-white' : 'bg-sak-hover text-gray-400 hover:bg-sak-border'}`}
+            className={`px-3 py-1.5 text-sm font-medium rounded-lg ${mode === 'assign' ? 'bg-rose-500 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
           >
             Assign team
           </button>
         </div>
         {mode === 'swap' ? (
           <>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-sm text-gray-600 mb-4">
               Select two picks to swap. The teams at those spots will exchange draft positions.
             </p>
             <div className="flex gap-4 mb-4">
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Pick A</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Pick A</label>
                 <select
                   value={pickA}
                   onChange={(e) => setPickA(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-sak-border rounded-lg text-sm bg-sak-hover text-gray-200"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white text-gray-900"
                 >
                   {effectiveOrder.map((d) => (
                     <option key={d.pick} value={d.pick}>
@@ -95,11 +95,11 @@ function TradeModal({
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Pick B</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Pick B</label>
                 <select
                   value={pickB}
                   onChange={(e) => setPickB(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-sak-border rounded-lg text-sm bg-sak-hover text-gray-200"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white text-gray-900"
                 >
                   {effectiveOrder.map((d) => (
                     <option key={d.pick} value={d.pick}>
@@ -110,23 +110,23 @@ function TradeModal({
               </div>
             </div>
             {pickA !== pickB && (
-              <p className="text-sm text-gray-400 mb-4">
-                After swap: <strong className="text-white">{pickA}. {teamB}</strong> ↔ <strong className="text-white">{pickB}. {teamA}</strong>
+              <p className="text-sm text-gray-600 mb-4">
+                After swap: <strong className="text-gray-900">{pickA}. {teamB}</strong> ↔ <strong className="text-gray-900">{pickB}. {teamA}</strong>
               </p>
             )}
           </>
         ) : (
           <>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-sm text-gray-600 mb-4">
               Assign a team (e.g. one without a first-round pick) to a specific pick—for when a team trades into the first round.
             </p>
             <div className="flex gap-4 mb-4">
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Pick</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Pick</label>
                 <select
                   value={assignPick}
                   onChange={(e) => setAssignPick(Number(e.target.value))}
-                  className="w-full px-3 py-2 border border-sak-border rounded-lg text-sm bg-sak-hover text-gray-200"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white text-gray-900"
                 >
                   {effectiveOrder.map((d) => (
                     <option key={d.pick} value={d.pick}>
@@ -136,11 +136,11 @@ function TradeModal({
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">New team</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">New team</label>
                 <select
                   value={assignTeam}
                   onChange={(e) => setAssignTeam(e.target.value)}
-                  className="w-full px-3 py-2 border border-sak-border rounded-lg text-sm bg-sak-hover text-gray-200"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white text-gray-900"
                 >
                   {NFL_TEAM_NAMES.map((name) => (
                     <option key={name} value={name}>
@@ -150,10 +150,10 @@ function TradeModal({
                 </select>
               </div>
             </div>
-            <p className="text-sm text-gray-400 mb-4">
-              Pick <strong className="text-white">{assignPick}</strong> will be held by <strong className="text-white">{assignTeam}</strong>
+            <p className="text-sm text-gray-600 mb-4">
+              Pick <strong className="text-gray-900">{assignPick}</strong> will be held by <strong className="text-gray-900">{assignTeam}</strong>
               {assignTeam !== currentHolder && (
-                <span className="block mt-1 text-gray-500">(currently {currentHolder})</span>
+                <span className="block mt-1 text-gray-400">(currently {currentHolder})</span>
               )}
             </p>
           </>
@@ -162,7 +162,7 @@ function TradeModal({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-400 hover:bg-sak-hover rounded-lg"
+            className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
           >
             Cancel
           </button>
@@ -171,7 +171,7 @@ function TradeModal({
               type="button"
               onClick={() => pickA !== pickB && onSwap(pickA, pickB)}
               disabled={loading || pickA === pickB}
-              className="px-4 py-2 text-sm font-semibold bg-brand-red text-white rounded-lg hover:bg-brand-red/90 disabled:opacity-50"
+              className="px-4 py-2 text-sm font-semibold bg-rose-500 text-white rounded-lg hover:bg-rose-500/90 disabled:opacity-50"
             >
               Swap
             </button>
@@ -180,7 +180,7 @@ function TradeModal({
               type="button"
               onClick={() => onAssign(assignPick, assignTeam)}
               disabled={loading}
-              className="px-4 py-2 text-sm font-semibold bg-brand-red text-white rounded-lg hover:bg-brand-red/90 disabled:opacity-50"
+              className="px-4 py-2 text-sm font-semibold bg-rose-500 text-white rounded-lg hover:bg-rose-500/90 disabled:opacity-50"
             >
               Assign
             </button>
@@ -670,7 +670,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   return (
     <div className="space-y-6">
       {/* Combined card: draft tabs + name + progress */}
-      <div className="rounded-2xl border border-white/[0.06] bg-sak-card px-5 py-4 shadow-card">
+      <div className="rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
         {/* Tabs row */}
         <div className="flex items-center gap-3">
           <div className="flex-1 min-w-0 flex gap-2 overflow-x-auto pb-1">
@@ -686,7 +686,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               return (
                 <div
                   key={draft.id}
-                  className="flex flex-shrink-0 items-center gap-0.5 rounded-lg border border-white/[0.06] bg-sak-hover"
+                  className="flex flex-shrink-0 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50"
                 >
                   <button
                     type="button"
@@ -695,8 +695,8 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                     title={onLeaderboard ? 'Leaderboard entry' : undefined}
                     className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-all rounded-l-md ${
                       isSelected
-                        ? 'bg-brand-red text-white shadow-sm'
-                        : 'bg-sak-hover text-gray-400 hover:bg-sak-border hover:text-gray-200'
+                        ? 'bg-rose-500 text-white shadow-sm'
+                        : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700'
                     }`}
                   >
                     {onLeaderboard && (
@@ -720,7 +720,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                     }}
                     disabled={loading}
                     aria-label={`Delete ${draft.name || draft.display_name || 'draft'}`}
-                    className="p-1.5 text-gray-600 hover:text-brand-red hover:bg-brand-red/10 disabled:opacity-50"
+                    className="p-1.5 text-gray-600 hover:text-rose-500 hover:bg-rose-50 disabled:opacity-50"
                   >
                     <Trash2 className="h-3 w-3" />
                   </button>
@@ -732,7 +732,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
             type="button"
             onClick={handleCreateNewDraft}
             disabled={loading || drafts.length >= MAX_DRAFTS}
-            className="inline-flex flex-shrink-0 items-center gap-2 rounded-lg border border-dashed border-white/[0.1] px-3 py-1.5 text-xs font-semibold text-gray-500 hover:border-brand-red/40 hover:text-brand-red transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex flex-shrink-0 items-center gap-2 rounded-lg border border-dashed border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-500 hover:border-rose-400 hover:text-rose-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus className="h-3.5 w-3.5" />
             <span className="whitespace-nowrap">
@@ -756,7 +756,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
 
         {selectedDraftId && (
           <>
-            <div className="mt-3 pt-3 border-t border-white/[0.06] flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div className="mt-3 pt-3 border-t border-gray-200 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div className="max-w-md">
                 <label htmlFor="draftName" className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">
                   Draft name
@@ -767,7 +767,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                   value={draftName}
                   onChange={(e) => setDraftName(e.target.value)}
                   maxLength={50}
-                  className="mt-1 w-full max-w-xs px-3 py-2 border border-sak-border rounded-lg bg-sak-hover text-sm text-white placeholder:text-gray-600 focus:ring-2 focus:ring-brand-red focus:border-transparent"
+                  className="mt-1 w-full max-w-xs px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
                   placeholder="e.g. DraftKing"
                 />
               </div>
@@ -778,7 +778,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                       <Trophy className="h-4 w-4 shrink-0" />
                       <span>
                         On leaderboard as{' '}
-                        <span className="font-semibold text-white">
+                        <span className="font-semibold text-gray-900">
                           {selectedDraft.display_name || selectedDraft.name || '—'}
                         </span>
                       </span>
@@ -791,7 +791,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                   <button
                     type="button"
                     onClick={() => setSubmitToLeaderboardModal(true)}
-                    className="inline-flex items-center gap-2 rounded-lg bg-brand-gold px-3 py-1.5 text-xs sm:text-sm font-semibold text-sak-dark hover:bg-brand-gold/90"
+                    className="inline-flex items-center gap-2 rounded-lg bg-brand-gold px-3 py-1.5 text-xs sm:text-sm font-semibold text-gray-900 hover:bg-brand-gold/90"
                   >
                     <Trophy className="h-4 w-4" />
                     Submit this draft to leaderboard
@@ -799,13 +799,13 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                 )}
                 {currentScore !== null && (
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs sm:text-sm text-gray-300 font-medium">
-                      Score: <strong className="text-brand-gold font-display">{currentScore}</strong>
+                    <span className="text-xs sm:text-sm text-gray-600 font-medium">
+                      Score: <strong className="text-amber-600 font-display">{currentScore}</strong>
                     </span>
                     <button
                       type="button"
                       onClick={() => setShareModalOpen(true)}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-sak-hover px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 ring-1 ring-white/[0.06] hover:bg-sak-border"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-gray-200 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm"
                     >
                       <Share2 className="h-4 w-4" />
                       Share top 5
@@ -814,7 +814,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                       <button
                         type="button"
                         onClick={() => setShareFullModalOpen(true)}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-sak-hover px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 ring-1 ring-white/[0.06] hover:bg-sak-border"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-gray-200 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm"
                       >
                         <Share2 className="h-4 w-4" />
                         Share full draft
@@ -829,11 +829,11 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                 <span className="text-xs text-gray-500">
                   {filledCount === totalPicks ? '🎉 All picks filled — ready to save!' : `${filledCount} of ${totalPicks} picks filled`}
                 </span>
-                <span className={`text-xs font-bold tabular-nums ${filledCount === totalPicks ? 'text-brand-red' : 'text-gray-500'}`}>
+                <span className={`text-xs font-bold tabular-nums ${filledCount === totalPicks ? 'text-rose-500' : 'text-gray-500'}`}>
                   {filledCount}<span className="font-normal">/{totalPicks}</span>
                 </span>
               </div>
-              <div className="w-full h-1.5 rounded-full bg-sak-hover overflow-hidden">
+              <div className="w-full h-1.5 rounded-full bg-gray-200 overflow-hidden">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-brand-red to-brand-gold transition-all duration-500"
                   style={{ width: `${totalPicks > 0 ? (filledCount / totalPicks) * 100 : 0}%` }}
@@ -848,7 +848,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       </div>
 
       {message && (
-        <div className={`rounded-xl px-4 py-3 text-sm font-medium border ${message.type === 'error' ? 'bg-brand-red/10 text-brand-red border-brand-red/20' : 'bg-green-500/10 text-green-400 border-green-500/20'}`}>
+        <div className={`rounded-xl px-4 py-3 text-sm font-medium border ${message.type === 'error' ? 'bg-rose-50 text-rose-500 border-rose-100' : 'bg-green-500/10 text-green-400 border-green-500/20'}`}>
           {message.text}
         </div>
       )}
@@ -888,7 +888,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               <button
                 type="button"
                 onClick={fillFromBigBoard}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-red/10 text-brand-red border border-brand-red/20 hover:bg-brand-red/15 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 text-rose-500 border border-rose-100 hover:bg-rose-500/15 transition-colors"
               >
                 <Zap className="h-3.5 w-3.5" />
                 Use Big Board
@@ -897,16 +897,16 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                 type="button"
                 onClick={fillRemaining}
                 disabled={effectiveOrder.every(({ pick }) => picks[pick])}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-sak-hover text-gray-400 hover:bg-white/[0.08] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
               >
                 <Zap className="h-3.5 w-3.5" />
                 Fill remaining
               </button>
-              <div className="h-4 w-px bg-white/10" />
+              <div className="h-4 w-px bg-gray-200" />
               <button
                 type="button"
                 onClick={() => setTradeModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-sak-hover text-gray-400 hover:bg-white/[0.08] transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors shadow-sm"
               >
                 <ArrowLeftRight className="h-3.5 w-3.5" />
                 Add trade
@@ -943,7 +943,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                       if (el) pickCardRefs.current[pick] = el;
                       else delete pickCardRefs.current[pick];
                     }}
-                    className="flex flex-col rounded-xl border border-white/[0.06] bg-sak-card p-3 sm:p-4 shadow-sm hover:shadow-card transition-shadow"
+                    className="flex flex-col rounded-xl border border-gray-200 bg-white p-3 sm:p-4 shadow-sm hover:shadow-sm transition-shadow"
                     style={{ borderLeftWidth: '4px', borderLeftColor: teamColor }}
                   >
                     <div className="mb-2 flex-shrink-0 flex items-center gap-2">
@@ -954,14 +954,14 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                         {pick}
                       </span>
                       <TeamLogo teamName={team} size={20} />
-                      <span className="text-sm font-bold text-gray-200 truncate">{teamNickname}</span>
+                      <span className="text-sm font-bold text-gray-700 truncate">{teamNickname}</span>
                     </div>
                     {needsForTeam.length > 0 && (
                       <div className="mb-2 flex-shrink-0">
                         <p className="text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-1">Team Needs</p>
                         <div className="flex flex-wrap gap-1">
                           {needsForTeam.slice(0, 5).map((need) => (
-                            <span key={need} className="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold bg-white/[0.06] text-gray-500">
+                            <span key={need} className="inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold bg-gray-100 text-gray-600">
                               {need}
                             </span>
                           ))}
@@ -998,7 +998,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-2 rounded-xl bg-brand-red px-8 py-3 text-base font-bold text-white shadow-lg shadow-brand-red/25 hover:bg-brand-red/90 hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="inline-flex items-center gap-2 rounded-xl bg-rose-500 px-8 py-3 text-base font-bold text-white shadow-lg shadow-brand-red/25 hover:bg-rose-500/90 hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               <Zap className="h-5 w-5" />
               {loading ? 'Saving...' : saved ? 'Update Draft' : 'Save Draft'}
@@ -1011,7 +1011,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       )}
 
       {drafts.length === 0 && (
-        <p className="text-gray-400 text-sm">
+        <p className="text-gray-500 text-sm">
           Click &quot;New draft&quot; to create your first mock draft, or your drafts will load shortly.
         </p>
       )}
@@ -1063,11 +1063,11 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
       {/* Submit to leaderboard modal */}
       {submitToLeaderboardModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-sak-card border border-white/[0.08] rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
-            <h3 className="text-lg font-semibold text-white mb-2">Submit to Leaderboard</h3>
-            <p className="text-sm text-gray-400 mb-4">
+          <div className="bg-white border border-gray-200 rounded-xl p-6 max-w-sm w-full mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Submit to Leaderboard</h3>
+            <p className="text-sm text-gray-600 mb-4">
               Your entry will appear as{' '}
-              <span className="font-semibold text-white">
+              <span className="font-semibold text-gray-900">
                 {draftName.trim() || '—'}
               </span>{' '}
               (your draft name). This replaces any other draft you&apos;ve submitted.
@@ -1081,7 +1081,7 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
               <button
                 type="button"
                 onClick={() => setSubmitToLeaderboardModal(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-400 hover:bg-white/[0.06] rounded-lg transition-colors"
+                className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 Cancel
               </button>

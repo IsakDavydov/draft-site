@@ -75,6 +75,10 @@ const config = {
           light:   "#F5F6F8",   // warm gray background (light mode)
           card:    "#FFFFFF",   // white cards on warm gray
         },
+        cream: {
+          DEFAULT: "#faf7f2",   // warm eggshell — light section backgrounds
+          deep:    "#f0ebe1",   // deeper warm beige — alternate section backgrounds
+        },
 
         /* ── Legacy NFL aliases (kept for backward compat) ───── */
         nfl: {

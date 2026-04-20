@@ -20,15 +20,15 @@ export default async function JoinGroupPage({ params }: { params: Promise<{ code
 
   if (error || !groupId) {
     return (
-      <div className="bg-sak-darker min-h-screen flex items-center justify-center px-4">
+      <div className="bg-cream-deep min-h-screen flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center">
-          <h1 className="text-2xl font-bold text-white mb-2">Invalid invite</h1>
-          <p className="text-gray-400 mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Invalid invite</h1>
+          <p className="text-gray-500 mb-6">
             This invite code is invalid or may have expired. Ask your friend for a new link.
           </p>
           <Link
             href="/groups"
-            className="inline-flex items-center gap-2 text-brand-red font-medium hover:underline"
+            className="inline-flex items-center gap-2 text-rose-500 font-medium hover:underline"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Groups

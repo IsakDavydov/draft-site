@@ -85,22 +85,21 @@ export default async function LeaderboardPage() {
       : (participants?.length ?? 0);
 
   return (
-    <div className="min-h-screen bg-sak-darker">
+    <div className="min-h-screen bg-cream">
 
       {/* ─── Hero Header ─────────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-sak-dark via-sak-darker to-sak-dark">
-        <div className="absolute inset-0 hero-lines pointer-events-none" />
+      <div className="relative overflow-hidden bg-white border-b border-gray-200">
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-8 sm:py-12">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div>
-              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-brand-red/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white ring-1 ring-inset ring-brand-red/20">
+              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-rose-500 ring-1 ring-inset ring-rose-200">
                 <Trophy className="h-3 w-3" />
                 2026 Draft Challenge
               </div>
-              <h1 className="font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+              <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
                 Draft Leaderboard
               </h1>
-              <p className="mt-2 text-base leading-relaxed text-gray-400">
+              <p className="mt-2 text-base leading-relaxed text-gray-500">
                 {hasResults
                   ? 'Live scoring — leaderboard updates with every pick announced'
                   : 'Submit your picks to compete. Scores go live the moment the draft starts.'}
@@ -108,14 +107,14 @@ export default async function LeaderboardPage() {
               <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5">
                 <Link
                   href="/predict"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-white hover:text-white/80 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-500 hover:text-rose-600 transition-colors"
                 >
                   <Zap className="h-3.5 w-3.5" />
                   Submit picks
                 </Link>
                 <Link
                   href="/groups"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 hover:text-white transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700 transition-colors"
                 >
                   <Users className="h-3.5 w-3.5" />
                   Private groups
@@ -123,7 +122,7 @@ export default async function LeaderboardPage() {
                 {hasResults && (
                   <Link
                     href="/live"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-400 hover:text-green-300 transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-600 hover:text-green-700 transition-colors"
                   >
                     <Radio className="h-3.5 w-3.5" />
                     Live scoring
@@ -132,7 +131,7 @@ export default async function LeaderboardPage() {
               </div>
             </div>
             <div className="flex-shrink-0">
-              <DraftCountdown variant="compact" />
+              <DraftCountdown variant="hero" />
             </div>
           </div>
         </div>
@@ -140,29 +139,29 @@ export default async function LeaderboardPage() {
 
       {/* ─── Stats Strip ─────────────────────────────────────────────────── */}
       {participantCount > 0 && (
-        <div className="bg-sak-dark border-b border-white/[0.06]">
+        <div className="bg-cream-deep border-b border-gray-200">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-8 py-4">
               <div>
-                <p className="font-display text-2xl font-extrabold tabular-nums text-white">{participantCount}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-0.5">Competitors</p>
+                <p className="font-display text-2xl font-extrabold tabular-nums text-gray-900">{participantCount}</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Competitors</p>
               </div>
-              <div className="h-8 w-px bg-white/10" />
+              <div className="h-8 w-px bg-gray-200" />
               <div>
-                <p className="font-display text-2xl font-extrabold text-white">480</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-0.5">Max Points</p>
+                <p className="font-display text-2xl font-extrabold text-gray-900">480</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Max Points</p>
               </div>
-              <div className="h-8 w-px bg-white/10" />
+              <div className="h-8 w-px bg-gray-200" />
               <div>
-                <p className="font-display text-2xl font-extrabold text-white">32</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mt-0.5">Round 1 Picks</p>
+                <p className="font-display text-2xl font-extrabold text-gray-900">32</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Round 1 Picks</p>
               </div>
               {hasResults && (
                 <>
-                  <div className="h-8 w-px bg-white/10" />
+                  <div className="h-8 w-px bg-gray-200" />
                   <div className="flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-                    <span className="text-xs font-bold text-green-400">Live</span>
+                    <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-xs font-bold text-green-600">Live</span>
                   </div>
                 </>
               )}
@@ -176,7 +175,7 @@ export default async function LeaderboardPage() {
 
         <Link
           href="/predict"
-          className="group mb-6 inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-200 transition-colors"
+          className="group mb-6 inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700 transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
           Back to Predictions
@@ -199,15 +198,15 @@ export default async function LeaderboardPage() {
                 </p>
               </>
             ) : (!participants || participants.length === 0) ? (
-              <div className="rounded-2xl border border-white/[0.06] bg-sak-card p-10 text-center">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-red/10">
-                  <Trophy className="h-7 w-7 text-brand-red" />
+              <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50">
+                  <Trophy className="h-7 w-7 text-rose-500" />
                 </div>
-                <p className="font-display text-lg font-bold text-white">No predictions yet</p>
-                <p className="mt-1 text-sm text-gray-400">Be the first to submit and claim the #1 spot.</p>
+                <p className="font-display text-lg font-bold text-gray-900">No predictions yet</p>
+                <p className="mt-1 text-sm text-gray-500">Be the first to submit and claim the #1 spot.</p>
                 <Link
                   href="/predict"
-                  className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-brand-red px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-brand-red/90 hover:scale-[1.02]"
+                  className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-rose-500 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-rose-600 hover:scale-[1.02]"
                 >
                   <Zap className="h-4 w-4" />
                   Submit your predictions
@@ -235,7 +234,7 @@ export default async function LeaderboardPage() {
             )}
             {(preDraftLeaderboard.length > 0 || (participants && participants.length > 0)) && (
               <p className="mt-5 text-sm text-gray-500">
-                <Link href="/predict" className="font-bold text-brand-red hover:text-brand-red/80 transition-colors">
+                <Link href="/predict" className="font-bold text-rose-500 hover:text-rose-500/80 transition-colors">
                   Submit your predictions →
                 </Link>{' '}
                 {preDraftLeaderboard.length > 0 ? 'to join or update your score.' : 'to join the leaderboard.'}
@@ -243,20 +242,20 @@ export default async function LeaderboardPage() {
             )}
           </>
         ) : error ? (
-          <div className="rounded-2xl border border-white/[0.06] bg-sak-card p-10 text-center">
-            <p className="font-semibold text-brand-red">Unable to load leaderboard.</p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center">
+            <p className="font-semibold text-rose-500">Unable to load leaderboard.</p>
             <p className="mt-1 text-sm text-gray-400">Please try again later.</p>
           </div>
         ) : !leaderboard || leaderboard.length === 0 ? (
-          <div className="rounded-2xl border border-white/[0.06] bg-sak-card p-10 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-red/10">
-              <Trophy className="h-7 w-7 text-brand-red" />
+          <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50">
+              <Trophy className="h-7 w-7 text-rose-500" />
             </div>
-            <p className="font-display text-lg font-bold text-white">No predictions yet</p>
-            <p className="mt-1 text-sm text-gray-400">Be the first to submit and claim the #1 spot.</p>
+            <p className="font-display text-lg font-bold text-gray-900">No predictions yet</p>
+            <p className="mt-1 text-sm text-gray-500">Be the first to submit and claim the #1 spot.</p>
             <Link
               href="/predict"
-              className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-brand-red px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-brand-red/90 hover:scale-[1.02]"
+              className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-rose-500 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:bg-rose-600 hover:scale-[1.02]"
             >
               <Zap className="h-4 w-4" />
               Submit your predictions
@@ -291,17 +290,17 @@ export default async function LeaderboardPage() {
         {/* Scoring key + live indicator */}
         {hasResults && (
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <div className="inline-flex items-center gap-2 rounded-lg border border-white/[0.06] bg-sak-card px-3.5 py-2">
+            <div className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2">
               <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-green-100 text-[10px] font-bold text-green-800">15</span>
               <span className="text-xs text-gray-400">correct pick + team</span>
             </div>
-            <div className="inline-flex items-center gap-2 rounded-lg border border-white/[0.06] bg-sak-card px-3.5 py-2">
+            <div className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2">
               <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-yellow-100 text-[10px] font-bold text-yellow-800">5</span>
               <span className="text-xs text-gray-400">off by 1 pick</span>
             </div>
-            <div className="inline-flex items-center gap-2 rounded-lg border border-white/[0.06] bg-sak-card px-3.5 py-2">
-              <span className="text-[10px] font-bold text-gray-500">480</span>
-              <span className="text-xs text-gray-400">max possible</span>
+            <div className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3.5 py-2">
+              <span className="text-[10px] font-bold text-gray-700">480</span>
+              <span className="text-xs text-gray-500">max possible</span>
             </div>
             <LeaderboardLiveRefresh enabled={hasResults} />
           </div>

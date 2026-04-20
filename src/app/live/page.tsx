@@ -32,30 +32,30 @@ export default async function LiveDraftPage() {
   const completedPicks = results?.length ?? 0;
 
   return (
-    <div className="min-h-screen bg-sak-darker">
+    <div className="min-h-screen bg-cream-deep">
 
       {/* Hero */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-sak-dark via-sak-darker to-sak-dark">
-        <div className="absolute inset-0 hero-lines pointer-events-none" />
+      <div className="relative overflow-hidden bg-cream-deep border-b border-gray-200">
+        <div className="absolute inset-0 hero-lines pointer-events-none opacity-60" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-8 sm:py-12">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white ring-1 ring-inset ring-white/20">
+              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-rose-500 ring-1 ring-inset ring-brand-red/20">
                 <Radio className="h-3 w-3" />
                 2026 NFL Draft
               </div>
-              <h1 className="font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+              <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
                 Live Draft Scoring
               </h1>
-              <p className="mt-2 text-base text-gray-300/90">
+              <p className="mt-2 text-base text-gray-600">
                 {hasResults
                   ? `${completedPicks} of 32 picks announced · Scores update in real time`
                   : 'Scores update in real time as picks are announced on draft night'}
               </p>
             </div>
             <div className="flex-shrink-0 text-right">
-              <p className="text-3xl font-black text-white tabular-nums">{completedPicks}<span className="text-white/40 text-lg font-bold"> / 32</span></p>
-              <p className="text-xs font-bold uppercase tracking-widest text-white/40 mt-1">Picks Announced</p>
+              <p className="text-3xl font-black text-gray-900 tabular-nums">{completedPicks}<span className="text-gray-400 text-lg font-bold"> / 32</span></p>
+              <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mt-1">Picks Announced</p>
             </div>
           </div>
         </div>

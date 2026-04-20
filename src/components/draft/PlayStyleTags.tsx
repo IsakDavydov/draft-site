@@ -101,7 +101,7 @@ export function PlayStyleTags({ tags }: PlayStyleTagsProps) {
         return (
           <span
             key={tag}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-brand-red/10 px-3 py-1.5 text-xs font-medium text-brand-red ring-1 ring-inset ring-brand-red/20 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-rose-50 px-3 py-1.5 text-xs font-medium text-rose-500 ring-1 ring-inset ring-brand-red/20 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
           >
             <Icon className="h-3.5 w-3.5 flex-shrink-0 opacity-80" />
             {tag}

@@ -35,7 +35,7 @@ export function LeaderboardPreviewSection() {
     return (
       <div className="space-y-2 animate-pulse">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-14 rounded-xl bg-sak-hover" />
+          <div key={i} className="h-14 rounded-xl bg-gray-100" />
         ))}
       </div>
     );
@@ -43,13 +43,13 @@ export function LeaderboardPreviewSection() {
 
   if (entries.length === 0) {
     return (
-      <div className="rounded-2xl bg-sak-card shadow-card ring-1 ring-white/[0.06] p-12 text-center">
-        <Trophy className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <p className="text-lg font-semibold text-white mb-2">No entries yet</p>
-        <p className="text-gray-400 mb-6">Be the first to submit your mock draft and claim the top spot.</p>
+      <div className="rounded-2xl bg-white border border-gray-200 shadow-sm p-12 text-center">
+        <Trophy className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+        <p className="text-lg font-semibold text-gray-900 mb-2">No entries yet</p>
+        <p className="text-gray-500 mb-6">Be the first to submit your mock draft and claim the top spot.</p>
         <Link
           href="/predict"
-          className="inline-flex items-center gap-2 rounded-lg bg-brand-red px-6 py-3 text-sm font-bold text-white hover:bg-brand-red/90 transition-all hover:scale-[1.02]"
+          className="inline-flex items-center gap-2 rounded-lg bg-rose-500 px-6 py-3 text-sm font-bold text-white hover:bg-rose-600 transition-all hover:scale-[1.02]"
         >
           <Zap className="h-4 w-4" />
           Submit Your Picks
@@ -59,12 +59,12 @@ export function LeaderboardPreviewSection() {
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl bg-sak-card shadow-card ring-1 ring-white/[0.06]">
+    <div className="overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-sm">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <div className="flex items-center gap-2.5">
-          <Trophy className="h-5 w-5 text-brand-gold" />
-          <span className="font-semibold text-white">Top Predictions</span>
+          <Trophy className="h-5 w-5 text-orange-400" />
+          <span className="font-semibold text-gray-900">Top Predictions</span>
         </div>
         {total > 0 && (
           <span className="text-sm text-gray-400">
@@ -74,41 +74,41 @@ export function LeaderboardPreviewSection() {
       </div>
 
       {/* Rows */}
-      <div className="divide-y divide-white/[0.06]">
+      <div className="divide-y divide-gray-100">
         {entries.map((e) => (
           <div
             key={(e.prediction_id ?? '') + e.display_name + e.rank}
-            className="flex items-center justify-between px-6 py-3.5 hover:bg-white/[0.06] transition-colors"
+            className="flex items-center justify-between px-6 py-3.5 hover:bg-gray-50 transition-colors"
           >
             <div className="flex items-center gap-4 min-w-0">
               <span
                 className={`w-7 text-right font-bold tabular-nums text-sm flex-shrink-0 ${
                   e.rank === 1
-                    ? 'text-brand-gold text-base'
+                    ? 'text-orange-400 text-base'
                     : e.rank <= 3
-                    ? 'text-gray-200'
+                    ? 'text-gray-700'
                     : 'text-gray-400'
                 }`}
               >
                 #{e.rank}
               </span>
               {e.rank === 1 && (
-                <Trophy className="h-4 w-4 text-brand-gold -ml-2 flex-shrink-0" />
+                <Trophy className="h-4 w-4 text-orange-400 -ml-2 flex-shrink-0" />
               )}
               {e.prediction_id ? (
                 <Link
                   href={`/predictions/${e.prediction_id}?ref=home`}
-                  className="truncate font-medium text-gray-200 hover:text-brand-red transition-colors text-sm"
+                  className="truncate font-medium text-gray-700 hover:text-rose-500 transition-colors text-sm"
                 >
                   {sanitizeDisplayName(e.display_name)}
                 </Link>
               ) : (
-                <span className="truncate font-medium text-gray-200 text-sm">
+                <span className="truncate font-medium text-gray-700 text-sm">
                   {sanitizeDisplayName(e.display_name)}
                 </span>
               )}
             </div>
-            <span className="ml-4 flex-shrink-0 text-sm font-semibold text-gray-300 tabular-nums">
+            <span className="ml-4 flex-shrink-0 text-sm font-semibold text-gray-500 tabular-nums">
               {e.score} pts
             </span>
           </div>
@@ -116,13 +116,13 @@ export function LeaderboardPreviewSection() {
       </div>
 
       {/* Footer CTA */}
-      <div className="px-6 py-4 bg-sak-hover border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
         <p className="text-sm text-gray-400">
           Submit your picks to appear on the leaderboard.
         </p>
         <Link
           href="/predict"
-          className="flex-shrink-0 inline-flex items-center gap-2 rounded-lg bg-brand-red px-5 py-2.5 text-sm font-bold text-white shadow-card hover:bg-brand-red/90 transition-all hover:scale-[1.02]"
+          className="flex-shrink-0 inline-flex items-center gap-2 rounded-lg bg-rose-500 px-5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-rose-600 transition-all hover:scale-[1.02]"
         >
           <Zap className="h-4 w-4" />
           Enter the Challenge

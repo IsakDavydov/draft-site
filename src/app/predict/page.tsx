@@ -47,42 +47,42 @@ export default async function PredictPage() {
   }
 
   return (
-    <div className="min-h-screen bg-sak-darker">
+    <div className="min-h-screen bg-cream-deep">
 
       {/* ─── Hero Header ─────────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden bg-sak-dark border-b border-white/[0.06]">
+      <div className="relative overflow-hidden bg-cream-deep border-b border-gray-200">
         <div className="absolute inset-0 hero-lines pointer-events-none opacity-60" />
         <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-brand-red/40 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-8 sm:py-12">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div>
-              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-brand-red/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-brand-red ring-1 ring-inset ring-brand-red/20">
+              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-rose-500 ring-1 ring-inset ring-brand-red/20">
                 <Zap className="h-3 w-3" />
                 2026 Draft Challenge
               </div>
-              <h1 className="font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+              <h1 className="font-display text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
                 Build Your Mock Draft
               </h1>
-              <p className="mt-2 text-base leading-relaxed text-gray-300/90">
+              <p className="mt-2 text-base leading-relaxed text-gray-600">
                 Pick all 32 first-round selections. Lock in before draft night and compete on the leaderboard.
               </p>
               <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5">
                 <Link
                   href="/leaderboard"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 hover:text-white transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-700 transition-colors"
                 >
                   <Trophy className="h-3.5 w-3.5" />
                   View leaderboard
                 </Link>
                 <Link
                   href="/groups"
-                  className="text-xs font-semibold text-white hover:text-white/80 transition-colors"
+                  className="text-xs font-semibold text-rose-500 hover:text-rose-600 transition-colors"
                 >
                   Compete with friends →
                 </Link>
                 <Link
                   href="/contest-rules"
-                  className="text-xs text-gray-500 hover:text-gray-400 transition-colors"
+                  className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   Contest Rules
                 </Link>
