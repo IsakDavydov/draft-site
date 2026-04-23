@@ -107,6 +107,7 @@ const mockProspects: Prospect[] = [
   { id: '73', name: 'A.J. Haulcy', position: 'S', school: 'LSU', class: 'Senior', height: '6\'0"', weight: 222, birthYear: 2004, ras: 8.3, bigBoardRank: 73 },
   { id: '74', name: 'Gracen Halton', position: 'DT', school: 'Oklahoma', class: 'Senior', height: '6\'2"', weight: 292, birthYear: 2004, ras: 8.2, bigBoardRank: 74 },
   { id: '75', name: 'Elijah Sarratt', position: 'WR', school: 'Indiana', class: 'Senior', height: '6\'2"', weight: 213, birthYear: 2003, ras: 8.4, bigBoardRank: 75 },
+  { id: '76', name: 'Malachi Lawrence', position: 'EDGE', school: 'UCF', class: 'Senior', height: '6\'4"', weight: 253, birthYear: 2003, ras: 9.9 },
 ];
 
 // Mock data for mock drafts
