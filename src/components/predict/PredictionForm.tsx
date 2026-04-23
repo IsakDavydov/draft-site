@@ -20,6 +20,7 @@ import {
   getRecommendedProspects,
 } from '@/lib/adapters';
 import { validateDisplayNameForSave } from '@/lib/display-name-filter';
+import { DRAFT_DATE_2026 } from '@/lib/constants';
 import type { MockDraftFromFile } from '@/types';
 
 const DRAFT_YEAR = 2026;
@@ -231,6 +232,8 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareFullModalOpen, setShareFullModalOpen] = useState(false);
   const [submitResult, setSubmitResult] = useState<{ rank: number; score: number } | null>(null);
+
+  const isLocked = Date.now() >= DRAFT_DATE_2026.getTime();
 
   const selectedDraft = drafts.find((d) => d.id === selectedDraftId);
   const effectiveOrder = getEffectiveDraftOrder(draftOrder, selectedDraft?.custom_draft_order ?? null);
@@ -791,7 +794,8 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
                   <button
                     type="button"
                     onClick={() => setSubmitToLeaderboardModal(true)}
-                    className="inline-flex items-center gap-2 rounded-lg bg-brand-gold px-3 py-1.5 text-xs sm:text-sm font-semibold text-gray-900 hover:bg-brand-gold/90"
+                    disabled={isLocked}
+                    className="inline-flex items-center gap-2 rounded-lg bg-brand-gold px-3 py-1.5 text-xs sm:text-sm font-semibold text-gray-900 hover:bg-brand-gold/90 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Trophy className="h-4 w-4" />
                     Submit this draft to leaderboard
@@ -874,11 +878,17 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
         </div>
       )}
 
+      {isLocked && (
+        <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-600">
+          Entries are closed — the 2026 NFL Draft has started. Good luck tonight!
+        </div>
+      )}
+
       {selectedDraftId && (
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleSave();
+            if (!isLocked) handleSave();
           }}
           className="space-y-6"
         >
@@ -997,11 +1007,11 @@ export function PredictionForm({ prospects, draftOrder, userId, mockDraftTemplat
           <div className="flex items-center gap-4 pt-2">
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || isLocked}
               className="inline-flex items-center gap-2 rounded-xl bg-rose-500 px-8 py-3 text-base font-bold text-white shadow-lg shadow-brand-red/25 hover:bg-rose-500/90 hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               <Zap className="h-5 w-5" />
-              {loading ? 'Saving...' : saved ? 'Update Draft' : 'Save Draft'}
+              {loading ? 'Saving...' : isLocked ? 'Entries Closed' : saved ? 'Update Draft' : 'Save Draft'}
             </button>
             {!allPicksFilled && (
               <span className="text-xs text-gray-400">{totalPicks - filledCount} picks remaining</span>
