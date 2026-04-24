@@ -11,14 +11,7 @@ export type TopPickRow = {
   school: string;
 };
 
-/** Picks 1–5 / 6–10 map to rows 1–5 in each column (md+). */
-const MD_ROW_START: Record<number, string> = {
-  1: 'md:row-start-1',
-  2: 'md:row-start-2',
-  3: 'md:row-start-3',
-  4: 'md:row-start-4',
-  5: 'md:row-start-5',
-};
+const HALF = 16;
 
 function PickCard({ pick }: { pick: TopPickRow }) {
   return (
@@ -53,16 +46,14 @@ function PickCard({ pick }: { pick: TopPickRow }) {
 
 function TopPicksGridContent({ picks }: { picks: TopPickRow[] }) {
   const sorted = [...picks].sort((a, b) => a.pick_number - b.pick_number);
-  const left = sorted.filter((p) => p.pick_number <= 5);
-  const right = sorted.filter((p) => p.pick_number > 5);
+  const left = sorted.filter((p) => p.pick_number <= HALF);
+  const right = sorted.filter((p) => p.pick_number > HALF);
 
   if (sorted.length === 0) {
-    return <p className="mt-6 text-gray-400">No picks saved for picks 1–10 yet.</p>;
+    return <p className="mt-6 text-gray-400">No picks saved yet.</p>;
   }
 
-  const canSplitForWideLayout = left.length > 0 && right.length > 0;
-
-  if (!canSplitForWideLayout) {
+  if (left.length === 0 || right.length === 0) {
     return (
       <div className="mt-6 max-w-xl space-y-3">
         {sorted.map((pick) => (
@@ -72,19 +63,17 @@ function TopPicksGridContent({ picks }: { picks: TopPickRow[] }) {
     );
   }
 
-  /* Phone: one column, picks 1→10. md+: two columns (1–5 | 6–10), no section headings. */
+  /* Phone: one column. md+: two columns (picks 1–16 | 17–32). */
   return (
     <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-x-6 md:gap-y-3">
       {sorted.map((pick) => {
-        const row = pick.pick_number <= 5 ? pick.pick_number : pick.pick_number - 5;
-        const rowCls = MD_ROW_START[row] ?? 'md:row-start-1';
+        const isLeft = pick.pick_number <= HALF;
+        const row = isLeft ? pick.pick_number : pick.pick_number - HALF;
         return (
           <div
             key={pick.pick_number}
-            className={cn(
-              pick.pick_number <= 5 ? 'md:col-start-1' : 'md:col-start-2',
-              rowCls,
-            )}
+            className={cn(isLeft ? 'md:col-start-1' : 'md:col-start-2')}
+            style={{ gridRow: row }}
           >
             <PickCard pick={pick} />
           </div>

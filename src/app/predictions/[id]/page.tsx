@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: PageProps) {
   }
   const name = meta.display_name ? sanitizeDisplayName(meta.display_name) : 'Mock draft';
   return {
-    title: `${name} — Top 10 picks`,
-    description: `First-round picks 1–10 for ${name}'s 2026 NFL mock draft.`,
+    title: `${name} — Mock Draft`,
+    description: `All 32 first-round picks for ${name}'s 2026 NFL mock draft.`,
   };
 }
 
@@ -42,7 +42,6 @@ export default async function PredictionTopPicksPage({ params }: PageProps) {
     .from('prediction_picks')
     .select('pick_number, prospect_id, team')
     .eq('prediction_id', id)
-    .lte('pick_number', 10)
     .order('pick_number', { ascending: true });
 
   const rows = picks ?? [];
@@ -85,7 +84,7 @@ export default async function PredictionTopPicksPage({ params }: PageProps) {
             {displayName}
           </h1>
           <p className="mt-1 text-sm text-gray-400">
-            First-round picks 1–10 · 2026 NFL Draft mock
+            All 32 picks · 2026 NFL Draft mock
           </p>
 
           <PredictionTopPicksGrid picks={resolved} />

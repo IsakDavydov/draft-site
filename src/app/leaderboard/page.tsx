@@ -194,7 +194,7 @@ export default async function LeaderboardPage() {
                   scoreSuffix=""
                 />
                 <p className="mt-3 text-xs text-gray-400">
-                  Click a name to preview their first-round picks 1–10.
+                  Click a name to view their full mock draft.
                 </p>
               </>
             ) : (!participants || participants.length === 0) ? (
@@ -228,7 +228,7 @@ export default async function LeaderboardPage() {
                   showScores={false}
                 />
                 <p className="mt-3 text-xs text-gray-400">
-                  Click a name to preview their first-round picks 1–10.
+                  Click a name to view their full mock draft.
                 </p>
               </>
             )}
@@ -282,7 +282,7 @@ export default async function LeaderboardPage() {
               showGap
             />
             <p className="mt-3 text-xs text-gray-400">
-              Click a name to preview their first-round picks 1–10.
+              Click a name to view their full mock draft.
             </p>
           </>
         )}
