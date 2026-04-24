@@ -1,6 +1,5 @@
 'use client';
 
-import { cn } from '@/lib/utils';
 import { CollegeLogo } from '@/components/shared/CollegeLogo';
 
 export type TopPickRow = {
@@ -53,32 +52,26 @@ function TopPicksGridContent({ picks }: { picks: TopPickRow[] }) {
     return <p className="mt-6 text-gray-400">No picks saved yet.</p>;
   }
 
-  if (left.length === 0 || right.length === 0) {
-    return (
-      <div className="mt-6 max-w-xl space-y-3">
+  /* Phone: single column stack. md+: two side-by-side columns (1–16 | 17–32). */
+  return (
+    <div className="mt-6">
+      <div className="space-y-3 md:hidden">
         {sorted.map((pick) => (
           <PickCard key={pick.pick_number} pick={pick} />
         ))}
       </div>
-    );
-  }
-
-  /* Phone: one column. md+: two columns (picks 1–16 | 17–32). */
-  return (
-    <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-x-6 md:gap-y-3">
-      {sorted.map((pick) => {
-        const isLeft = pick.pick_number <= HALF;
-        const row = isLeft ? pick.pick_number : pick.pick_number - HALF;
-        return (
-          <div
-            key={pick.pick_number}
-            className={cn(isLeft ? 'md:col-start-1' : 'md:col-start-2')}
-            style={{ gridRow: row }}
-          >
-            <PickCard pick={pick} />
-          </div>
-        );
-      })}
+      <div className="hidden md:flex md:gap-6">
+        <div className="flex-1 space-y-3">
+          {left.map((pick) => (
+            <PickCard key={pick.pick_number} pick={pick} />
+          ))}
+        </div>
+        <div className="flex-1 space-y-3">
+          {(right.length > 0 ? right : sorted).map((pick) => (
+            <PickCard key={pick.pick_number} pick={pick} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
