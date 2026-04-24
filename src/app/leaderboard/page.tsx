@@ -141,7 +141,7 @@ export default async function LeaderboardPage() {
       {participantCount > 0 && (
         <div className="bg-cream-deep border-b border-gray-200">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-8 py-4">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 py-4">
               <div>
                 <p className="font-display text-2xl font-extrabold tabular-nums text-gray-900">{participantCount}</p>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Competitors</p>
